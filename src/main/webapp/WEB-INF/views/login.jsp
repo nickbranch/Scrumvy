@@ -40,14 +40,12 @@
                             <!-- User name -->
                             <div style="margin-bottom: 25px" class="input-group">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-
                                 <input type="text" name="username" placeholder="username" class="form-control">
                             </div>
 
                             <!-- Password -->
                             <div style="margin-bottom: 25px" class="input-group">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-
                                 <input type="password" name="password" placeholder="password" class="form-control">
                             </div>
 
@@ -55,25 +53,25 @@
                             <div style="margin-top: 10px" class="form-group">
                                 <button id="lgnbtn" type="submit" class="btn btn-black">Scrum in</button>
                             </div>
+
                             <!-- manually adding tokens csrf protection -->
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                         </form>
+
                         <a id ="regbtn" href="${pageContext.request.contextPath}/register/showRegister" class="btn btn-primary" role="button"
                            aria-pressed="true">Register</a>
+                    </div>
+                    <div id="loginError" class="form-group">
+                        <div class="col-xs-15">
+                            <c:if test="${param.error != null}">
+                                <div class="alert alert-danger col-xs-offset-1 col-xs-10">
+                                    Incorrect username or password</div>
+                                </c:if>
 
-
-                        <div id="errors" class="form-group">
-                            <div class="col-xs-15">
-                                <c:if test="${param.error != null}">
-                                    <div class="alert alert-danger col-xs-offset-1 col-xs-10">
-                                        Incorrect username or password</div>
-                                    </c:if>
-
-                                <c:if test="${param.logout != null}">
-                                    <div class="alert col-xs-offset-1 col-xs-10">
-                                        You are logged out.</div>
-                                    </c:if>
-                            </div>
+                            <c:if test="${param.logout != null}">
+                                <div class="alert col-xs-offset-1 col-xs-10">
+                                    You are logged out.</div>
+                                </c:if>
                         </div>
                     </div>
                 </div>

@@ -10,37 +10,34 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>  
 
 <html lang="en">
-
     <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Scrumvy - Create an account</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <!-- Reference Bootstrap files -->
-        <link rel="stylesheet"
-              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-        <script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <style>.error {color:red}</style>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet"
+              id="bootstrap-css">
+        <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css">
     </head>
 
     <body>
-        <div>
-            <div id="loginbox" style="margin-top: 50px;"
-                 class="mainbox col-md-3 col-md-offset-2 col-sm-6 col-sm-offset-2">
+        <div class="container">
+            <div id="mainRow" class="row">
 
-                <div class="panel panel-primary">
-
-                    <div class="panel-heading">
-                        <div class="panel-title">Create an account</div>
+                <div id="left" class="col-lg-4">
+                    <div id="contentleft">
+                        <img class="img-fluid" src="${pageContext.request.contextPath}/img/6.png" alt="scrumvy-logo">
+                        <h2><strong>Welcome to Scrumvy</strong></h2>
+                        <h3><strong>Scrum in.</strong></h3>
                     </div>
+                </div>
 
-                    <div style="padding-top: 30px" class="panel-body">
-
+                <div id="right" class="col-lg-8">
+                    <div class="login-form">
                         <!-- Registration Form -->
                         <form:form action="${pageContext.request.contextPath}/register/processRegistrationForm" 
                                    modelAttribute="userDto"
                                    class="form-horizontal">
-
-                            <!-- Place for messages: error, alert etc ... -->
                             <div class="form-group">
                                 <div class="col-xs-15">
                                     <div>
@@ -50,70 +47,64 @@
                                                 ${registrationError}
                                             </div>
                                         </c:if>
-
                                     </div>
                                 </div>
                             </div>
-
                             <!-- User name -->
-                            <div style="margin-bottom: 25px" class="input-group">
+                            <div class="input-group bottom-fix">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span> 
-                                    <form:errors path="userName" cssClass="error" />
-                                    <form:input path="userName" placeholder="username (*)" class="form-control" />
+                                <form:input path="userName" placeholder="username (*)" class="form-control" /><br>
                             </div>
+                            <form:errors path="userName" cssClass="error" />
 
                             <!-- Password -->
-                            <div style="margin-bottom: 25px" class="input-group">
+                            <div class="input-group bottom-fix">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span> 
-                                    <form:errors path="password" cssClass="error" />
-                                    <form:password path="password" placeholder="password (*)" class="form-control" />
+                                <form:password path="password" placeholder="password (*)" class="form-control" /><br>
                             </div>
+                            <form:errors path="password" cssClass="error" />
 
                             <!-- Confirm Password -->
-                            <div style="margin-bottom: 25px" class="input-group">
+                            <div class="input-group bottom-fix">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span> 
-                                    <form:errors path="passwordConfirm" cssClass="error" />
-                                    <form:password path="passwordConfirm" placeholder="confirm password (*)" class="form-control" />
+                                <form:password path="passwordConfirm" placeholder="confirm password (*)" class="form-control" /><br>
                             </div>
+                            <form:errors path="passwordConfirm" cssClass="error" />
 
                             <!-- First name -->
-                            <div style="margin-bottom: 25px" class="input-group">
+                            <div class="input-group bottom-fix">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span> 
-                                    <form:errors path="firstName" cssClass="error" />
-                                    <form:input path="firstName" placeholder="first name (*)" class="form-control" />
+                                <form:input path="firstName" placeholder="first name (*)" class="form-control" /><br>
                             </div>
+                            <form:errors path="firstName" cssClass="error" />
 
                             <!-- Last name -->
-                            <div style="margin-bottom: 25px" class="input-group">
+                            <div class="input-group bottom-fix">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span> 
-                                    <form:errors path="lastName" cssClass="error" />
-                                    <form:input path="lastName" placeholder="last name (*)" class="form-control" />
+                                <form:input path="lastName" placeholder="last name (*)" class="form-control" /><br>
                             </div>
+                            <form:errors path="lastName" cssClass="error" />
 
                             <!-- Email -->
-                            <div style="margin-bottom: 25px" class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span> 
-                                    <form:errors path="email" cssClass="error" />
-                                    <form:input path="email" placeholder="email (*)" class="form-control" />
+                            <div class="input-group bottom-fix">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span> 
+                                <form:input path="email" placeholder="email (*)" class="form-control" /><br>
                             </div>
-
+                            <form:errors path="email" cssClass="error" />
 
                             <!-- Register Button -->
                             <div style="margin-top: 10px" class="form-group">						
-                                <div class="col-sm-6 controls">
                                     <button type="submit" class="btn btn-primary">Register</button>
-                                </div>
                             </div>
-
+                            <!-- manually adding tokens csrf protection -->
+                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                         </form:form>
-
                     </div>
-
                 </div>
-
             </div>
-
         </div>
-
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+        <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
     </body>
+
 </html>

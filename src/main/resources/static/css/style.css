@@ -1,9 +1,29 @@
+@import url("//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css");
 body {
     background-color:transparent;
 }
 html, body {
     height:100%;
 }
+
+.error {
+    margin:1px;
+    font-weight: bold;
+    color:#f7ff00;
+}
+
+#loginError {
+    margin-top:20px;
+    width:52%;
+    text-align: center;
+}
+.input-group-addon {
+    background-color: #512cd7b3;
+}
+.bottom-fix {
+    margin-bottom: 2px;
+}
+
 .login-form {
     width: 45%;
     padding:10px;
