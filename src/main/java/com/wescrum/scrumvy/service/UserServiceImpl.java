@@ -42,14 +42,14 @@ public class UserServiceImpl implements UserService {
 	public void save(UserDto userDto) {
 		User user = new User();
 		 // assign user dto details to the user object. premium is not needed default value is false
-		user.setUserName(userDto.getUserName());
+		user.setUsername(userDto.getUserName());
 		user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 		user.setFirstName(userDto.getFirstName());
 		user.setLastName(userDto.getLastName());
 		user.setEmail(userDto.getEmail());
 
 		// default role is employee . for admin we give manual approve directly from db.
-		user.setRoles(Arrays.asList(roleDao.findRoleByName("ROLE_EMPLOYEE")));
+		user.setRoleCollection(Arrays.asList(roleDao.findRoleByName("ROLE_EMPLOYEE")));
 		 // save user in the database
 		userDao.save(user);
 	}
@@ -61,8 +61,8 @@ public class UserServiceImpl implements UserService {
 		if (user == null) {
 			throw new UsernameNotFoundException("Invalid username or password.");
 		}
-		return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(),
-				mapRolesToAuthorities(user.getRoles()));
+		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
+				mapRolesToAuthorities(user.getRoleCollection()));
 	}
 
 	private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
