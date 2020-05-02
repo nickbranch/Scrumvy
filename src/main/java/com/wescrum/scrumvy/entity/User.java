@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.wescrum.scrumvy.entity;
 
 import java.io.Serializable;
@@ -25,10 +20,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-/**
- *
- * @author nklad
- */
 @Entity
 @Table(name = "user")
 @NamedQueries({
@@ -48,49 +39,60 @@ public class User implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
     @Column(name = "username")
     private String username;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 80)
     @Column(name = "password")
     private String password;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
     @Column(name = "first_name")
     private String firstName;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
     @Column(name = "last_name")
     private String lastName;
+    
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
     @Column(name = "email")
     private String email;
+    
     @Basic(optional = false)
     @NotNull
     @Column(name = "premium")
     private boolean premium;
-    
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roleCollection;
-    
-    @ManyToMany(mappedBy = "userCollection")
-    private Collection<Projects> projectsCollection;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_project",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "project_id"))
+    private Collection<Project> projectsCollection;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Collection<ProjectTeam> projectTeamCollection;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "receivingUserId")
-    private Collection<Invites> invitesCollection;
+    private Collection<Invite> invitesCollection;
 
     public User() {
     }
@@ -173,11 +175,11 @@ public class User implements Serializable {
         this.roleCollection = roleCollection;
     }
 
-    public Collection<Projects> getProjectsCollection() {
+    public Collection<Project> getProjectsCollection() {
         return projectsCollection;
     }
 
-    public void setProjectsCollection(Collection<Projects> projectsCollection) {
+    public void setProjectsCollection(Collection<Project> projectsCollection) {
         this.projectsCollection = projectsCollection;
     }
 
@@ -189,11 +191,11 @@ public class User implements Serializable {
         this.projectTeamCollection = projectTeamCollection;
     }
 
-    public Collection<Invites> getInvitesCollection() {
+    public Collection<Invite> getInvitesCollection() {
         return invitesCollection;
     }
 
-    public void setInvitesCollection(Collection<Invites> invitesCollection) {
+    public void setInvitesCollection(Collection<Invite> invitesCollection) {
         this.invitesCollection = invitesCollection;
     }
 
@@ -221,5 +223,5 @@ public class User implements Serializable {
     public String toString() {
         return "com.wescrum.scrumvy.entity.User[ id=" + id + " ]";
     }
-    
+
 }

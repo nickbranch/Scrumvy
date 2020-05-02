@@ -24,6 +24,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -31,13 +33,14 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "tasks")
+@XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Tasks.findAll", query = "SELECT t FROM Tasks t"),
-    @NamedQuery(name = "Tasks.findByTaskId", query = "SELECT t FROM Tasks t WHERE t.taskId = :taskId"),
-    @NamedQuery(name = "Tasks.findByDescription", query = "SELECT t FROM Tasks t WHERE t.description = :description"),
-    @NamedQuery(name = "Tasks.findByTaskStartDate", query = "SELECT t FROM Tasks t WHERE t.taskStartDate = :taskStartDate"),
-    @NamedQuery(name = "Tasks.findByTaskEndDate", query = "SELECT t FROM Tasks t WHERE t.taskEndDate = :taskEndDate")})
-public class Tasks implements Serializable {
+    @NamedQuery(name = "Task.findAll", query = "SELECT t FROM Task t"),
+    @NamedQuery(name = "Task.findByTaskId", query = "SELECT t FROM Task t WHERE t.taskId = :taskId"),
+    @NamedQuery(name = "Task.findByDescription", query = "SELECT t FROM Task t WHERE t.description = :description"),
+    @NamedQuery(name = "Task.findByTaskStartDate", query = "SELECT t FROM Task t WHERE t.taskStartDate = :taskStartDate"),
+    @NamedQuery(name = "Task.findByTaskEndDate", query = "SELECT t FROM Task t WHERE t.taskEndDate = :taskEndDate")})
+public class Task implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -58,18 +61,18 @@ public class Tasks implements Serializable {
         @JoinColumn(name = "task_id", referencedColumnName = "task_id")}, inverseJoinColumns = {
         @JoinColumn(name = "sprint_id", referencedColumnName = "sprint_id")})
     @ManyToMany
-    private Collection<Sprints> sprintsCollection;
+    private Collection<Sprint> sprintCollection;
     @JoinColumn(name = "project_id", referencedColumnName = "project_id")
     @ManyToOne(optional = false)
-    private Projects projectId;
+    private Project projectId;
     @JoinColumn(name = "status_id", referencedColumnName = "status_id")
     @ManyToOne(optional = false)
     private Status statusId;
 
-    public Tasks() {
+    public Task() {
     }
 
-    public Tasks(Long taskId) {
+    public Task(Long taskId) {
         this.taskId = taskId;
     }
 
@@ -105,19 +108,20 @@ public class Tasks implements Serializable {
         this.taskEndDate = taskEndDate;
     }
 
-    public Collection<Sprints> getSprintsCollection() {
-        return sprintsCollection;
+    @XmlTransient
+    public Collection<Sprint> getSprintCollection() {
+        return sprintCollection;
     }
 
-    public void setSprintsCollection(Collection<Sprints> sprintsCollection) {
-        this.sprintsCollection = sprintsCollection;
+    public void setSprintCollection(Collection<Sprint> sprintCollection) {
+        this.sprintCollection = sprintCollection;
     }
 
-    public Projects getProjectId() {
+    public Project getProjectId() {
         return projectId;
     }
 
-    public void setProjectId(Projects projectId) {
+    public void setProjectId(Project projectId) {
         this.projectId = projectId;
     }
 
@@ -139,10 +143,10 @@ public class Tasks implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Tasks)) {
+        if (!(object instanceof Task)) {
             return false;
         }
-        Tasks other = (Tasks) object;
+        Task other = (Task) object;
         if ((this.taskId == null && other.taskId != null) || (this.taskId != null && !this.taskId.equals(other.taskId))) {
             return false;
         }
@@ -151,7 +155,7 @@ public class Tasks implements Serializable {
 
     @Override
     public String toString() {
-        return "com.wescrum.scrumvy.entity.Tasks[ taskId=" + taskId + " ]";
+        return "com.wescrum.scrumvy.entity.Task[ taskId=" + taskId + " ]";
     }
     
 }

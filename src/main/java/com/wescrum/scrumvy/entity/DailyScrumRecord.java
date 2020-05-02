@@ -22,6 +22,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -29,6 +30,7 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "daily_scrum_record")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "DailyScrumRecord.findAll", query = "SELECT d FROM DailyScrumRecord d"),
     @NamedQuery(name = "DailyScrumRecord.findByRecordId", query = "SELECT d FROM DailyScrumRecord d WHERE d.recordId = :recordId"),
@@ -52,7 +54,7 @@ public class DailyScrumRecord implements Serializable {
     private Date timestamp;
     @JoinColumn(name = "project_id", referencedColumnName = "project_id")
     @ManyToOne(optional = false)
-    private Projects projectId;
+    private Project projectId;
 
     public DailyScrumRecord() {
     }
@@ -90,11 +92,11 @@ public class DailyScrumRecord implements Serializable {
         this.timestamp = timestamp;
     }
 
-    public Projects getProjectId() {
+    public Project getProjectId() {
         return projectId;
     }
 
-    public void setProjectId(Projects projectId) {
+    public void setProjectId(Project projectId) {
         this.projectId = projectId;
     }
 

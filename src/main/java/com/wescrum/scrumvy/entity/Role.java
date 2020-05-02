@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.wescrum.scrumvy.entity;
 
 import java.io.Serializable;
@@ -21,10 +16,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
-/**
- *
- * @author nklad
- */
 @Entity
 @Table(name = "role")
 @NamedQueries({
@@ -42,10 +33,11 @@ public class Role implements Serializable {
     @Size(max = 50)
     @Column(name = "name")
     private String name;
-    @JoinTable(name = "users_roles", joinColumns = {
-        @JoinColumn(name = "role_id", referencedColumnName = "id")}, inverseJoinColumns = {
-        @JoinColumn(name = "user_id", referencedColumnName = "id")})
-    @ManyToMany
+    
+//    @JoinTable(name = "users_roles", joinColumns = {
+//        @JoinColumn(name = "role_id", referencedColumnName = "id")}, inverseJoinColumns = {
+//        @JoinColumn(name = "user_id", referencedColumnName = "id")})
+    @ManyToMany(mappedBy = "roleCollection")
     private Collection<User> userCollection;
 
     public Role() {

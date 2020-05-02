@@ -5,6 +5,7 @@ import com.wescrum.scrumvy.dao.RoleDao;
 import com.wescrum.scrumvy.dao.UserDao;
 import com.wescrum.scrumvy.entity.Role;
 import com.wescrum.scrumvy.entity.User;
+import com.wescrum.scrumvy.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,51 +22,66 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
 
-	@Autowired
-	private UserDao userDao;
+    @Autowired
+    private UserDao userDao;
 
-	@Autowired
-	private RoleDao roleDao;
-	
-	@Autowired
-	private BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private RoleDao roleDao;
 
-	@Override
-	@Transactional
-	public User findByUserName(String userName) {
-		// checks the database if a user exists in it
-		return userDao.findByUserName(userName);
-	}
+    @Autowired
+    UserRepository userRepository;
 
-	@Override
-	@Transactional
-	public void save(UserDto userDto) {
-		User user = new User();
-		 // assign user dto details to the user object. premium is not needed default value is false
-		user.setUsername(userDto.getUserName());
-		user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-		user.setFirstName(userDto.getFirstName());
-		user.setLastName(userDto.getLastName());
-		user.setEmail(userDto.getEmail());
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
-		// default role is employee . for admin we give manual approve directly from db.
-		user.setRoleCollection(Arrays.asList(roleDao.findRoleByName("ROLE_EMPLOYEE")));
-		 // save user in the database
-		userDao.save(user);
-	}
+    @Override
+    @Transactional
+    public User findByUserName(String userName) {
+        // checks the database if a user exists in it
+        return userDao.findByUserName(userName);
+    }
 
-	@Override
-	@Transactional
-	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-		User user = userDao.findByUserName(userName);
-		if (user == null) {
-			throw new UsernameNotFoundException("Invalid username or password.");
-		}
-		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
-				mapRolesToAuthorities(user.getRoleCollection()));
-	}
+    @Override
+    @Transactional
+    public User findByUserId(Integer userId) {
+        return userRepository.getOne(userId);
+    }
 
-	private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
-		return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
-	}
+    @Override
+    @Transactional
+    public void save(UserDto userDto) {
+        User user = new User();
+        // assign user dto details to the user object. premium is not needed default value is false
+        user.setUsername(userDto.getUserName());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
+        user.setEmail(userDto.getEmail());
+        // default role is employee . for admin we give manual approve directly from db.
+        user.setRoleCollection(Arrays.asList(roleDao.findRoleByName("ROLE_EMPLOYEE")));
+        // save user in the database
+        userDao.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void saveUserWithProject(User user) {
+        userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        User user = userDao.findByUserName(userName);
+        if (user == null) {
+            throw new UsernameNotFoundException("Invalid username or password.");
+        }
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
+                mapRolesToAuthorities(user.getRoleCollection()));
+    }
+
+    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
+        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+    }
+
 }

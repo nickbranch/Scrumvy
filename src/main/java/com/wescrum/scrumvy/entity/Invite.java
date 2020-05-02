@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -24,11 +25,12 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "invites")
+@XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Invites.findAll", query = "SELECT i FROM Invites i"),
-    @NamedQuery(name = "Invites.findByInviteId", query = "SELECT i FROM Invites i WHERE i.inviteId = :inviteId"),
-    @NamedQuery(name = "Invites.findByAccepted", query = "SELECT i FROM Invites i WHERE i.accepted = :accepted")})
-public class Invites implements Serializable {
+    @NamedQuery(name = "Invite.findAll", query = "SELECT i FROM Invite i"),
+    @NamedQuery(name = "Invite.findByInviteId", query = "SELECT i FROM Invite i WHERE i.inviteId = :inviteId"),
+    @NamedQuery(name = "Invite.findByAccepted", query = "SELECT i FROM Invite i WHERE i.accepted = :accepted")})
+public class Invite implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -40,18 +42,18 @@ public class Invites implements Serializable {
     private Boolean accepted;
     @JoinColumn(name = "project_role_id", referencedColumnName = "project_role_id")
     @ManyToOne(optional = false)
-    private ProjectRoles projectRoleId;
+    private ProjectRole projectRoleId;
     @JoinColumn(name = "project_id", referencedColumnName = "project_id")
     @ManyToOne(optional = false)
-    private Projects projectId;
+    private Project projectId;
     @JoinColumn(name = "receiving_user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private User receivingUserId;
 
-    public Invites() {
+    public Invite() {
     }
 
-    public Invites(Long inviteId) {
+    public Invite(Long inviteId) {
         this.inviteId = inviteId;
     }
 
@@ -71,19 +73,19 @@ public class Invites implements Serializable {
         this.accepted = accepted;
     }
 
-    public ProjectRoles getProjectRoleId() {
+    public ProjectRole getProjectRoleId() {
         return projectRoleId;
     }
 
-    public void setProjectRoleId(ProjectRoles projectRoleId) {
+    public void setProjectRoleId(ProjectRole projectRoleId) {
         this.projectRoleId = projectRoleId;
     }
 
-    public Projects getProjectId() {
+    public Project getProjectId() {
         return projectId;
     }
 
-    public void setProjectId(Projects projectId) {
+    public void setProjectId(Project projectId) {
         this.projectId = projectId;
     }
 
@@ -105,10 +107,10 @@ public class Invites implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Invites)) {
+        if (!(object instanceof Invite)) {
             return false;
         }
-        Invites other = (Invites) object;
+        Invite other = (Invite) object;
         if ((this.inviteId == null && other.inviteId != null) || (this.inviteId != null && !this.inviteId.equals(other.inviteId))) {
             return false;
         }
@@ -117,7 +119,7 @@ public class Invites implements Serializable {
 
     @Override
     public String toString() {
-        return "com.wescrum.scrumvy.entity.Invites[ inviteId=" + inviteId + " ]";
+        return "com.wescrum.scrumvy.entity.Invite[ inviteId=" + inviteId + " ]";
     }
     
 }

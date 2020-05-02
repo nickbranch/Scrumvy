@@ -20,6 +20,11 @@
         <hr>
         <a href="${pageContext.request.contextPath}/project/createProject" class="btn btn-primary" role="button"
            aria-pressed="true">Create Project</a>
+        <h2>Owned Projects</h2>
+        <div></div>
+        <h2>Projects you joined</h2>
+        <div></div>
+
         <!-- display user name and role -->
         <div>
             <p>

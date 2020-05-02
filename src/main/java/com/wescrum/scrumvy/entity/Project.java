@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.wescrum.scrumvy.entity;
 
 import java.io.Serializable;
@@ -18,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -27,21 +21,20 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
-/**
- *
- * @author nklad
- */
 @Entity
 @Table(name = "projects")
+@XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Projects.findAll", query = "SELECT p FROM Projects p"),
-    @NamedQuery(name = "Projects.findByProjectId", query = "SELECT p FROM Projects p WHERE p.projectId = :projectId"),
-    @NamedQuery(name = "Projects.findByProjectName", query = "SELECT p FROM Projects p WHERE p.projectName = :projectName"),
-    @NamedQuery(name = "Projects.findByProjectDescription", query = "SELECT p FROM Projects p WHERE p.projectDescription = :projectDescription"),
-    @NamedQuery(name = "Projects.findByStartDate", query = "SELECT p FROM Projects p WHERE p.startDate = :startDate"),
-    @NamedQuery(name = "Projects.findByEndDate", query = "SELECT p FROM Projects p WHERE p.endDate = :endDate")})
-public class Projects implements Serializable {
+    @NamedQuery(name = "Project.findAll", query = "SELECT p FROM Project p"),
+    @NamedQuery(name = "Project.findByProjectId", query = "SELECT p FROM Project p WHERE p.projectId = :projectId"),
+    @NamedQuery(name = "Project.findByProjectName", query = "SELECT p FROM Project p WHERE p.projectName = :projectName"),
+    @NamedQuery(name = "Project.findByProjectDescription", query = "SELECT p FROM Project p WHERE p.projectDescription = :projectDescription"),
+    @NamedQuery(name = "Project.findByStartDate", query = "SELECT p FROM Project p WHERE p.startDate = :startDate"),
+    @NamedQuery(name = "Project.findByEndDate", query = "SELECT p FROM Project p WHERE p.endDate = :endDate")})
+public class Project implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -49,49 +42,56 @@ public class Projects implements Serializable {
     @Basic(optional = false)
     @Column(name = "project_id")
     private Long projectId;
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
     @Column(name = "project_name")
     private String projectName;
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 150)
     @Column(name = "project_description")
     private String projectDescription;
+
     @Column(name = "start_date")
     @Temporal(TemporalType.DATE)
     private Date startDate;
+
     @Column(name = "end_date")
     @Temporal(TemporalType.DATE)
     private Date endDate;
-    @JoinTable(name = "user_project", joinColumns = {
-        @JoinColumn(name = "project_id", referencedColumnName = "project_id")}, inverseJoinColumns = {
-        @JoinColumn(name = "user_id", referencedColumnName = "id")})
-    @ManyToMany
+
+    @ManyToMany(mappedBy = "projectsCollection")
     private Collection<User> userCollection;
-    @JoinColumn(name = "project_team_id", referencedColumnName = "project_team_id")
-    @ManyToOne(optional = false)
-    private ProjectTeam projectTeamId;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectId")
+    private Collection<ProjectTeam> projectTeamCollection;
+
     @OneToMany(mappedBy = "projectId")
     private Collection<Retrospective> retrospectiveCollection;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectId")
-    private Collection<Invites> invitesCollection;
+    private Collection<Invite> inviteCollection;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectId")
-    private Collection<Sprints> sprintsCollection;
+    private Collection<Sprint> sprintCollection;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectId")
     private Collection<DailyScrumRecord> dailyScrumRecordCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectId")
-    private Collection<Tasks> tasksCollection;
 
-    public Projects() {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectId")
+    private Collection<Task> taskCollection;
+
+    public Project() {
     }
 
-    public Projects(Long projectId) {
+    public Project(Long projectId) {
         this.projectId = projectId;
     }
 
-    public Projects(Long projectId, String projectName, String projectDescription) {
+    public Project(Long projectId, String projectName, String projectDescription) {
         this.projectId = projectId;
         this.projectName = projectName;
         this.projectDescription = projectDescription;
@@ -137,6 +137,7 @@ public class Projects implements Serializable {
         this.endDate = endDate;
     }
 
+    @XmlTransient
     public Collection<User> getUserCollection() {
         return userCollection;
     }
@@ -145,14 +146,16 @@ public class Projects implements Serializable {
         this.userCollection = userCollection;
     }
 
-    public ProjectTeam getProjectTeamId() {
-        return projectTeamId;
+    @XmlTransient
+    public Collection<ProjectTeam> getProjectTeamCollection() {
+        return projectTeamCollection;
     }
 
-    public void setProjectTeamId(ProjectTeam projectTeamId) {
-        this.projectTeamId = projectTeamId;
+    public void setProjectTeamCollection(Collection<ProjectTeam> projectTeamCollection) {
+        this.projectTeamCollection = projectTeamCollection;
     }
 
+    @XmlTransient
     public Collection<Retrospective> getRetrospectiveCollection() {
         return retrospectiveCollection;
     }
@@ -161,22 +164,25 @@ public class Projects implements Serializable {
         this.retrospectiveCollection = retrospectiveCollection;
     }
 
-    public Collection<Invites> getInvitesCollection() {
-        return invitesCollection;
+    @XmlTransient
+    public Collection<Invite> getInviteCollection() {
+        return inviteCollection;
     }
 
-    public void setInvitesCollection(Collection<Invites> invitesCollection) {
-        this.invitesCollection = invitesCollection;
+    public void setInviteCollection(Collection<Invite> inviteCollection) {
+        this.inviteCollection = inviteCollection;
     }
 
-    public Collection<Sprints> getSprintsCollection() {
-        return sprintsCollection;
+    @XmlTransient
+    public Collection<Sprint> getSprintCollection() {
+        return sprintCollection;
     }
 
-    public void setSprintsCollection(Collection<Sprints> sprintsCollection) {
-        this.sprintsCollection = sprintsCollection;
+    public void setSprintCollection(Collection<Sprint> sprintCollection) {
+        this.sprintCollection = sprintCollection;
     }
 
+    @XmlTransient
     public Collection<DailyScrumRecord> getDailyScrumRecordCollection() {
         return dailyScrumRecordCollection;
     }
@@ -185,12 +191,13 @@ public class Projects implements Serializable {
         this.dailyScrumRecordCollection = dailyScrumRecordCollection;
     }
 
-    public Collection<Tasks> getTasksCollection() {
-        return tasksCollection;
+    @XmlTransient
+    public Collection<Task> getTaskCollection() {
+        return taskCollection;
     }
 
-    public void setTasksCollection(Collection<Tasks> tasksCollection) {
-        this.tasksCollection = tasksCollection;
+    public void setTaskCollection(Collection<Task> taskCollection) {
+        this.taskCollection = taskCollection;
     }
 
     @Override
@@ -203,10 +210,10 @@ public class Projects implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Projects)) {
+        if (!(object instanceof Project)) {
             return false;
         }
-        Projects other = (Projects) object;
+        Project other = (Project) object;
         if ((this.projectId == null && other.projectId != null) || (this.projectId != null && !this.projectId.equals(other.projectId))) {
             return false;
         }
@@ -215,7 +222,7 @@ public class Projects implements Serializable {
 
     @Override
     public String toString() {
-        return "com.wescrum.scrumvy.entity.Projects[ projectId=" + projectId + " ]";
+        return "com.wescrum.scrumvy.entity.Project[ projectId=" + projectId + " ]";
     }
-    
+
 }

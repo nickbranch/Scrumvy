@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.wescrum.scrumvy.entity;
 
 import java.io.Serializable;
@@ -19,18 +14,17 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
-/**
- *
- * @author nklad
- */
 @Entity
 @Table(name = "project_roles")
+@XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "ProjectRoles.findAll", query = "SELECT p FROM ProjectRoles p"),
-    @NamedQuery(name = "ProjectRoles.findByProjectRoleId", query = "SELECT p FROM ProjectRoles p WHERE p.projectRoleId = :projectRoleId"),
-    @NamedQuery(name = "ProjectRoles.findByRoleDescription", query = "SELECT p FROM ProjectRoles p WHERE p.roleDescription = :roleDescription")})
-public class ProjectRoles implements Serializable {
+    @NamedQuery(name = "ProjectRole.findAll", query = "SELECT p FROM ProjectRole p"),
+    @NamedQuery(name = "ProjectRole.findByProjectRoleId", query = "SELECT p FROM ProjectRole p WHERE p.projectRoleId = :projectRoleId"),
+    @NamedQuery(name = "ProjectRole.findByRoleDescription", query = "SELECT p FROM ProjectRole p WHERE p.roleDescription = :roleDescription")})
+public class ProjectRole implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -38,18 +32,21 @@ public class ProjectRoles implements Serializable {
     @Basic(optional = false)
     @Column(name = "project_role_id")
     private Integer projectRoleId;
+    
     @Size(max = 30)
     @Column(name = "role_description")
     private String roleDescription;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectRoleId")
     private Collection<ProjectTeam> projectTeamCollection;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectRoleId")
-    private Collection<Invites> invitesCollection;
+    private Collection<Invite> inviteCollection;
 
-    public ProjectRoles() {
+    public ProjectRole() {
     }
 
-    public ProjectRoles(Integer projectRoleId) {
+    public ProjectRole(Integer projectRoleId) {
         this.projectRoleId = projectRoleId;
     }
 
@@ -69,6 +66,7 @@ public class ProjectRoles implements Serializable {
         this.roleDescription = roleDescription;
     }
 
+    @XmlTransient
     public Collection<ProjectTeam> getProjectTeamCollection() {
         return projectTeamCollection;
     }
@@ -77,12 +75,13 @@ public class ProjectRoles implements Serializable {
         this.projectTeamCollection = projectTeamCollection;
     }
 
-    public Collection<Invites> getInvitesCollection() {
-        return invitesCollection;
+    @XmlTransient
+    public Collection<Invite> getInviteCollection() {
+        return inviteCollection;
     }
 
-    public void setInvitesCollection(Collection<Invites> invitesCollection) {
-        this.invitesCollection = invitesCollection;
+    public void setInviteCollection(Collection<Invite> inviteCollection) {
+        this.inviteCollection = inviteCollection;
     }
 
     @Override
@@ -95,10 +94,10 @@ public class ProjectRoles implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ProjectRoles)) {
+        if (!(object instanceof ProjectRole)) {
             return false;
         }
-        ProjectRoles other = (ProjectRoles) object;
+        ProjectRole other = (ProjectRole) object;
         if ((this.projectRoleId == null && other.projectRoleId != null) || (this.projectRoleId != null && !this.projectRoleId.equals(other.projectRoleId))) {
             return false;
         }
@@ -107,7 +106,7 @@ public class ProjectRoles implements Serializable {
 
     @Override
     public String toString() {
-        return "com.wescrum.scrumvy.entity.ProjectRoles[ projectRoleId=" + projectRoleId + " ]";
+        return "com.wescrum.scrumvy.entity.ProjectRole[ projectRoleId=" + projectRoleId + " ]";
     }
     
 }

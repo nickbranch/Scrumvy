@@ -1,31 +1,22 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.wescrum.scrumvy.entity;
 
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- *
- * @author nklad
- */
 @Entity
 @Table(name = "project_team")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ProjectTeam.findAll", query = "SELECT p FROM ProjectTeam p"),
     @NamedQuery(name = "ProjectTeam.findByProjectTeamId", query = "SELECT p FROM ProjectTeam p WHERE p.projectTeamId = :projectTeamId")})
@@ -33,40 +24,52 @@ public class ProjectTeam implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "project_team_id")
-    private Integer projectTeamId;
+    private Long projectTeamId;
+    
     @JoinColumn(name = "project_role_id", referencedColumnName = "project_role_id")
     @ManyToOne(optional = false)
-    private ProjectRoles projectRoleId;
+    private ProjectRole projectRoleId;
+    
+    @JoinColumn(name = "project_id", referencedColumnName = "project_id")
+    @ManyToOne(optional = false)
+    private Project projectId;
+    
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private User userId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectTeamId")
-    private Collection<Projects> projectsCollection;
 
     public ProjectTeam() {
     }
 
-    public ProjectTeam(Integer projectTeamId) {
+    public ProjectTeam(Long projectTeamId) {
         this.projectTeamId = projectTeamId;
     }
 
-    public Integer getProjectTeamId() {
+    public Long getProjectTeamId() {
         return projectTeamId;
     }
 
-    public void setProjectTeamId(Integer projectTeamId) {
+    public void setProjectTeamId(Long projectTeamId) {
         this.projectTeamId = projectTeamId;
     }
 
-    public ProjectRoles getProjectRoleId() {
+    public ProjectRole getProjectRoleId() {
         return projectRoleId;
     }
 
-    public void setProjectRoleId(ProjectRoles projectRoleId) {
+    public void setProjectRoleId(ProjectRole projectRoleId) {
         this.projectRoleId = projectRoleId;
+    }
+
+    public Project getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Project projectId) {
+        this.projectId = projectId;
     }
 
     public User getUserId() {
@@ -75,14 +78,6 @@ public class ProjectTeam implements Serializable {
 
     public void setUserId(User userId) {
         this.userId = userId;
-    }
-
-    public Collection<Projects> getProjectsCollection() {
-        return projectsCollection;
-    }
-
-    public void setProjectsCollection(Collection<Projects> projectsCollection) {
-        this.projectsCollection = projectsCollection;
     }
 
     @Override

@@ -21,6 +21,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -28,6 +29,7 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "retrospective")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Retrospective.findAll", query = "SELECT r FROM Retrospective r"),
     @NamedQuery(name = "Retrospective.findByStoryId", query = "SELECT r FROM Retrospective r WHERE r.storyId = :storyId"),
@@ -49,7 +51,7 @@ public class Retrospective implements Serializable {
     private Date timestamp;
     @JoinColumn(name = "project_id", referencedColumnName = "project_id")
     @ManyToOne
-    private Projects projectId;
+    private Project projectId;
 
     public Retrospective() {
     }
@@ -82,11 +84,11 @@ public class Retrospective implements Serializable {
         this.timestamp = timestamp;
     }
 
-    public Projects getProjectId() {
+    public Project getProjectId() {
         return projectId;
     }
 
-    public void setProjectId(Projects projectId) {
+    public void setProjectId(Project projectId) {
         this.projectId = projectId;
     }
 

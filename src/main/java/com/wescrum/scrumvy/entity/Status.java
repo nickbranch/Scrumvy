@@ -19,6 +19,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -26,6 +28,7 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "status")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Status.findAll", query = "SELECT s FROM Status s"),
     @NamedQuery(name = "Status.findByStatusId", query = "SELECT s FROM Status s WHERE s.statusId = :statusId"),
@@ -42,7 +45,7 @@ public class Status implements Serializable {
     @Column(name = "status_state")
     private String statusState;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "statusId")
-    private Collection<Tasks> tasksCollection;
+    private Collection<Task> taskCollection;
 
     public Status() {
     }
@@ -67,12 +70,13 @@ public class Status implements Serializable {
         this.statusState = statusState;
     }
 
-    public Collection<Tasks> getTasksCollection() {
-        return tasksCollection;
+    @XmlTransient
+    public Collection<Task> getTaskCollection() {
+        return taskCollection;
     }
 
-    public void setTasksCollection(Collection<Tasks> tasksCollection) {
-        this.tasksCollection = tasksCollection;
+    public void setTaskCollection(Collection<Task> taskCollection) {
+        this.taskCollection = taskCollection;
     }
 
     @Override

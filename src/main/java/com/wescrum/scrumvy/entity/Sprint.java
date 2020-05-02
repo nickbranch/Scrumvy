@@ -22,6 +22,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -29,12 +31,13 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "sprints")
+@XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Sprints.findAll", query = "SELECT s FROM Sprints s"),
-    @NamedQuery(name = "Sprints.findBySprintId", query = "SELECT s FROM Sprints s WHERE s.sprintId = :sprintId"),
-    @NamedQuery(name = "Sprints.findBySprintStartDate", query = "SELECT s FROM Sprints s WHERE s.sprintStartDate = :sprintStartDate"),
-    @NamedQuery(name = "Sprints.findBySprintEndDate", query = "SELECT s FROM Sprints s WHERE s.sprintEndDate = :sprintEndDate")})
-public class Sprints implements Serializable {
+    @NamedQuery(name = "Sprint.findAll", query = "SELECT s FROM Sprint s"),
+    @NamedQuery(name = "Sprint.findBySprintId", query = "SELECT s FROM Sprint s WHERE s.sprintId = :sprintId"),
+    @NamedQuery(name = "Sprint.findBySprintStartDate", query = "SELECT s FROM Sprint s WHERE s.sprintStartDate = :sprintStartDate"),
+    @NamedQuery(name = "Sprint.findBySprintEndDate", query = "SELECT s FROM Sprint s WHERE s.sprintEndDate = :sprintEndDate")})
+public class Sprint implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -48,16 +51,16 @@ public class Sprints implements Serializable {
     @Column(name = "sprint_end_date")
     @Temporal(TemporalType.DATE)
     private Date sprintEndDate;
-    @ManyToMany(mappedBy = "sprintsCollection")
-    private Collection<Tasks> tasksCollection;
+    @ManyToMany(mappedBy = "sprintCollection")
+    private Collection<Task> taskCollection;
     @JoinColumn(name = "project_id", referencedColumnName = "project_id")
     @ManyToOne(optional = false)
-    private Projects projectId;
+    private Project projectId;
 
-    public Sprints() {
+    public Sprint() {
     }
 
-    public Sprints(Long sprintId) {
+    public Sprint(Long sprintId) {
         this.sprintId = sprintId;
     }
 
@@ -85,19 +88,20 @@ public class Sprints implements Serializable {
         this.sprintEndDate = sprintEndDate;
     }
 
-    public Collection<Tasks> getTasksCollection() {
-        return tasksCollection;
+    @XmlTransient
+    public Collection<Task> getTaskCollection() {
+        return taskCollection;
     }
 
-    public void setTasksCollection(Collection<Tasks> tasksCollection) {
-        this.tasksCollection = tasksCollection;
+    public void setTaskCollection(Collection<Task> taskCollection) {
+        this.taskCollection = taskCollection;
     }
 
-    public Projects getProjectId() {
+    public Project getProjectId() {
         return projectId;
     }
 
-    public void setProjectId(Projects projectId) {
+    public void setProjectId(Project projectId) {
         this.projectId = projectId;
     }
 
@@ -111,10 +115,10 @@ public class Sprints implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Sprints)) {
+        if (!(object instanceof Sprint)) {
             return false;
         }
-        Sprints other = (Sprints) object;
+        Sprint other = (Sprint) object;
         if ((this.sprintId == null && other.sprintId != null) || (this.sprintId != null && !this.sprintId.equals(other.sprintId))) {
             return false;
         }
@@ -123,7 +127,7 @@ public class Sprints implements Serializable {
 
     @Override
     public String toString() {
-        return "com.wescrum.scrumvy.entity.Sprints[ sprintId=" + sprintId + " ]";
+        return "com.wescrum.scrumvy.entity.Sprint[ sprintId=" + sprintId + " ]";
     }
     
 }

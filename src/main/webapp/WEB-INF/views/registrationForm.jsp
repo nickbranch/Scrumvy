@@ -35,9 +35,10 @@
                 <div id="right" class="col-lg-8">
                     <div class="login-form">
                         <!-- Registration Form -->
-                        <form:form action="${pageContext.request.contextPath}/register/processRegistrationForm" 
+                        <form:form action="${pageContext.request.contextPath}/register/processRegistrationForm" method="POST"
                                    modelAttribute="userDto"
                                    class="form-horizontal">
+                            
                             <div class="form-group">
                                 <div class="col-xs-15">
                                     <div>
@@ -50,6 +51,7 @@
                                     </div>
                                 </div>
                             </div>
+                            
                             <!-- User name -->
                             <div class="input-group bottom-fix">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span> 
@@ -95,9 +97,6 @@
                             <!-- Register Button -->
                             <div style="margin-top: 10px" class="form-group">						
                                     <button type="submit" class="btn btn-primary">Register</button>
-                            </div>
-                            <!-- manually adding tokens csrf protection -->
-                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                         </form:form>
                     </div>
                 </div>
