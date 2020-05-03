@@ -4,10 +4,12 @@ import com.wescrum.scrumvy.entity.Project;
 import com.wescrum.scrumvy.entity.ProjectRole;
 import com.wescrum.scrumvy.entity.ProjectTeam;
 import com.wescrum.scrumvy.entity.User;
+import com.wescrum.scrumvy.repos.ProjectRoleRepository;
 import com.wescrum.scrumvy.repos.ProjectTeamRepository;
 import com.wescrum.scrumvy.service.ProjectServiceImpl;
 import com.wescrum.scrumvy.service.ProjectTeamServiceImpl;
 import com.wescrum.scrumvy.service.UserService;
+import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -30,19 +32,27 @@ public class ProjectController {
     private UserService userService;
     @Autowired
     private ProjectTeamServiceImpl projectTeamService;
-    
+    @Autowired
+    private ProjectRoleRepository projectRoleRepo;
+    @Autowired
+    ProjectTeamRepository projectTeamRepo;
+
     @GetMapping("/createProject")
     public String createProject(Model model) {
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
         String username = loggedInUser.getName();
-        System.out.println("logged in user = " + username); //diagnostic
         User user = userService.findByUserName(username);
         User customUser = userService.findByUserId(user.getId());
 
-        int numberOfProjects = customUser.getProjectsCollection().size(); // MUST CHECK FOR OWNED PROJECTS
+        ProjectRole projectRole = projectRoleRepo.findByprojectRoleId(1);
+        List<ProjectTeam> usersOwnedProjects = projectTeamRepo.findByUserIdAndProjectRoleId(user, projectRole);
+        System.out.println(usersOwnedProjects);
+
+        int numberOfProjects = usersOwnedProjects.size(); // MUST CHECK FOR OWNED PROJECTS
         if ((customUser.getPremium() == false) && (numberOfProjects >= 1)) {
-            System.out.println("number of projects = " + numberOfProjects); //diagnostic
             // IMPLEMENT THROW ERROR
+            model.addAttribute("project", new Project());
+            model.addAttribute("createProjectError", "If you need to create more projects. Go premium!");
             return "home";
         } else {
             model.addAttribute("project", new Project());
@@ -70,10 +80,7 @@ public class ProjectController {
             return "createProjectForm";
         }
 
-        // create a demo role for the moment
-        ProjectRole projectRole = new ProjectRole();
-        projectRole.setProjectRoleId(1);
-        projectRole.setRoleDescription("Product Owner");
+        ProjectRole projectRole = projectRoleRepo.findByprojectRoleId(1);
 
         System.out.println("PROJECT ID = " + project.getProjectId()); //diagnostic
         System.out.println("PROJECT name = " + project.getProjectName()); //diagnostic
@@ -87,10 +94,10 @@ public class ProjectController {
         projectTeam.setUserId(user);
         projectTeam.setProjectRoleId(projectRole);
         projectTeamService.saveTeam(projectTeam);
-        
+
         user.getProjectsCollection().add(project);
         userService.saveUserWithProject(user);
-        
+
         System.out.println(projectTeam.toString());
         //customUser.getProjectsCollection().add(project);
         //userService.saveUserWithProject(customUser);

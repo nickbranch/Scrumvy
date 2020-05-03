@@ -2,6 +2,7 @@ package com.wescrum.scrumvy.controller;
 
 import com.wescrum.scrumvy.dto.UserDto;
 import com.wescrum.scrumvy.entity.User;
+import com.wescrum.scrumvy.repos.UserRepository;
 import com.wescrum.scrumvy.service.UserService;
 import java.util.logging.Logger;
 import javax.validation.Valid;
@@ -23,6 +24,9 @@ public class RegistrationController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserRepository userRepo;
+
     private Logger logger = Logger.getLogger(getClass().getName());
 
     @InitBinder
@@ -58,6 +62,15 @@ public class RegistrationController {
             model.addAttribute("registrationError", "User name already exists.");
 
             logger.warning("User name already exists.");
+            return "registrationForm";
+        }
+
+        User EmailExists = userRepo.findByEmail(userDto.getEmail());
+        if (EmailExists != null) {
+            model.addAttribute("userDto", new UserDto());
+            model.addAttribute("registrationError", "Email already exists.");
+
+            logger.warning("Email already exists.");
             return "registrationForm";
         }
 

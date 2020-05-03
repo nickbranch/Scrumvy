@@ -33,9 +33,9 @@
                                 <div class="col-xs-15">
                                     <div>
                                         <!-- Check for errors FIRST IMPLEMENT VALIDATION --> 
-                                        <c:if test="${registrationError != null}">
+                                        <c:if test="${createProjectError != null}">
                                             <div class="alert alert-danger col-xs-offset-1 col-xs-10">
-                                                ${registrationError}
+                                                ${createProjectError}
                                             </div>
                                         </c:if>
                                     </div>

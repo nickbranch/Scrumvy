@@ -221,7 +221,13 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "com.wescrum.scrumvy.entity.User[ id=" + id + " ]";
+        return "User{" + "id=" + id + ", username=" + username + ", password=" + 
+                password + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + 
+                email + ", premium=" + premium + ", roleCollection=" + roleCollection + ", projectsCollection=" + 
+                projectsCollection + ", projectTeamCollection=" + projectTeamCollection + ", invitesCollection=" + 
+                invitesCollection + '}';
     }
+
+
 
 }

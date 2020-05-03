@@ -12,5 +12,5 @@ public interface UserService extends UserDetailsService {
 
     public void save(UserDto userDto);
     
-    public void saveUserWithProject(User user);
+    public void saveUserWithProject(User user);    
 }
