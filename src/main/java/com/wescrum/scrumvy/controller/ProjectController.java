@@ -46,13 +46,12 @@ public class ProjectController {
 
         ProjectRole projectRole = projectRoleRepo.findByprojectRoleId(1);
         List<ProjectTeam> usersOwnedProjects = projectTeamRepo.findByUserIdAndProjectRoleId(user, projectRole);
-        System.out.println(usersOwnedProjects);
 
-        int numberOfProjects = usersOwnedProjects.size(); // MUST CHECK FOR OWNED PROJECTS
+        int numberOfProjects = usersOwnedProjects.size();
         if ((customUser.getPremium() == false) && (numberOfProjects >= 1)) {
             // IMPLEMENT THROW ERROR
             model.addAttribute("project", new Project());
-            model.addAttribute("createProjectError", "If you need to create more projects. Go premium!");
+            model.addAttribute("createProjectError", "I would love to create a new project for you. If you want me to do this Go premium!");
             return "home";
         } else {
             model.addAttribute("project", new Project());

@@ -5,6 +5,7 @@
     Created on : Apr 24, 2020, 10:04:01 PM
     Author     : nklad
 --%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -43,12 +44,21 @@
                         Meeting</a> (only for admin peeps)
                 </p>
             </security:authorize>
+            <p>
+                These are the projects which I own: 
+                <c:forEach items="${ownedProjects}" var="project">
+                <ul>
+                    <li>${project.projectName}</li> 
+                </ul>
+            </c:forEach>
 
-            <!--  Add log out button -->
-            <form:form action="${pageContext.request.contextPath}/logout"
-                       method="POST">
-                <input type="submit" value="Logout">
-            </form:form>
+        </p>
 
-            </body>
-            </html>
+        <!--  Add log out button -->
+        <form:form action="${pageContext.request.contextPath}/logout"
+                   method="POST">
+            <input type="submit" value="Logout">
+        </form:form>
+
+        </body>
+        </html>

@@ -6,5 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProjectRoleRepository extends JpaRepository<ProjectRole, Integer> {
+    
     public ProjectRole findByprojectRoleId(Integer projectRoleId);
+    
 }
