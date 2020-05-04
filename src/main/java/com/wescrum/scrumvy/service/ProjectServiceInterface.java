@@ -15,4 +15,6 @@ public interface ProjectServiceInterface {
 
     public void updateProject(Project project);
 
+    public List<Project> getAllOwnedProjectsOfAUser(Integer user_id);
+
 }

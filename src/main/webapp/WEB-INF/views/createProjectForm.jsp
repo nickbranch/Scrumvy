@@ -32,7 +32,7 @@
                             <div class="form-group">
                                 <div class="col-xs-15">
                                     <div>
-                                        <!-- Check for errors FIRST IMPLEMENT VALIDATION --> 
+                                        <!-- Check for errors --> 
                                         <c:if test="${createProjectError != null}">
                                             <div class="alert alert-danger col-xs-offset-1 col-xs-10">
                                                 ${createProjectError}

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class AfterLoginController {
 
-    @Autowired//diko mou
+    @Autowired
     private UserService userService;
 
     @Autowired
@@ -34,30 +34,34 @@ public class AfterLoginController {
 
     @GetMapping("/")
     public String showHome(ModelMap modelMap) {
-        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
-        String username = loggedInUser.getName();
-        System.out.println("logged in user = " + username); //diagnostic
-        User user = userService.findByUserName(username);
-        User customUser = userService.findByUserId(user.getId());
+        User user = userService.getLoggedinUser();
 
-        ProjectRole projectRole = projectRoleRepo.findByprojectRoleId(1);
-        List<ProjectTeam> usersTeamProjects = projectTeamRepo.findByUserIdAndProjectRoleId(user, projectRole);
-
-        List<Project> userOwnedProjects = new ArrayList();
-        for (ProjectTeam usersTeamProject : usersTeamProjects) {
-            System.out.println(usersTeamProjects);
-            userOwnedProjects.add(projectServiceInterface.getProjectbyid(usersTeamProject.getProjectId().getProjectId()));
+        for (int i = 1; i <= 3; i++) {
+            String[] roles = {"ownedProjects", "joinedAsScrumMaster", "joinedAsDevTeam"};
+            List<Project> listTobeAdded = userProjectListGenerator(i, user);
+            modelMap.addAttribute(roles[i - 1], listTobeAdded);
         }
-
-        modelMap.addAttribute("ownedProjects", userOwnedProjects);
+        //ProjectRole projectRole = projectRoleRepo.findByprojectRoleId(1);
+//        List<ProjectTeam> usersTeamProjects = projectTeamRepo.findByUserIdAndProjectRoleId(user, projectRole);
+//
+//        List<Project> userOwnedProjects = new ArrayList();
+//        for (ProjectTeam usersTeamProject : usersTeamProjects) {
+//            System.out.println(usersTeamProjects);
+//            userOwnedProjects.add(projectServiceInterface.getProjectbyid(usersTeamProject.getProjectId().getProjectId()));
+//        }
+//        modelMap.addAttribute("ownedProjects", userOwnedProjects);
         return "home";
     }
 
-    // add request mapping for /leaders
-    @GetMapping("/leaders")
-    public String showLeaders() {
+    private List<Project> userProjectListGenerator(Integer roleId, User user) {
+        ProjectRole projectRole = projectRoleRepo.findByprojectRoleId(roleId);
+        List<ProjectTeam> usersTeamProjects = projectTeamRepo.findByUserIdAndProjectRoleId(user, projectRole);
+        List<Project> usersProjects = new ArrayList();
 
-        return "leaders";
+        for (ProjectTeam usersTeamProject : usersTeamProjects) {
+            usersProjects.add(usersTeamProject.getProjectId());
+        }
+        return usersProjects;
     }
 
     // add request mapping for /systems

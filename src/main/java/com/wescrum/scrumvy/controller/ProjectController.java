@@ -4,6 +4,7 @@ import com.wescrum.scrumvy.entity.Project;
 import com.wescrum.scrumvy.entity.ProjectRole;
 import com.wescrum.scrumvy.entity.ProjectTeam;
 import com.wescrum.scrumvy.entity.User;
+import com.wescrum.scrumvy.repos.ProjectRepository;
 import com.wescrum.scrumvy.repos.ProjectRoleRepository;
 import com.wescrum.scrumvy.repos.ProjectTeamRepository;
 import com.wescrum.scrumvy.service.ProjectServiceImpl;
@@ -12,8 +13,6 @@ import com.wescrum.scrumvy.service.UserService;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -39,23 +38,20 @@ public class ProjectController {
 
     @GetMapping("/createProject")
     public String createProject(Model model) {
-        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
-        String username = loggedInUser.getName();
-        User user = userService.findByUserName(username);
-        User customUser = userService.findByUserId(user.getId());
+        User user = userService.getLoggedinUser();
+//        User customUser = userService.findByUserId(user.getId());
 
         ProjectRole projectRole = projectRoleRepo.findByprojectRoleId(1);
         List<ProjectTeam> usersOwnedProjects = projectTeamRepo.findByUserIdAndProjectRoleId(user, projectRole);
 
         int numberOfProjects = usersOwnedProjects.size();
-        if ((customUser.getPremium() == false) && (numberOfProjects >= 1)) {
-            // IMPLEMENT THROW ERROR
+        if ((user.getPremium() == false) && (numberOfProjects >= 1)) {
             model.addAttribute("project", new Project());
             model.addAttribute("createProjectError", "I would love to create a new project for you. If you want me to do this Go premium!");
-            return "home";
+            return "redirect:/";
         } else {
             model.addAttribute("project", new Project());
-            model.addAttribute("customUser", customUser);
+            model.addAttribute("customUser", user);
             return "createProjectForm";
         }
     }
@@ -65,28 +61,30 @@ public class ProjectController {
             BindingResult theBindingResult,
             Model model) {
 
-        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
-        String username = loggedInUser.getName();
-        System.out.println("logged in user = " + username); //diagnostic
-        User user = userService.findByUserName(username);
-        System.out.println("logged in user = " + user.getUsername()); //diagnostic
-
-        User customUser = userService.findByUserId(user.getId());
-        System.out.println("logged in user = " + customUser.getUsername()); //diagnostic
+        User user = userService.getLoggedinUser();
 
         // form validation
         if (theBindingResult.hasErrors()) {
             return "createProjectForm";
         }
 
+        List<Project> tempList = projectService.getAllOwnedProjectsOfAUser(user.getId());
+        boolean exists = false;
+        for (Project pr : tempList) {
+            if (pr.getProjectName().toLowerCase().equals(project.getProjectName().toLowerCase())) {
+                exists = true;
+            }
+        }        
+        if (exists) {
+            model.addAttribute("project", new Project());
+            model.addAttribute("createProjectError", "Sorry. It seems you already have a project named that way");
+            model.addAttribute("project", project);
+            return "createProjectForm";
+        }
+
         ProjectRole projectRole = projectRoleRepo.findByprojectRoleId(1);
-
-        System.out.println("PROJECT ID = " + project.getProjectId()); //diagnostic
-        System.out.println("PROJECT name = " + project.getProjectName()); //diagnostic
-
         projectService.createProject(project);
 
-        System.out.println("PROJECT ID = " + project.getProjectId()); //diagnostic
         // create project team
         ProjectTeam projectTeam = new ProjectTeam();
         projectTeam.setProjectId(project);
@@ -98,8 +96,6 @@ public class ProjectController {
         userService.saveUserWithProject(user);
 
         System.out.println(projectTeam.toString());
-        //customUser.getProjectsCollection().add(project);
-        //userService.saveUserWithProject(customUser);
-        return "home";
+        return "redirect:/";
     }
 }

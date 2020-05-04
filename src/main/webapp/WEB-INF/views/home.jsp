@@ -21,29 +21,16 @@
         <hr>
         <a href="${pageContext.request.contextPath}/project/createProject" class="btn btn-primary" role="button"
            aria-pressed="true">Create Project</a>
-        <h2>Owned Projects</h2>
-        <div></div>
-        <h2>Projects you joined</h2>
-        <div></div>
-
-        <!-- display user name and role -->
         <div>
-            <p>
-                User:
-                <security:authentication property="principal.username" />
-                <br> <br> Role(s)
-                <security:authentication property="principal.authorities" />
-            </p>
-            <br><br>
-            <hr>
-            <security:authorize access="hasRole('ADMIN')">
-
-                <!-- Add a link to point to /systems... this is for the managers -->
-                <p>
-                    <a href="${pageContext.request.contextPath}/systems">IT Systems
-                        Meeting</a> (only for admin peeps)
-                </p>
-            </security:authorize>
+            <!-- Check for errors --> 
+            <c:if test="${createProjectError != null}">
+                <div class="alert alert-danger col-xs-offset-1 col-xs-10">
+                    ${createProjectError}
+                </div>
+            </c:if>
+        </div>
+        <h2>Owned Projects</h2>
+        <div>
             <p>
                 These are the projects which I own: 
                 <c:forEach items="${ownedProjects}" var="project">
@@ -51,14 +38,55 @@
                     <li>${project.projectName}</li> 
                 </ul>
             </c:forEach>
-
         </p>
+    </div>
+    <h2>Projects you joined as a Scrum Master</h2>
+    <div>
+        <p>
+            These are the projects which I own: 
+            <c:forEach items="${joinedAsScrumMaster}" var="project">
+            <ul>
+                <li>${project.projectName}</li> 
+            </ul>
+        </c:forEach>
+    </p>
+</div>
+<h2>Projects you joined as a Developer</h2>
+<div>
+    <p>
+        These are the projects which I own: 
+        <c:forEach items="${joinedAsDevTeam}" var="project">
+        <ul>
+            <li>${project.projectName}</li> 
+        </ul>
+    </c:forEach>
+</p>
+</div>
 
-        <!--  Add log out button -->
-        <form:form action="${pageContext.request.contextPath}/logout"
-                   method="POST">
-            <input type="submit" value="Logout">
-        </form:form>
+<!-- display user name and role -->
+<div>
+    <p>
+        User:
+        <security:authentication property="principal.username" />
+        <br> <br> Role(s)
+        <security:authentication property="principal.authorities" />
+    </p>
+    <br><br>
+    <hr>
+    <security:authorize access="hasRole('ADMIN')">
 
-        </body>
-        </html>
+        <!-- Add a link to point to /systems... this is for the managers -->
+        <p>
+            <a href="${pageContext.request.contextPath}/systems">IT Systems
+                Meeting</a> (only for admin peeps)
+        </p>
+    </security:authorize>
+
+    <!--  Add log out button -->
+    <form:form action="${pageContext.request.contextPath}/logout"
+               method="POST">
+        <input type="submit" value="Logout">
+    </form:form>
+
+    </body>
+    </html>
