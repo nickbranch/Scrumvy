@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.wescrum.scrumvy.entity;
 
 import java.io.Serializable;
@@ -19,10 +14,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- *
- * @author nklad
- */
 @Entity
 @Table(name = "invites")
 @XmlRootElement
@@ -38,14 +29,18 @@ public class Invite implements Serializable {
     @Basic(optional = false)
     @Column(name = "invite_id")
     private Long inviteId;
+    
     @Column(name = "accepted")
     private Boolean accepted;
+    
     @JoinColumn(name = "project_role_id", referencedColumnName = "project_role_id")
     @ManyToOne(optional = false)
     private ProjectRole projectRoleId;
+    
     @JoinColumn(name = "project_id", referencedColumnName = "project_id")
     @ManyToOne(optional = false)
     private Project projectId;
+    
     @JoinColumn(name = "receiving_user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private User receivingUserId;

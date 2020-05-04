@@ -32,10 +32,11 @@
         <h2>Owned Projects</h2>
         <div>
             <p>
-                These are the projects which I own: 
                 <c:forEach items="${ownedProjects}" var="project">
                 <ul>
-                    <li>${project.projectName}</li> 
+                    <li>${project.projectName}</li>
+                    <a href="${pageContext.request.contextPath}/project/projectSettings/${project.projectId}" class="btn btn-primary" role="button"
+                       aria-pressed="true">Edit </a>
                 </ul>
             </c:forEach>
         </p>
@@ -43,7 +44,6 @@
     <h2>Projects you joined as a Scrum Master</h2>
     <div>
         <p>
-            These are the projects which I own: 
             <c:forEach items="${joinedAsScrumMaster}" var="project">
             <ul>
                 <li>${project.projectName}</li> 
@@ -54,7 +54,6 @@
 <h2>Projects you joined as a Developer</h2>
 <div>
     <p>
-        These are the projects which I own: 
         <c:forEach items="${joinedAsDevTeam}" var="project">
         <ul>
             <li>${project.projectName}</li> 

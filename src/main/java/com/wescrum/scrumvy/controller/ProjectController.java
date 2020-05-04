@@ -39,16 +39,14 @@ public class ProjectController {
     @GetMapping("/createProject")
     public String createProject(Model model) {
         User user = userService.getLoggedinUser();
-//        User customUser = userService.findByUserId(user.getId());
 
         ProjectRole projectRole = projectRoleRepo.findByprojectRoleId(1);
         List<ProjectTeam> usersOwnedProjects = projectTeamRepo.findByUserIdAndProjectRoleId(user, projectRole);
 
         int numberOfProjects = usersOwnedProjects.size();
         if ((user.getPremium() == false) && (numberOfProjects >= 1)) {
-            model.addAttribute("project", new Project());
             model.addAttribute("createProjectError", "I would love to create a new project for you. If you want me to do this Go premium!");
-            return "redirect:/";
+            return "forward:/";
         } else {
             model.addAttribute("project", new Project());
             model.addAttribute("customUser", user);
@@ -76,7 +74,6 @@ public class ProjectController {
             }
         }        
         if (exists) {
-            model.addAttribute("project", new Project());
             model.addAttribute("createProjectError", "Sorry. It seems you already have a project named that way");
             model.addAttribute("project", project);
             return "createProjectForm";

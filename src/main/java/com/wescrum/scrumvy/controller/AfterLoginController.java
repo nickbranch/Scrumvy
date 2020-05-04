@@ -35,9 +35,8 @@ public class AfterLoginController {
     @GetMapping("/")
     public String showHome(ModelMap modelMap) {
         User user = userService.getLoggedinUser();
-
+        String[] roles = {"ownedProjects", "joinedAsScrumMaster", "joinedAsDevTeam"};
         for (int i = 1; i <= 3; i++) {
-            String[] roles = {"ownedProjects", "joinedAsScrumMaster", "joinedAsDevTeam"};
             List<Project> listTobeAdded = userProjectListGenerator(i, user);
             modelMap.addAttribute(roles[i - 1], listTobeAdded);
         }
