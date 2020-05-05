@@ -95,21 +95,4 @@ public class ProjectController {
         System.out.println(projectTeam.toString());
         return "redirect:/";
     }
-    
-    @PostMapping("/projectDetails")
-    public String showProject(@ModelAttribute("projectId") Long projectid,
-                                Model model){
-
-        Project currentProject = projectService.getProjectbyid(projectid);
-        /* NEEDED FROM CURRENT PROJECT:
-        1.  PRODUCT BACKLOG/TASKS -- take from taskRepoServices
-        2.  CURRENT SPRINT DETAILS  -- take from sprintServices
-        4.  LISTO OF PROJECT SPRINTS
-        5.  CURRENT PROJECT'S TEAM -- take from projectTeamRepository Services
-        6.  
-        */
-
-        return "projectMain";
-    }
-    
 }

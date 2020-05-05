@@ -37,13 +37,6 @@
                     <li>${project.projectName}</li>
                     <a href="${pageContext.request.contextPath}/project/projectSettings/${project.projectId}" class="btn btn-primary" role="button"
                        aria-pressed="true">Edit </a>
-                    <br>
-                    <form:form method="POST"
-                               modelAttribute="project"
-                               action="/project/projectDetails">
-                        <input type="hidden" name="projectId" value="${project.projectId}"/>
-                        <input type="SUBMIT" value="Check project details"/>                       
-                    </form:form>
                 </ul>
             </c:forEach>
         </p>
@@ -68,8 +61,6 @@
     </c:forEach>
 </p>
 </div>
-
-
 
 <!-- display user name and role -->
 <div>
