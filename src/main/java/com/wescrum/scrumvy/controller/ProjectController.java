@@ -3,14 +3,12 @@ package com.wescrum.scrumvy.controller;
 import com.wescrum.scrumvy.entity.Project;
 import com.wescrum.scrumvy.entity.ProjectRole;
 import com.wescrum.scrumvy.entity.ProjectTeam;
-import com.wescrum.scrumvy.entity.Task;
 import com.wescrum.scrumvy.entity.User;
 import com.wescrum.scrumvy.repos.ProjectRepository;
 import com.wescrum.scrumvy.repos.ProjectRoleRepository;
 import com.wescrum.scrumvy.repos.ProjectTeamRepository;
 import com.wescrum.scrumvy.service.ProjectServiceImpl;
 import com.wescrum.scrumvy.service.ProjectTeamServiceImpl;
-import com.wescrum.scrumvy.service.TaskServiceInterface;
 import com.wescrum.scrumvy.service.UserService;
 import java.util.List;
 import javax.validation.Valid;
@@ -36,11 +34,7 @@ public class ProjectController {
     @Autowired
     private ProjectRoleRepository projectRoleRepo;
     @Autowired
-    private ProjectTeamRepository projectTeamRepo;
-    
-    @Autowired
-    private TaskServiceInterface taskService;
-    
+    ProjectTeamRepository projectTeamRepo;
 
     @GetMapping("/createProject")
     public String createProject(Model model) {
@@ -107,13 +101,8 @@ public class ProjectController {
                                 Model model){
 
         Project currentProject = projectService.getProjectbyid(projectid);
-        
-        // list of all the tasks from this product
-        List <Task> tasksOfCurrentProject = taskService.findbyProjectId(projectid);
-        
-        
         /* NEEDED FROM CURRENT PROJECT:
-        1.  PRODUCT BACKLOG/TASKS -- take from taskRepoServices 
+        1.  PRODUCT BACKLOG/TASKS -- take from taskRepoServices
         2.  CURRENT SPRINT DETAILS  -- take from sprintServices
         4.  LISTO OF PROJECT SPRINTS
         5.  CURRENT PROJECT'S TEAM -- take from projectTeamRepository Services

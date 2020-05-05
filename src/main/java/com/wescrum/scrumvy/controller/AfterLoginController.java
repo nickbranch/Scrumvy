@@ -35,7 +35,7 @@ public class AfterLoginController {
     @GetMapping("/")
     public String showHome(ModelMap modelMap) {
         User user = userService.getLoggedinUser();
-        String[] roles = {"ownedProjects", "joinedAsScrumMaster", "joinedAsDevTeam"}; 
+        String[] roles = {"ownedProjects", "joinedAsScrumMaster", "joinedAsDevTeam"};
         for (int i = 1; i <= 3; i++) {
             List<Project> listTobeAdded = userProjectListGenerator(i, user);
             modelMap.addAttribute(roles[i - 1], listTobeAdded);
@@ -52,7 +52,7 @@ public class AfterLoginController {
         return "home";
     }
 
-    private List<Project> userProjectListGenerator(Integer roleId, User user) { //koukli, etoimos programmatistis peraste apti grammateia na paralavete tin pistopoiisi sa
+    private List<Project> userProjectListGenerator(Integer roleId, User user) {
         ProjectRole projectRole = projectRoleRepo.findByprojectRoleId(roleId);
         List<ProjectTeam> usersTeamProjects = projectTeamRepo.findByUserIdAndProjectRoleId(user, projectRole);
         List<Project> usersProjects = new ArrayList();

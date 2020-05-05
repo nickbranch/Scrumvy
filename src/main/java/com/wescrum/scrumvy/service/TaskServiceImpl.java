@@ -37,10 +37,5 @@ public class TaskServiceImpl implements TaskServiceInterface {
     public void updateTask(Task task) {
         taskRepo.save(task);
     }
-
-    @Override
-    public List<Task> findbyProjectId(Long projectId) {
-        return taskRepo.findbyProjectId(projectId);
-    }
     
 }
