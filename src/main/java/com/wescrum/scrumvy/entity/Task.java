@@ -62,9 +62,12 @@ public class Task implements Serializable {
         @JoinColumn(name = "sprint_id", referencedColumnName = "sprint_id")})
     @ManyToMany
     private Collection<Sprint> sprintCollection;
+    
     @JoinColumn(name = "project_id", referencedColumnName = "project_id")
     @ManyToOne(optional = false)
     private Project projectId;
+    
+    
     @JoinColumn(name = "status_id", referencedColumnName = "status_id")
     @ManyToOne(optional = false)
     private Status statusId;

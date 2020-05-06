@@ -42,7 +42,7 @@
                                modelAttribute="project"
                                action="/project/projectDetails">
                         <input type="hidden" name="projectId" value="${project.projectId}"/>
-                        <input type="SUBMIT" value="Check project details"/>                       
+                        <input type="SUBMIT" value="Project Workspace"/>                       
                     </form:form>
                 </ul>
             </c:forEach>

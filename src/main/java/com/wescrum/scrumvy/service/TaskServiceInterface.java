@@ -18,6 +18,6 @@ public interface TaskServiceInterface {
 
     public void updateTask(Task task);
     
-    public List<Task> findbyProjectId (Long projectId);
+
  
 }

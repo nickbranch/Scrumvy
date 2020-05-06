@@ -1,6 +1,7 @@
 
 package com.wescrum.scrumvy.service;
 
+import com.wescrum.scrumvy.entity.Project;
 import com.wescrum.scrumvy.entity.Task;
 import com.wescrum.scrumvy.repos.TaskRepository;
 import java.util.List;
@@ -38,9 +39,5 @@ public class TaskServiceImpl implements TaskServiceInterface {
         taskRepo.save(task);
     }
 
-    @Override
-    public List<Task> findbyProjectId(Long projectId) {
-        return taskRepo.findbyProjectId(projectId);
-    }
     
 }

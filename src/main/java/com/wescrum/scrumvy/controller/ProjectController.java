@@ -3,11 +3,14 @@ package com.wescrum.scrumvy.controller;
 import com.wescrum.scrumvy.entity.Project;
 import com.wescrum.scrumvy.entity.ProjectRole;
 import com.wescrum.scrumvy.entity.ProjectTeam;
+import com.wescrum.scrumvy.entity.Sprint;
 import com.wescrum.scrumvy.entity.Task;
 import com.wescrum.scrumvy.entity.User;
 import com.wescrum.scrumvy.repos.ProjectRepository;
 import com.wescrum.scrumvy.repos.ProjectRoleRepository;
 import com.wescrum.scrumvy.repos.ProjectTeamRepository;
+import com.wescrum.scrumvy.repos.SprintRepository;
+import com.wescrum.scrumvy.repos.TaskRepository;
 import com.wescrum.scrumvy.service.ProjectServiceImpl;
 import com.wescrum.scrumvy.service.ProjectTeamServiceImpl;
 import com.wescrum.scrumvy.service.TaskServiceInterface;
@@ -39,7 +42,10 @@ public class ProjectController {
     private ProjectTeamRepository projectTeamRepo;
     
     @Autowired
-    private TaskServiceInterface taskService;
+    private TaskRepository taskRepo;
+    
+    @Autowired
+    private SprintRepository sprintRepo;
     
 
     @GetMapping("/createProject")
@@ -107,20 +113,22 @@ public class ProjectController {
                                 Model model){
 
         Project currentProject = projectService.getProjectbyid(projectid);
-        
-        // list of all the tasks from this product
-        List <Task> tasksOfCurrentProject = taskService.findbyProjectId(projectid);
-        
-        
-        /* NEEDED FROM CURRENT PROJECT:
-        1.  PRODUCT BACKLOG/TASKS -- take from taskRepoServices 
-        2.  CURRENT SPRINT DETAILS  -- take from sprintServices
-        4.  LISTO OF PROJECT SPRINTS
-        5.  CURRENT PROJECT'S TEAM -- take from projectTeamRepository Services
-        6.  
-        */
 
-        return "projectMain";
+        List <Task> projectTasks = taskRepo.findByProjectId(currentProject);
+
+        List <Sprint> projectSprints = sprintRepo.findByProjectId(currentProject);        
+
+        List <ProjectTeam> projectTeam = projectTeamRepo.findByProjectId(currentProject);
+        
+        model.addAttribute("project", currentProject);
+        model.addAttribute("projectTasks", projectTasks);
+        model.addAttribute("projectSprints", projectSprints);
+        model.addAttribute("projectTeam", projectTeam);
+        
+        
+      
+
+        return "projectWorkspace";
     }
     
 }
