@@ -51,10 +51,9 @@ public class ProjectServiceImpl implements ProjectServiceInterface {
 
     @Override
     public List<Project> getAllOwnedProjectsOfAUser(Integer user_id) {
-        User user = userService.findByUserId(user_id);
         List<Project> ownedProjectOfAUser = new ArrayList<>();
-        ProjectRole projectRole = projectRoleRepo.findByprojectRoleId(1);
-        List<ProjectTeam> ownedProjectOfAUserLookup = projectTeamRepo.findByUserIdAndProjectRoleId(user, projectRole);
+        List<ProjectTeam> ownedProjectOfAUserLookup = 
+                projectTeamRepo.findByUserIdAndProjectRoleId(userService.findByUserId(user_id), projectRoleRepo.findByprojectRoleId(1));
         ownedProjectOfAUserLookup.forEach((projectTeam) -> {
             ownedProjectOfAUser.add(projectTeam.getProjectId());
         });

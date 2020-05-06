@@ -1,14 +1,15 @@
 package com.wescrum.scrumvy.controller;
 
+import com.wescrum.scrumvy.dto.TaskDto;
 import com.wescrum.scrumvy.entity.Project;
 import com.wescrum.scrumvy.entity.ProjectRole;
 import com.wescrum.scrumvy.entity.ProjectTeam;
+import com.wescrum.scrumvy.entity.Task;
 import com.wescrum.scrumvy.entity.User;
-import com.wescrum.scrumvy.repos.ProjectRepository;
 import com.wescrum.scrumvy.repos.ProjectRoleRepository;
 import com.wescrum.scrumvy.repos.ProjectTeamRepository;
-import com.wescrum.scrumvy.service.ProjectServiceImpl;
-import com.wescrum.scrumvy.service.ProjectTeamServiceImpl;
+import com.wescrum.scrumvy.service.ProjectServiceInterface;
+import com.wescrum.scrumvy.service.ProjectTeamServiceInterface;
 import com.wescrum.scrumvy.service.UserService;
 import java.util.List;
 import javax.validation.Valid;
@@ -26,11 +27,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ProjectController {
 
     @Autowired
-    private ProjectServiceImpl projectService;
+    private ProjectServiceInterface projectService;
     @Autowired
     private UserService userService;
     @Autowired
-    private ProjectTeamServiceImpl projectTeamService;
+    private ProjectTeamServiceInterface projectTeamService;
     @Autowired
     private ProjectRoleRepository projectRoleRepo;
     @Autowired
@@ -72,7 +73,7 @@ public class ProjectController {
             if (pr.getProjectName().toLowerCase().equals(project.getProjectName().toLowerCase())) {
                 exists = true;
             }
-        }        
+        }
         if (exists) {
             model.addAttribute("createProjectError", "Sorry. It seems you already have a project named that way");
             model.addAttribute("project", project);
@@ -94,5 +95,48 @@ public class ProjectController {
 
         System.out.println(projectTeam.toString());
         return "redirect:/";
+    }
+
+    @PostMapping("/updateProjectDetails")
+    public String updateProjectDetails(@Valid @ModelAttribute("project") Project project,
+            BindingResult theBindingResult,
+            Model model) {
+
+        // form validation
+        if (theBindingResult.hasErrors()) {
+//        model.addAttribute("emptyTask", new TaskDto());
+        model.addAttribute("emptyTask", new Task());
+            return "projectSetup";
+        }
+
+        List<Project> tempList = projectService.getAllOwnedProjectsOfAUser(userService.getLoggedinUser().getId());
+        boolean exists = false;
+        for (Project pr : tempList) {
+            if (pr.getProjectName().toLowerCase().equals(project.getProjectName().toLowerCase())) {
+                exists = true;
+            }
+        }
+        if (exists) {
+            model.addAttribute("createProjectError", "Sorry. It seems you already have a project named that way");
+//        model.addAttribute("emptyTask", new TaskDto());
+        model.addAttribute("emptyTask", new Task());
+            return "projectSetup";
+        }
+
+        model.addAttribute("project", project);
+//        model.addAttribute("emptyTask", new TaskDto());
+        model.addAttribute("emptyTask", new Task());
+        projectService.createProject(project);
+        return "projectSetup";
+    }
+
+    @PostMapping("/projectSettings")
+    public String projectSettings(@ModelAttribute("projectId") Long projectid,
+            Model model) {
+        Project currentProject = projectService.getProjectbyid(projectid);
+//        model.addAttribute("emptyTask", new TaskDto());
+        model.addAttribute("emptyTask", new Task());
+        model.addAttribute("project", currentProject);
+        return "projectSetup";
     }
 }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.wescrum.scrumvy.entity;
 
 import java.io.Serializable;
@@ -26,11 +21,8 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.springframework.format.annotation.DateTimeFormat;
 
-/**
- *
- * @author nklad
- */
 @Entity
 @Table(name = "tasks")
 @XmlRootElement
@@ -48,23 +40,31 @@ public class Task implements Serializable {
     @Basic(optional = false)
     @Column(name = "task_id")
     private Long taskId;
+    
     @Size(max = 150)
     @Column(name = "description")
     private String description;
+    
     @Column(name = "task_start_date")
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date taskStartDate;
+    
     @Column(name = "task_end_date")
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date taskEndDate;
+    
     @JoinTable(name = "sprint_tasks", joinColumns = {
         @JoinColumn(name = "task_id", referencedColumnName = "task_id")}, inverseJoinColumns = {
         @JoinColumn(name = "sprint_id", referencedColumnName = "sprint_id")})
     @ManyToMany
     private Collection<Sprint> sprintCollection;
+    
     @JoinColumn(name = "project_id", referencedColumnName = "project_id")
     @ManyToOne(optional = false)
     private Project projectId;
+    
     @JoinColumn(name = "status_id", referencedColumnName = "status_id")
     @ManyToOne(optional = false)
     private Status statusId;

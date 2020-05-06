@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.wescrum.scrumvy.entity;
 
 import java.io.Serializable;
@@ -22,10 +17,6 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-/**
- *
- * @author nklad
- */
 @Entity
 @Table(name = "status")
 @XmlRootElement
@@ -41,9 +32,11 @@ public class Status implements Serializable {
     @Basic(optional = false)
     @Column(name = "status_id")
     private Integer statusId;
+    
     @Size(max = 30)
     @Column(name = "status_state")
     private String statusState;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "statusId")
     private Collection<Task> taskCollection;
 

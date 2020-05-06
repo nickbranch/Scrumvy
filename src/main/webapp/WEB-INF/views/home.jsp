@@ -1,10 +1,10 @@
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
 <%-- 
     Document   : home
     Created on : Apr 24, 2020, 10:04:01 PM
     Author     : nklad
 --%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -34,9 +34,15 @@
             <p>
                 <c:forEach items="${ownedProjects}" var="project">
                 <ul>
-                    <li>${project.projectName}</li>
-                    <a href="${pageContext.request.contextPath}/project/projectSettings/${project.projectId}" class="btn btn-primary" role="button"
-                       aria-pressed="true">Edit </a>
+                    <li>
+                        <form:form method="POST"
+                                   modelAttribute="project"
+                                   action="/project/projectSettings">
+                            ${project.projectName}
+                            <input type="hidden" name="projectId" value="${project.projectId}"/>
+                            <input type="SUBMIT" value="Project Settings"/>                       
+                        </form:form>
+                    </li>
                 </ul>
             </c:forEach>
         </p>
@@ -46,7 +52,15 @@
         <p>
             <c:forEach items="${joinedAsScrumMaster}" var="project">
             <ul>
-                <li>${project.projectName}</li> 
+                <li>
+                    <form:form method="POST"
+                               modelAttribute="project"
+                               action="/project/projectSettings">
+                        ${project.projectName}
+                        <input type="hidden" name="projectId" value="${project.projectId}"/>
+                        <input type="SUBMIT" value="Project Settings"/>                       
+                    </form:form>
+                </li>
             </ul>
         </c:forEach>
     </p>
@@ -56,7 +70,15 @@
     <p>
         <c:forEach items="${joinedAsDevTeam}" var="project">
         <ul>
-            <li>${project.projectName}</li> 
+            <li>
+                <form:form method="POST"
+                           modelAttribute="project"
+                           action="/project/projectSettings">
+                    ${project.projectName}
+                    <input type="hidden" name="projectId" value="${project.projectId}"/>
+                    <input type="SUBMIT" value="Project Settings"/>                       
+                </form:form>
+            </li>
         </ul>
     </c:forEach>
 </p>

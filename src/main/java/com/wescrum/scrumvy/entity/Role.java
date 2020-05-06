@@ -30,6 +30,7 @@ public class Role implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    
     @Size(max = 50)
     @Column(name = "name")
     private String name;
