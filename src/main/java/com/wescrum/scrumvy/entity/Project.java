@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -64,7 +66,11 @@ public class Project implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date endDate;
 
-    @ManyToMany(mappedBy = "projectsCollection")
+//    @ManyToMany(mappedBy = "projectsCollection")
+    @ManyToMany
+    @JoinTable(name = "user_project",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Collection<User> userCollection;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectId")

@@ -109,7 +109,7 @@
             <th scope="col">Actions</th>
         </tr>
 
-        
+
         <c:forEach items="${project.taskCollection}" var="task">
             <form:form method="POST"
                        modelAttribute="emptyTask"
@@ -137,7 +137,7 @@
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
             </form:form>
         </c:forEach>
-                
+
     </tr>
 
     <tr>
@@ -201,6 +201,17 @@
 
     </tr>
 </c:forEach>
+<tr>
+    <td>
+        <form:form method="POST"
+                   modelAttribute="project"
+                   action="/project/deleteProject">
+            <input type="hidden" name="projectId" value="${project.projectId}"/>
+            <input type="SUBMIT" class="btn btn-danger" value="Delete Project"/>                       
+        </form:form>
+    </td>
+</tr>
+
 </tbody>
 </table>
 </body>

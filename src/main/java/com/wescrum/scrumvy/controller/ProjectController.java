@@ -1,6 +1,5 @@
 package com.wescrum.scrumvy.controller;
 
-import com.wescrum.scrumvy.dto.TaskDto;
 import com.wescrum.scrumvy.entity.Project;
 import com.wescrum.scrumvy.entity.ProjectRole;
 import com.wescrum.scrumvy.entity.ProjectTeam;
@@ -105,7 +104,7 @@ public class ProjectController {
         // form validation
         if (theBindingResult.hasErrors()) {
 //        model.addAttribute("emptyTask", new TaskDto());
-        model.addAttribute("emptyTask", new Task());
+            model.addAttribute("emptyTask", new Task());
             return "projectSetup";
         }
 
@@ -118,13 +117,11 @@ public class ProjectController {
         }
         if (exists) {
             model.addAttribute("createProjectError", "Sorry. It seems you already have a project named that way");
-//        model.addAttribute("emptyTask", new TaskDto());
-        model.addAttribute("emptyTask", new Task());
+            model.addAttribute("emptyTask", new Task());
             return "projectSetup";
         }
 
         model.addAttribute("project", project);
-//        model.addAttribute("emptyTask", new TaskDto());
         model.addAttribute("emptyTask", new Task());
         projectService.createProject(project);
         return "projectSetup";
@@ -134,9 +131,26 @@ public class ProjectController {
     public String projectSettings(@ModelAttribute("projectId") Long projectid,
             Model model) {
         Project currentProject = projectService.getProjectbyid(projectid);
-//        model.addAttribute("emptyTask", new TaskDto());
         model.addAttribute("emptyTask", new Task());
         model.addAttribute("project", currentProject);
         return "projectSetup";
+    }
+
+    @PostMapping("/deleteProject")
+    public String deleteProject(@ModelAttribute("projectId") Long projectid,
+            Model model) {
+        Project currentProject = projectService.getProjectbyid(projectid);
+//        System.out.println("***************************************************************************************************************" + currentProject.toString());
+//        User user = userService.getLoggedinUser();
+//        System.out.println("***************************************************************************************************************" + currentProject.toString());
+//        user.getProjectsCollection().remove(currentProject);
+//        currentProject.getUserCollection().remove(user);
+//        userService.saveUserWithProject(user);
+        System.out.println("***************************************************************************************************************" + currentProject.toString());
+
+        projectService.deleteProject(currentProject);
+        System.out.println("***************************************************************************************************************" + currentProject.toString());        
+
+        return "redirect:/";
     }
 }

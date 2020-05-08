@@ -82,7 +82,8 @@ public class User implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roleCollection;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(name = "user_project",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "project_id"))

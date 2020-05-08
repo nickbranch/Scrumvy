@@ -29,9 +29,6 @@ public class AfterLoginController {
     @Autowired
     private ProjectTeamRepository projectTeamRepo;
 
-    @Autowired
-    private ProjectServiceInterface projectServiceInterface;
-
     @GetMapping("/")
     public String showHome(ModelMap modelMap) {
         User user = userService.getLoggedinUser();
@@ -40,15 +37,6 @@ public class AfterLoginController {
             List<Project> listTobeAdded = userProjectListGenerator(i, user);
             modelMap.addAttribute(roles[i - 1], listTobeAdded);
         }
-        //ProjectRole projectRole = projectRoleRepo.findByprojectRoleId(1);
-//        List<ProjectTeam> usersTeamProjects = projectTeamRepo.findByUserIdAndProjectRoleId(user, projectRole);
-//
-//        List<Project> userOwnedProjects = new ArrayList();
-//        for (ProjectTeam usersTeamProject : usersTeamProjects) {
-//            System.out.println(usersTeamProjects);
-//            userOwnedProjects.add(projectServiceInterface.getProjectbyid(usersTeamProject.getProjectId().getProjectId()));
-//        }
-//        modelMap.addAttribute("ownedProjects", userOwnedProjects);
         return "home";
     }
 
