@@ -38,7 +38,7 @@
                                 <tr id="row">
  <!--                                    the td id and class are for js-->
                                     <td id="taskId_${task.taskId}" class="editable">${status.count}. ${task.description}</td>
-                                    <td><button id="makeButtonEditable" type="button" class="btn btn-light" onclick="">edit</button></td>
+                                    <td><button id="makeButtonEditable" type="button" class="btn btn-light" onclick="makeEditable()">edit</button></td>
                                 </tr>
                             </c:forEach>
 
@@ -128,7 +128,7 @@
         src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
         crossorigin="anonymous"></script>
-        <script rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/js/workspaceRest.js"></script>
+        <script src="${pageContext.request.contextPath}/js/workspaceRest.js"></script>
         
 </body>
 
