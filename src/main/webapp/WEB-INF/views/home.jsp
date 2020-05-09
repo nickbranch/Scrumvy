@@ -32,18 +32,23 @@
         <h2>Owned Projects</h2>
         <div>
             <p>
+                
+                
                 <c:forEach items="${ownedProjects}" var="project">
                 <ul>
                     <li>${project.projectName}</li>
                     <a href="${pageContext.request.contextPath}/project/projectSettings/${project.projectId}" class="btn btn-primary" role="button"
                        aria-pressed="true">Edit </a>
                     <br>
-                    <form:form method="POST"
+                    <a href="${pageContext.request.contextPath}/project/projectDetails/${project.projectId}" class="btn btn-primary" role="button"
+                       aria-pressed="true">Project Workspace </a>
+                    
+                  <%--  <form:form method="POST"
                                modelAttribute="project"
                                action="/project/projectDetails">
                         <input type="hidden" name="projectId" value="${project.projectId}"/>
                         <input type="SUBMIT" value="Project Workspace"/>                       
-                    </form:form>
+                    </form:form> --%>
                 </ul>
             </c:forEach>
         </p>

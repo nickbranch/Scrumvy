@@ -48,20 +48,25 @@ public class Task implements Serializable {
     @Basic(optional = false)
     @Column(name = "task_id")
     private Long taskId;
+    
     @Size(max = 150)
     @Column(name = "description")
     private String description;
+    
     @Column(name = "task_start_date")
     @Temporal(TemporalType.DATE)
     private Date taskStartDate;
+    
     @Column(name = "task_end_date")
     @Temporal(TemporalType.DATE)
     private Date taskEndDate;
-    @JoinTable(name = "sprint_tasks", joinColumns = {
-        @JoinColumn(name = "task_id", referencedColumnName = "task_id")}, inverseJoinColumns = {
-        @JoinColumn(name = "sprint_id", referencedColumnName = "sprint_id")})
+ 
     @ManyToMany
+    @JoinTable(name = "sprint_tasks", 
+            joinColumns = @JoinColumn(name = "task_id"),
+            inverseJoinColumns = @JoinColumn(name = "sprint_id"))
     private Collection<Sprint> sprintCollection;
+    
     
     @JoinColumn(name = "project_id", referencedColumnName = "project_id")
     @ManyToOne(optional = false)

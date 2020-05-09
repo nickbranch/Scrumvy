@@ -23,6 +23,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -108,27 +109,47 @@ public class ProjectController {
         return "redirect:/";
     }
     
-    @PostMapping("/projectDetails")
-    public String showProject(@ModelAttribute("projectId") Long projectid,
+//    @PostMapping("/projectDetails")
+//    public String showProject(@ModelAttribute("projectId") Long projectid,
+//                                Model model){
+//
+//        Project currentProject = projectService.getProjectbyid(projectid);
+//        List <Task> projectTasks = taskRepo.findByProjectId(currentProject);
+//        List <Sprint> projectSprints = sprintRepo.findByProjectId(currentProject);        
+//        List <ProjectTeam> projectTeam = projectTeamRepo.findByProjectId(currentProject);
+//        
+//        model.addAttribute("project", currentProject);
+//        model.addAttribute("projectTasks", projectTasks);
+//        model.addAttribute("projectSprints", projectSprints);
+//        model.addAttribute("projectTeam", projectTeam);
+//
+//        return "projectWorkspace";
+//    }
+    
+    @GetMapping("/projectDetails/{id}")
+    public String showProject(@PathVariable Long id,
                                 Model model){
 
-        Project currentProject = projectService.getProjectbyid(projectid);
-
+        Project currentProject = projectService.getProjectbyid(id);
         List <Task> projectTasks = taskRepo.findByProjectId(currentProject);
-
         List <Sprint> projectSprints = sprintRepo.findByProjectId(currentProject);        
-
         List <ProjectTeam> projectTeam = projectTeamRepo.findByProjectId(currentProject);
         
         model.addAttribute("project", currentProject);
+        //all project tasks
         model.addAttribute("projectTasks", projectTasks);
-        model.addAttribute("projectSprints", projectSprints);
-        model.addAttribute("projectTeam", projectTeam);
-        
         
       
+        
+        
+        
+        model.addAttribute("projectSprints", projectSprints);
+        model.addAttribute("projectTeam", projectTeam);
 
-        return "projectWorkspace";
+        return "workspace";
     }
     
+    
+   
+       
 }
