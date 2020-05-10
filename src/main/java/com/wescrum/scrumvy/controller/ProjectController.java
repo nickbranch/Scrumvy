@@ -140,14 +140,7 @@ public class ProjectController {
     public String deleteProject(@ModelAttribute("projectId") Long projectid,
             Model model) {
         Project currentProject = projectService.getProjectbyid(projectid);
-//        System.out.println("***************************************************************************************************************" + currentProject.toString());
-//        User user = userService.getLoggedinUser();
-//        System.out.println("***************************************************************************************************************" + currentProject.toString());
-//        user.getProjectsCollection().remove(currentProject);
-//        currentProject.getUserCollection().remove(user);
-//        userService.saveUserWithProject(user);
         System.out.println("***************************************************************************************************************" + currentProject.toString());
-
         projectService.deleteProject(currentProject);
         System.out.println("***************************************************************************************************************" + currentProject.toString());        
 

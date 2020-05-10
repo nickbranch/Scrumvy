@@ -116,6 +116,8 @@
                        action="${pageContext.request.contextPath}/tasks/updateTask">
                 <tr>
                 <input type="hidden" name="taskId" value="${task.taskId}"/>
+                <input type="hidden" name="projectId" value="${project.projectId}"/>
+                <input type="hidden" name="statusId" value="${task.statusId.statusId}"/>
                 <td>
                     <form:input path="description" placeholder="${task.description}" class="form-control" /><br>
                     <form:errors path="description" cssClass="error" />
@@ -132,10 +134,18 @@
                 </td>
                 <td>
                     <button type="submit" class="btn btn-primary">Update</button>
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                 </td>
                 <!-- manually adding tokens csrf protection -->
-                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
             </form:form>
+            <td>
+                <form method="POST"
+                      action="${pageContext.request.contextPath}/tasks/deleteTask">
+                    <input type="hidden" name="taskId" value="${task.taskId}"/>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                </form>
+            </td>
         </c:forEach>
 
     </tr>

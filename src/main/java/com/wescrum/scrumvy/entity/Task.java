@@ -155,7 +155,10 @@ public class Task implements Serializable {
 
     @Override
     public String toString() {
-        return "com.wescrum.scrumvy.entity.Task[ taskId=" + taskId + " ]";
+        return "Task{" + "taskId=" + taskId + ", description=" + description + ", "
+                + "taskStartDate=" + taskStartDate + ", taskEndDate=" + taskEndDate + ", "
+                + "sprintCollection=" + sprintCollection + ", projectId=" + projectId + ", "
+                + "statusId=" + statusId + '}';
     }
-    
+        
 }
