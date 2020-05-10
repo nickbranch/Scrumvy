@@ -103,7 +103,6 @@ public class ProjectController {
 
         // form validation
         if (theBindingResult.hasErrors()) {
-//        model.addAttribute("emptyTask", new TaskDto());
             model.addAttribute("emptyTask", new Task());
             return "projectSetup";
         }
@@ -140,10 +139,14 @@ public class ProjectController {
     public String deleteProject(@ModelAttribute("projectId") Long projectid,
             Model model) {
         Project currentProject = projectService.getProjectbyid(projectid);
-        System.out.println("***************************************************************************************************************" + currentProject.toString());
         projectService.deleteProject(currentProject);
-        System.out.println("***************************************************************************************************************" + currentProject.toString());        
-
         return "redirect:/";
+    }
+
+    @PostMapping("/manageTeamMembers")
+    public String manageTeamMembers(@ModelAttribute("projectId") Long projectid,
+            Model model) {
+        model.addAttribute("project", projectService.getProjectbyid(projectid));
+        return "manageTeam";
     }
 }

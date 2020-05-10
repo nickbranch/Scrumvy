@@ -176,41 +176,6 @@
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
     </form:form>
 </tr>
-
-
-<tr>
-    <th colspan=4 scope="col" class="text-center"><h1>Team Members</h1></th>
-</tr>
-<c:forEach items="${project.projectTeamCollection}" var="teamMember">
-    <tr>
-        <th scope="row">${teamMember.projectRoleId.roleDescription}</th>
-        <td>${teamMember.userId.firstName}</td>
-        <td>
-            <c:set var = "projectRoleId" scope = "session" value = "${teamMember.projectRoleId.projectRoleId}"/>
-            <c:if test="${projectRoleId != 1}">
-                <form:form method="POST"
-                           modelAttribute="project"
-                           action="/project/releaseTeamMember">
-                    <input type="hidden" name="projectTeamId" value="${teamMember.projectTeamId}"/>
-                    <input type="SUBMIT" value="Release Member"/>                       
-                </form:form>
-            </c:if>
-        </td>
-
-        <td>
-            <c:set var = "projectRoleId" scope = "session" value = "${teamMember.projectRoleId.projectRoleId}"/>
-            <c:if test="${projectRoleId != 1}">
-                <form:form method="POST"
-                           modelAttribute="project"
-                           action="/project/editTeamMember">
-                    <input type="hidden" name="projectTeamId" value="${teamMember.projectTeamId}"/>
-                    <input type="SUBMIT" value="Edit Member"/>                       
-                </form:form>
-            </c:if>
-        </td>
-
-    </tr>
-</c:forEach>
 <tr>
     <td>
         <form:form method="POST"
@@ -218,6 +183,15 @@
                    action="/project/deleteProject">
             <input type="hidden" name="projectId" value="${project.projectId}"/>
             <input type="SUBMIT" class="btn btn-danger" value="Delete Project"/>                       
+        </form:form>
+    </td>
+
+    <td>
+        <form:form method="POST"
+                   modelAttribute="project"
+                   action="/project/manageTeamMembers">
+            <input type="hidden" name="projectId" value="${project.projectId}"/>
+            <input type="SUBMIT" class="btn btn-warning" value="Manage Team Members"/>                       
         </form:form>
     </td>
 </tr>
