@@ -84,10 +84,11 @@ public class User implements Serializable {
 
 //    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 //    @ManyToMany(mappedBy = "userCollection", cascade = CascadeType.ALL)
-    @ManyToMany
-    @JoinTable(name = "user_project",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "project_id"))
+//    @ManyToMany
+//    @JoinTable(name = "user_project",
+//            joinColumns = @JoinColumn(name = "user_id"),
+//            inverseJoinColumns = @JoinColumn(name = "project_id"))
+    @ManyToMany(mappedBy = "userCollection", cascade = CascadeType.ALL)
     private Collection<Project> projectsCollection;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
