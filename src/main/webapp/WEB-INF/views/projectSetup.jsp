@@ -189,7 +189,7 @@
     <td>
         <form:form method="POST"
                    modelAttribute="project"
-                   action="/project/manageTeamMembers">
+                   action="/projectTeam/manageTeamMembers">
             <input type="hidden" name="projectId" value="${project.projectId}"/>
             <input type="SUBMIT" class="btn btn-warning" value="Manage Team Members"/>                       
         </form:form>

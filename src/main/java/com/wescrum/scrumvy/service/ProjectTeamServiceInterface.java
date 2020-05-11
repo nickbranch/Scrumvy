@@ -7,9 +7,9 @@ public interface ProjectTeamServiceInterface {
 
     public void saveTeam(ProjectTeam projectTeam);
 
-//    public Project getProjectbyid(Long id);
+    public ProjectTeam getProjectTeambyid(Long projectTeamId);
 //
-//    public void deleteProject(Project project);
+    public void deleteProjectTeam(ProjectTeam projectTeam);
 //
 //    public void updateProject(Project project);
 }

@@ -14,5 +14,15 @@ public class ProjectTeamServiceImpl implements ProjectTeamServiceInterface {
     public void saveTeam(ProjectTeam projectTeam) {
         projectTeamRepository.save(projectTeam);
     }
+
+    @Override
+    public ProjectTeam getProjectTeambyid(Long projectTeamId) {
+        return projectTeamRepository.getOne(projectTeamId);        
+    }
+
+    @Override
+    public void deleteProjectTeam(ProjectTeam projectTeam) {
+        projectTeamRepository.delete(projectTeam);
+    }
     
 }

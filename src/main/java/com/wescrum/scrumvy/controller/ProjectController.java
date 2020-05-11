@@ -138,15 +138,9 @@ public class ProjectController {
     @PostMapping("/deleteProject")
     public String deleteProject(@ModelAttribute("projectId") Long projectid,
             Model model) {
-        Project currentProject = projectService.getProjectbyid(projectid);
-        projectService.deleteProject(currentProject);
+        System.out.println("***************************************************************************************************");
+        projectService.deleteProject(projectService.getProjectbyid(projectid));
+        System.out.println("***************************************************************************************************");
         return "redirect:/";
-    }
-
-    @PostMapping("/manageTeamMembers")
-    public String manageTeamMembers(@ModelAttribute("projectId") Long projectid,
-            Model model) {
-        model.addAttribute("project", projectService.getProjectbyid(projectid));
-        return "manageTeam";
     }
 }
