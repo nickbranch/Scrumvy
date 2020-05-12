@@ -59,6 +59,7 @@
                                modelAttribute="project"
                                action="${pageContext.request.contextPath}/project/updateProjectDetails">
                 <input type="hidden" name="projectId" value="${project.projectId}"/>
+                <input type="hidden" name="userCollection" value="${user.id}"/>
                 <td> 
                     <form:input path="projectName" placeholder="${project.startDate}" class="form-control" /><br>
                     <form:errors path="projectName" cssClass="error" />
@@ -68,12 +69,12 @@
                     <form:errors path="projectDescription" cssClass="error" />
                 </td>
                 <td>
-                    <form:input type="date" path="startDate" value="${project.startDate}" class="form-control" />
+                    <form:input type="date" path="startDate" class="form-control" />
                     <fmt:formatDate type = "date" value = "${project.startDate}" />
                     <form:errors path="startDate" cssClass="error" />
                 </td>
                 <td>
-                    <form:input type="date" path="endDate" value="${project.endDate}" class="form-control" />
+                    <form:input type="date" path="endDate" class="form-control" />
                     <fmt:formatDate type = "date" value = "${project.endDate}" />
                     <form:errors path="endDate" cssClass="error" />
                 </td>
@@ -119,16 +120,16 @@
                 <input type="hidden" name="projectId" value="${project.projectId}"/>
                 <input type="hidden" name="statusId" value="${task.statusId.statusId}"/>
                 <td>
-                    <form:input path="description" placeholder="${task.description}" class="form-control" /><br>
+                    <form:input path="description" value="${task.description}" class="form-control" /><br>
                     <form:errors path="description" cssClass="error" />
                 </td>
                 <td>
-                    <form:input type="date" path="taskStartDate" value="${task.taskStartDate}" class="form-control" />
+                    <form:input type="date" path="taskStartDate" value = "${task.taskStartDate}" class="form-control" />
                     <fmt:formatDate type = "date" value = "${task.taskStartDate}" />
                     <form:errors path="taskStartDate" cssClass="error" />
                 </td>
                 <td>
-                    <form:input type="date" path="taskEndDate" value="${task.taskEndDate}" class="form-control" />
+                    <form:input type="date" path="taskEndDate" value = "${task.taskEndDate}" class="form-control" />
                     <fmt:formatDate type = "date" value = "${task.taskEndDate}" />                        
                     <form:errors path="taskEndDate" cssClass="error" />
                 </td>

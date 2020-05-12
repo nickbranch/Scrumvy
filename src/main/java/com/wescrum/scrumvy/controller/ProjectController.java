@@ -11,6 +11,7 @@ import com.wescrum.scrumvy.service.ProjectServiceInterface;
 import com.wescrum.scrumvy.service.ProjectTeamServiceInterface;
 import com.wescrum.scrumvy.service.UserService;
 import java.util.List;
+import java.util.Objects;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -58,7 +59,7 @@ public class ProjectController {
     public String saveProject(@Valid @ModelAttribute("project") Project project,
             BindingResult theBindingResult,
             Model model) {
-
+        project = trimTheProject(project);
         User user = userService.getLoggedinUser();
 
         // form validation
@@ -82,7 +83,6 @@ public class ProjectController {
         ProjectRole projectRole = projectRoleRepo.findByprojectRoleId(1);
         projectService.createProject(project);
 
-        // create project team
         ProjectTeam projectTeam = new ProjectTeam();
         projectTeam.setProjectId(project);
         projectTeam.setUserId(user);
@@ -100,6 +100,8 @@ public class ProjectController {
     public String updateProjectDetails(@Valid @ModelAttribute("project") Project project,
             BindingResult theBindingResult,
             Model model) {
+        
+        project = trimTheProject(project);
 
         // form validation
         if (theBindingResult.hasErrors()) {
@@ -107,14 +109,7 @@ public class ProjectController {
             return "projectSetup";
         }
 
-        List<Project> tempList = projectService.getAllOwnedProjectsOfAUser(userService.getLoggedinUser().getId());
-        boolean exists = false;
-        for (Project pr : tempList) {
-            if (pr.getProjectName().toLowerCase().equals(project.getProjectName().toLowerCase())) {
-                exists = true;
-            }
-        }
-        if (exists) {
+        if (checkForSameName(project)) {
             model.addAttribute("createProjectError", "Sorry. It seems you already have a project named that way");
             model.addAttribute("emptyTask", new Task());
             return "projectSetup";
@@ -122,6 +117,7 @@ public class ProjectController {
 
         model.addAttribute("project", project);
         model.addAttribute("emptyTask", new Task());
+
         projectService.createProject(project);
         return "projectSetup";
     }
@@ -130,17 +126,34 @@ public class ProjectController {
     public String projectSettings(@ModelAttribute("projectId") Long projectid,
             Model model) {
         Project currentProject = projectService.getProjectbyid(projectid);
-        model.addAttribute("emptyTask", new Task());
+        model.addAttribute("user", userService.getLoggedinUser());
         model.addAttribute("project", currentProject);
+        model.addAttribute("emptyTask", new Task());
         return "projectSetup";
     }
 
     @PostMapping("/deleteProject")
     public String deleteProject(@ModelAttribute("projectId") Long projectid,
             Model model) {
-        System.out.println("***************************************************************************************************");
         projectService.deleteProject(projectService.getProjectbyid(projectid));
-        System.out.println("***************************************************************************************************");
         return "redirect:/";
+    }
+
+    private Project trimTheProject(Project project) {
+        String trimmedName = project.getProjectName().trim();
+        String trimmedDescription = project.getProjectDescription().trim();
+        project.setProjectName(trimmedName);
+        project.setProjectDescription(trimmedDescription);
+        return project;
+    }
+
+    private boolean checkForSameName(Project project) {
+        List<Project> tempList = projectService.getAllOwnedProjectsOfAUser(userService.getLoggedinUser().getId());
+        for (Project pr : tempList) {
+            if ((pr.getProjectName().toLowerCase().equals(project.getProjectName().toLowerCase())) && (!Objects.equals(pr.getProjectId(), project.getProjectId()))) {
+                return true;
+            }
+        }
+        return false;
     }
 }

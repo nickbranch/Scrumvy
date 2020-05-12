@@ -30,6 +30,7 @@
                         <form:form action="${pageContext.request.contextPath}/project/saveProject"  method="POST"
                                    modelAttribute="project"
                                    class="form-horizontal">
+
                             <div class="form-group">
                                 <div class="col-xs-15">
                                     <div>
@@ -42,6 +43,8 @@
                                     </div>
                                 </div>
                             </div>
+                            
+                            <input type="hidden" name="userCollection" value="${customUser.id}"/>
                             <!-- Project Name -->
                             <div class="input-group">
                                 <form:input path="projectName" placeholder="Name (*)" class="form-control" /><br>
