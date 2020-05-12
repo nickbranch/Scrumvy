@@ -6,13 +6,15 @@
 package com.wescrum.scrumvy.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -62,10 +64,11 @@ public class Sprint implements Serializable {
     private Date sprintEndDate;
     
 //    @ManyToMany(mappedBy = "sprintCollection")
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany
     @JoinTable(name = "sprint_tasks", 
             joinColumns = @JoinColumn(name = "sprint_id"),
             inverseJoinColumns = @JoinColumn(name = "task_id"))
+//    @ManyToMany(fetch = FetchType.LAZY,mappedBy = "sprintCollection")
     private Collection<Task> taskCollection ;
     
     @JoinColumn(name = "project_id", referencedColumnName = "project_id")
@@ -146,3 +149,5 @@ public class Sprint implements Serializable {
     }
     
 }
+//
+//

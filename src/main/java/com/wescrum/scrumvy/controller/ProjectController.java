@@ -15,6 +15,8 @@ import com.wescrum.scrumvy.service.ProjectServiceImpl;
 import com.wescrum.scrumvy.service.ProjectTeamServiceImpl;
 import com.wescrum.scrumvy.service.TaskServiceInterface;
 import com.wescrum.scrumvy.service.UserService;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,15 +137,36 @@ public class ProjectController {
         List <Sprint> projectSprints = sprintRepo.findByProjectId(currentProject);        
         List <ProjectTeam> projectTeam = projectTeamRepo.findByProjectId(currentProject);
         
+        // get current sprint according to current date:
+        Date date = new Date();
+       List <Sprint> currentSprint = sprintRepo.findByProjectIdAndSprintStartDateBeforeAndSprintEndDateAfter(currentProject,date, date);
+        
+//       List<Task> currentTasks = new ArrayList();
+//                for (Task task : currentSprint.get(0).getTaskCollection()) {
+//                    currentTasks.add(task);
+//                }
+       
+       
+        System.out.println("-+_+_+_+_+_+_+_++_+_+_++_+_+_+_+_+_+_+_+_+_+_+_+_+");
+        System.out.println(currentSprint.toString());
+        System.out.println("-+_+_+_+_+_+_+_++_+_+_++_+_+_+_+_+_+_+_+_+_+_+_+_+");
+        
+        
         model.addAttribute("project", currentProject);
+        
+//        //tasks of current sprint:
+//        model.addAttribute("currentTasks", currentTasks);
+        
+        // current sprint:
+        model.addAttribute("currentSprint", currentSprint.get(0));
+        
         //all project tasks
-        model.addAttribute("projectTasks", projectTasks);
+        model.addAttribute("projectTasks", projectTasks); 
         
-      
-        
-        
-        
+        //all project sprints
         model.addAttribute("projectSprints", projectSprints);
+        
+        // project team
         model.addAttribute("projectTeam", projectTeam);
 
         return "workspace";

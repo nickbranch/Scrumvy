@@ -7,6 +7,7 @@ package com.wescrum.scrumvy.service;
 
 import com.wescrum.scrumvy.entity.Sprint;
 import com.wescrum.scrumvy.repos.SprintRepository;
+
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class SprintServiceImpl implements SprintServiceInterface {
     @Autowired
     SprintRepository sprintRepo;
     
-    
+ 
     @Override
     public List<Sprint> getAllSprints() {
         return sprintRepo.findAll();

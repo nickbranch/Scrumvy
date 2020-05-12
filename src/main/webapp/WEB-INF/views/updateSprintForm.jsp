@@ -25,7 +25,7 @@
                 <div  class="col-lg-12">
                     <div class="">
                         <!-- Create Srint Form -->
-                        <form:form action="${pageContext.request.contextPath}/sprint/saveSprint"  method="POST"
+                        <form:form action="${pageContext.request.contextPath}/sprint/saveUpdatedSprint"  method="POST"
                                    modelAttribute="sprint"
                                    class="form-horizontal">
                             <div class="form-group">
@@ -41,7 +41,7 @@
                                 </div>
                             </div>
 
-                            <!-- Start Date  (new java.util.Date()).toString()%> -->
+                            <!-- Start Date -->
                             <div class="input-group">
                                 <form:input type="date" path="sprintStartDate" class="form-control" />
                             </div>
@@ -55,19 +55,26 @@
 
                             <!-- Create task dropdown -->
 
-                            <p><strong>Select tasks. You may control-click (Windows) or command-click (Mac) to select more than one.</strong></p>
+                            <p><strong>Current tasks</strong></p>
 
                             <!-- This works  -->
+
+                            <!--add current tasks column with for each also add clear field -->
                             <form:select path="taskCollection" multiple="true">
-
-                                <form:options items="${activeTasks}" itemValue="taskId" itemLabel="description"/>
-
+                                <form:options items="${currentTasks}" itemValue="taskId" itemLabel="description"/>                               
                             </form:select>
                             
+                            <p><strong>Add another task from the project</strong></p>
+                            
+                            <form:select path="taskCollection" multiple="true">
+                                <form:options items="${activeTasks}" itemValue="taskId" itemLabel="description"/>
+                            </form:select>
+                                                      
                             <input type="hidden" name="projectId" value="${project.projectId}"/>
+                            <input type="hidden" name="sprintId" value="${sprint.sprintId}"/>
                             <!-- Create sprint Button -->
                             <div style="margin-top: 10px" class="form-group">						
-                                <button type="SUBMIT" class="btn btn-primary">Create</button>
+                                <button type="SUBMIT" class="btn btn-primary">Update</button>
                             </div>
                             <!-- manually adding tokens csrf protection -->
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
@@ -79,7 +86,7 @@
             </div>
         </div>
         <!--        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>-->
-<!--        <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>-->
+        <!--        <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>-->
     </body>
 
 </html>

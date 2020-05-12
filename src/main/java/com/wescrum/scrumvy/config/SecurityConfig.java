@@ -26,6 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/adminpanel/**").hasRole("ADMIN")
                 .antMatchers("/").hasRole("EMPLOYEE")
                 .and()
+                .csrf().disable()
                 .formLogin()
                 .loginPage("/showLogin")
                 .loginProcessingUrl("/authentication")
@@ -34,7 +35,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout().permitAll()
                 .and()
-                .exceptionHandling().accessDeniedPage("/access-denied");
+                .exceptionHandling().accessDeniedPage("/access-denied")
+                ;
     }
 
     //bcrypt bean definition

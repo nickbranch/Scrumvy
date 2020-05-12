@@ -5,6 +5,7 @@
  */
 package com.wescrum.scrumvy.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
@@ -41,9 +42,12 @@ public class Status implements Serializable {
     @Basic(optional = false)
     @Column(name = "status_id")
     private Integer statusId;
+    
     @Size(max = 30)
     @Column(name = "status_state")
     private String statusState;
+    
+ 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "statusId")
     private Collection<Task> taskCollection;
 

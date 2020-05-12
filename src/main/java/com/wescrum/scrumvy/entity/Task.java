@@ -5,10 +5,12 @@
  */
 package com.wescrum.scrumvy.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -60,14 +62,17 @@ public class Task implements Serializable {
     @Column(name = "task_end_date")
     @Temporal(TemporalType.DATE)
     private Date taskEndDate;
- 
-    @ManyToMany
-    @JoinTable(name = "sprint_tasks", 
-            joinColumns = @JoinColumn(name = "task_id"),
-            inverseJoinColumns = @JoinColumn(name = "sprint_id"))
+    
+    
+//    @ManyToMany
+//    @JoinTable(name = "sprint_tasks", 
+//            joinColumns = @JoinColumn(name = "task_id"),
+//            inverseJoinColumns = @JoinColumn(name = "sprint_id"))
+
+    @ManyToMany (mappedBy = "taskCollection", cascade=CascadeType.ALL)
     private Collection<Sprint> sprintCollection;
     
-    
+     
     @JoinColumn(name = "project_id", referencedColumnName = "project_id")
     @ManyToOne(optional = false)
     private Project projectId;
@@ -165,5 +170,10 @@ public class Task implements Serializable {
     public String toString() {
         return "com.wescrum.scrumvy.entity.Task[ taskId=" + taskId + " ]";
     }
+    
+//     @Override
+//    public String toString() {
+//        return this.getSprintCollection().toString();
+//    }
     
 }
