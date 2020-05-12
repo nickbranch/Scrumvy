@@ -1,17 +1,24 @@
 
 package com.wescrum.scrumvy.pojo;
 
+import java.util.Date;
+
 
 public class TasksJsonResponse {
     
+    // CARE THE DATES, THEY ARE SPRINT DATES
     private Long taskId;
     private String description;
     private Integer statusId;
+    private String sprintStartDate;
+    private String sprintEndDate;
 
-    public TasksJsonResponse(Long taskId, String description, Integer statusId) {
+    public TasksJsonResponse(Long taskId, String description, Integer statusId, String sprintStartDate, String sprintEndDate) {
         this.taskId = taskId;
         this.description = description;
         this.statusId = statusId;
+        this.sprintStartDate = sprintStartDate;
+        this.sprintEndDate = sprintEndDate;
     }
 
     public Long getTaskId() {
@@ -38,12 +45,28 @@ public class TasksJsonResponse {
         this.statusId = statusId;
     }
 
+    public String getSprintStartDate() {
+        return sprintStartDate;
+    }
+
+    public void setSprintStartDate(String sprintStartDate) {
+        this.sprintStartDate = sprintStartDate;
+    }
+
+    public String getSprintEndDate() {
+        return sprintEndDate;
+    }
+
+    public void setSprintEndDate(String sprintEndDate) {
+        this.sprintEndDate = sprintEndDate;
+    }
+
     @Override
     public String toString() {
-        return "TasksJsonResponse{" + "taskId=" + taskId + ", description=" + description + ", statusId=" + statusId + '}';
+        return "TasksJsonResponse{" + "taskId=" + taskId + ", description=" + description + ", statusId=" + statusId + ", sprintStartDate=" + sprintStartDate + ", sprintEndDate=" + sprintEndDate + '}';
     }
     
     
-    
+   
     
 }

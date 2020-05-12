@@ -42,7 +42,7 @@
                                 <c:forEach items="${projectTasks}" var="task" varStatus="status" begin="0"
                                            end="${fn:length(projectTasks)}" step="1">
                                     <tr id="row">
-                                        <td> ${status.count}.</td>
+                                        <td> ${status.count} </td>
                                         <td id="taskDescription_${task.taskId}" class="editable">${task.description}</td>                             
                                         <td >
     <!--                                    <div id="taskStartDate_${task.taskId}" style="visibility:hidden"> ${task.taskStartDate}</div>
@@ -85,7 +85,7 @@
                                 <c:forEach items="${projectSprints}" var="sprint" varStatus="status" begin="0"
                                            end="${fn:length(projectSprints)}" step="1">
                                     <tr>
-                                        <td> ${status.count}.</td>
+                                        <td><button class="sprintSelector" data-selectSprintId="${sprint.sprintId}"> <i class="fa fa-eye"></i></button></td>
                                         <td>
                                             <span id="sprintStartDate_${sprint.sprintId}" class="editable"><fmt:formatDate type="date" value="${sprint.sprintStartDate}" /></span>
                                         </td>
@@ -110,17 +110,18 @@
 
                                                 <div class="col-9 pl-5">
                                                     <br>
-                                                    <h4>Current Sprint backlog: </h4>
+                                                    <h4>Sprint backlog: </h4>
+<!--                                                     1 thing to clear and append-->
+                                                    <div id="sprintDatedFromTask">
+                                                        <h4 class="font-italic">
 
-                                                    <h4 class="font-italic">
-                                                        <%--    <c:forEach items="${currentSprint}" var="currentSprint"> --%>
-                                                            
                                                             <fmt:formatDate type="date" value="${currentSprint.sprintStartDate}"/> - 
                                                             <fmt:formatDate  type="date" value="${currentSprint.sprintEndDate}" />
-                                                    <%--    </c:forEach> --%>
-                                                    </h4>
+
+                                                        </h4>
+                                                    </div>
                                                     <br>
-                                                   
+
                                                     <table id="tasksTable" class="table table-striped col text-center" data-sprintId="${currentSprint.sprintId}">
                                                         <thead class=" text-center">
                                                             <tr>
@@ -133,10 +134,10 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody id="bodyOfTaskTable">
-                                                         
+
                                                         </tbody>
                                                     </table>
-                                                    
+
                                                 </div>
                                                 </div>
                                                 </div>

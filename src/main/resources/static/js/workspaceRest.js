@@ -5,8 +5,6 @@ let token = $("meta[name='_csrf']").attr("content");
 let header = $("meta[name='_csrf_header']").attr("content");
 let csrf = {};
 csrf[header] = token;
-
-
 function makeTaskEditable(id) {
     let btn = $(event.target);
     if ($(event.target).html() === "edit") {
@@ -38,6 +36,28 @@ function makeTaskEditable(id) {
     }
 }
 
+$(".sprintSelector").on("click", function () {
+    let sprintIdFromTable = $(event.currentTarget).attr("data-selectSprintId");
+    console.log(sprintIdFromTable);
+   
+    $("#bodyOfTaskTable").empty();
+    $.ajax({
+        url: "/getSprintTasks",
+        type: "POST",
+        data: {
+            sprintId: sprintIdFromTable
+        },
+        success: function (data) {
+            console.log(data);
+            let taskForSprintDates = data[0];
+            fillSprintDates(taskForSprintDates);
+            data.forEach(function (task) {
+            categorizeTasksToTable(task);
+            })
+        }
+    })
+    })
+   
 
 
 $(document).ready(function () {
@@ -49,20 +69,18 @@ $(document).ready(function () {
             sprintId: currentSprintId
         },
         success: function (data) {
-               data.forEach(function (task){
-                   categorizeTasksToTable(task) 
-               })
+            data.forEach(function (task) {
+            categorizeTasksToTable(task)
+            })
         }
     })
 });
-
-
 
 function categorizeTasksToTable(task) {
     switch (task["statusId"]) {
         case 1:
             $("#bodyOfTaskTable").append(
-         `<tr>
+                    `<tr>
           <td id="toDoTask" data-sprintId="${task.taskId}"> ${task.description} </td>
           <td> </td>
           <td> </td> 
@@ -70,7 +88,7 @@ function categorizeTasksToTable(task) {
             break;
         case 2:
             $("#bodyOfTaskTable").append(
-         `<tr>
+                    `<tr>
           <td> </td>
           <td id="inProgressTask" data-sprintId="${task.taskId}"> ${task.description} </td>
           <td> </td> 
@@ -78,14 +96,26 @@ function categorizeTasksToTable(task) {
             break;
         case 3:
             $("#bodyOfTaskTable").append(
-         `<tr>
+                    `<tr>
           <td> </td>
           <td> </td>
           <td id="completeTask" data-sprintId="${task.taskId}"> ${task.description} </td> 
           </tr>`)
             break;
     }
-
-
-
 }
+
+function fillSprintDates(task) {
+   
+    $("#sprintDatedFromTask").empty();
+    $("#sprintDatedFromTask").append(`
+            <h4 class = "font-italic">
+                        <span>${task.sprintStartDate}</span> -
+                        <span>${task.sprintEndDate}</span>
+
+            </h4>`)
+
+            }
+            
+            
+            

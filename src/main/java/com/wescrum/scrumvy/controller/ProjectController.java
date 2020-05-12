@@ -158,7 +158,9 @@ public class ProjectController {
 //        model.addAttribute("currentTasks", currentTasks);
         
         // current sprint:
+        if (!currentSprint.isEmpty()){
         model.addAttribute("currentSprint", currentSprint.get(0));
+        }
         
         //all project tasks
         model.addAttribute("projectTasks", projectTasks); 
