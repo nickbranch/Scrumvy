@@ -58,24 +58,27 @@
                 <c:if test="${userFound != null}">
                     <td>
                         <div class="alert alert-danger col-xs-offset-1 col-xs-10">
-                            ${userFound.username}
+                            ${userFound}
                         </div>                    
                     </td>
                     <td>
-                        SelectDropDown
-                    </td>
-                    <td>
                         <form:form method="POST"
-                                   modelAttribute="project"
-                                   action="/invites/sendInvite">
-                            <input type="hidden" name="projectTeamId" value="${teamMember.projectTeamId}"/>
-                            <input type="SUBMIT" value="Send Invite"/>                       
+                                   modelAttribute="invite"
+                                   action="${pageContext.request.contextPath}/invites/sendInvite">
+                            <form:select path="projectRoleId"> 
+                                <form:options items="${availableRoles}" itemValue="projectRoleId" itemLabel="roleDescription"/>
+                            </form:select>
+                            <input type="hidden" name="userName" value="${userFound}"/>
+                            <input type="hidden" name="project" value="${project.projectId}"/>
+                        </td>
+                        <td>
+                            <input type="submit" value="Send Invite"/>                       
                         </form:form>
                     </td>
                 </c:if>
             </tr>
             <tr>
-                <th colspan="4">                            
+                <th colspan="5">                            
                     <div class="form-group">
                         <div class="col-xs-15">
                             <div>
@@ -83,6 +86,11 @@
                                 <c:if test="${couldNotFind != null}">
                                     <div class="alert alert-danger col-xs-offset-1 col-xs-10">
                                         ${couldNotFind}
+                                    </div>
+                                </c:if>
+                                <c:if test="${inviteHasBeenSent != null}">
+                                    <div class="alert alert-success col-xs-offset-1 col-xs-10">
+                                        ${inviteHasBeenSent}
                                     </div>
                                 </c:if>
                             </div>
