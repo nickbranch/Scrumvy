@@ -29,6 +29,51 @@
                 </div>
             </c:if>
         </div>
+        <%--<h2>Received Invites</h2>
+        <div>
+            <p>
+                <c:forEach items="${receivedInvites}" var="receivedInvite">
+                <ul>
+                    <li>
+                        <form:form method="POST"
+                                   modelAttribute="invite"
+                                   action="${pageContext.request.contextPath}/invites/handleAccept">
+                            You have been invited to project ${receivedInvite.projectId.projectName}
+                            in the position of ${receivedInvite.projectRoleId.roleDescription}
+                            <input type="hidden" name="projectId" value="${project.projectId}"/>
+                            <input type="SUBMIT" value="TO BE IMPLEMENTED"/>                       
+                        </form:form>
+                    </li>
+                </ul>
+            </c:forEach>
+        </p>
+    </div> --%>
+
+
+        <h2>Sent Invites</h2>
+<div>
+    <p>
+        <c:forEach items="${sentInvites}" var="sentInvite">
+        <ul>
+            <li>
+                <form:form method="POST"
+                           modelAttribute="invite"
+                           action="${pageContext.request.contextPath}/invites/handleAccept">
+                    You have invited  ${sentInvite.receivingUserId.username} 
+                    to project ${sentInvite.projectId.projectName}
+                    in the position of ${sentInvite.projectRoleId.roleDescription}
+                    <input type="hidden" name="projectId" value="${project.projectId}"/>
+                    <input type="SUBMIT" value="TO BE IMPLEMENTED"/>                       
+                </form:form>
+            </li>
+        </ul>
+    </c:forEach>
+</p>
+</div>
+
+
+
+
         <h2>Owned Projects</h2>
         <div>
             <p>
