@@ -16,6 +16,5 @@ public interface InviteServiceInterface {
 
     public List<Invite> getSentInvites(User user);
 
-    public List<Invite> getReceivedInvites(Integer userId);
     //public void editInvite(Invite invite);
 }

@@ -18,24 +18,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/tasks")
 public class TaskController {
-    
+
     @Autowired
     private ProjectServiceInterface projectService;
     @Autowired
     TaskServiceInterface taskService;
     @Autowired
     StatusRepository statusRepo;
-    
+
     @PostMapping("/saveTask")
     public String saveTask(@Valid @ModelAttribute("emptyTask") Task task,
             BindingResult theBindingResult,
             Model model) {
         Project project = task.getProjectId();
-        
-        if (task.getStatusId() == null) {
-            Status status = statusRepo.findByStatusId(1);
-            task.setStatusId(status);
-        }
+
         // form validation
         if (theBindingResult.hasErrors()) {
             model.addAttribute("project", project);
@@ -43,12 +39,18 @@ public class TaskController {
             return "projectSetup";
         }
 
+        // if for any reason (front end error) status is null initialize it
+        if (task.getStatusId() == null) {
+            Status status = statusRepo.findByStatusId(1);
+            task.setStatusId(status);
+        }
+
         taskService.createTask(task);
         model.addAttribute("project", project);
         model.addAttribute("emptyTask", new Task());
         return "projectSetup";
     }
-    
+
     @PostMapping("/deleteTask")
     public String deleteTask(@Valid @ModelAttribute("taskId") Long taskId,
             BindingResult theBindingResult,
@@ -67,7 +69,7 @@ public class TaskController {
         model.addAttribute("emptyTask", new Task());
         return "projectSetup";
     }
-    
+
     @PostMapping("/updateTask")
     public String updateTask(@Valid @ModelAttribute("emptyTask") Task task,
             BindingResult theBindingResult,

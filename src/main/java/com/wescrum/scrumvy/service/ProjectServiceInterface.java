@@ -17,4 +17,8 @@ public interface ProjectServiceInterface {
 
     public List<Project> getAllOwnedProjectsOfAUser(Integer user_id);
 
+    public boolean checkIfProjectIsOwned(Project project);
+
+    public boolean checkIdOfOwnedProjectsFix(Project project);
+
 }

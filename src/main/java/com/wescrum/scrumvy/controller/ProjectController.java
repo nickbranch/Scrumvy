@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/project")
@@ -35,7 +36,7 @@ public class ProjectController {
     @Autowired
     private ProjectRoleRepository projectRoleRepo;
     @Autowired
-    ProjectTeamRepository projectTeamRepo;
+    private ProjectTeamRepository projectTeamRepo;
 
     @GetMapping("/createProject")
     public String createProject(Model model) {
@@ -100,7 +101,7 @@ public class ProjectController {
     public String updateProjectDetails(@Valid @ModelAttribute("project") Project project,
             BindingResult theBindingResult,
             Model model) {
-        
+
         project = trimTheProject(project);
 
         // form validation
@@ -108,9 +109,17 @@ public class ProjectController {
             model.addAttribute("emptyTask", new Task());
             return "projectSetup";
         }
-
+        
+        // unique name per project validation
         if (checkForSameName(project)) {
             model.addAttribute("createProjectError", "Sorry. It seems you already have a project named that way");
+            model.addAttribute("emptyTask", new Task());
+            return "projectSetup";
+        }
+
+        // check if project is owned by this user
+        if (!projectService.checkIdOfOwnedProjectsFix(project)) {
+            model.addAttribute("createProjectError", "You do not own this project");
             model.addAttribute("emptyTask", new Task());
             return "projectSetup";
         }
@@ -124,19 +133,33 @@ public class ProjectController {
 
     @PostMapping("/projectSettings")
     public String projectSettings(@ModelAttribute("projectId") Long projectid,
-            Model model) {
-        Project currentProject = projectService.getProjectbyid(projectid);
-        model.addAttribute("user", userService.getLoggedinUser());
-        model.addAttribute("project", currentProject);
-        model.addAttribute("emptyTask", new Task());
-        return "projectSetup";
+            Model model,
+            final RedirectAttributes redirectAttributes) {
+        Project project = projectService.getProjectbyid(projectid);
+        if (projectService.checkIdOfOwnedProjectsFix(project)) {
+            model.addAttribute("user", userService.getLoggedinUser());
+            model.addAttribute("project", project);
+            model.addAttribute("emptyTask", new Task());
+            return "projectSetup";
+        } else {
+            redirectAttributes.addFlashAttribute("createProjectError", "The project you are trying to join is not yours.");
+            return "redirect:/";
+        }
     }
 
     @PostMapping("/deleteProject")
     public String deleteProject(@ModelAttribute("projectId") Long projectid,
             Model model) {
-        projectService.deleteProject(projectService.getProjectbyid(projectid));
-        return "redirect:/";
+        Project project = projectService.getProjectbyid(projectid);
+        if (projectService.checkIfProjectIsOwned(project)) {
+            projectService.deleteProject(projectService.getProjectbyid(projectid));
+            return "redirect:/";
+        } else {
+            model.addAttribute("deleteProjectError", "The project you are trying to delete is not yours.");
+            model.addAttribute(project);
+            model.addAttribute("emptyTask", new Task());
+            return "projectSetup";
+        }
     }
 
     private Project trimTheProject(Project project) {
@@ -156,4 +179,5 @@ public class ProjectController {
         }
         return false;
     }
+
 }

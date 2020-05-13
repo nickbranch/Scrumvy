@@ -187,6 +187,7 @@
         </form:form>
     </td>
 
+
     <td>
         <form:form method="POST"
                    modelAttribute="project"
@@ -195,6 +196,22 @@
             <input type="SUBMIT" class="btn btn-warning" value="Manage Team Members"/>                       
         </form:form>
     </td>
+</tr>
+<tr>
+    <th colspan="2">                            
+        <div class="form-group">
+            <div class="col-xs-15">
+                <div>
+                    <!-- Check for errors --> 
+                    <c:if test="${deleteProjectError != null}">
+                        <div class="alert alert-danger col-xs-offset-1 col-xs-10">
+                            ${deleteProjectError}
+                        </div>
+                    </c:if>
+                </div>
+            </div>
+        </div>
+    </th>
 </tr>
 
 </tbody>

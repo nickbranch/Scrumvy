@@ -40,22 +40,12 @@ public class InviteServiceImpl implements InviteServiceInterface {
 
     @Override
     public List<Invite> getSentInvites(User user) {
-        System.out.println("Entering GET SENT INVITES");
         List<Project> usersProjects = projectService.getAllOwnedProjectsOfAUser(user.getId()); //owned projects
         List<Invite> projectInvites = new ArrayList();  // to be returned
         for (Project usersProject : usersProjects) {
-            System.out.println("**********************************************************");
-            System.out.println(usersProject.getInviteCollection());
-            System.out.println("**********************************************************");
             projectInvites.addAll(usersProject.getInviteCollection());
         }
         return projectInvites;
-    }
-
-    @Override
-    public List<Invite> getReceivedInvites(Integer userId) {
-        System.out.println("Entering GET RECEIVED INVITES");
-        return inviteRepo.findByreceivingUserId(userId); //received invites
     }
 
 }

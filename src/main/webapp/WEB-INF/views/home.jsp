@@ -29,7 +29,7 @@
                 </div>
             </c:if>
         </div>
-        <%--<h2>Received Invites</h2>
+        <h2>Received Invites</h2>
         <div>
             <p>
                 <c:forEach items="${receivedInvites}" var="receivedInvite">
@@ -47,10 +47,10 @@
                 </ul>
             </c:forEach>
         </p>
-    </div> --%>
+    </div> 
 
 
-        <h2>Sent Invites</h2>
+        <h2>Invitations to your projects.</h2>
 <div>
     <p>
         <c:forEach items="${sentInvites}" var="sentInvite">
