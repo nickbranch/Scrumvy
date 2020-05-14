@@ -55,11 +55,9 @@ public class TaskController {
             return "projectSetup";
         }
 
-        // if for any reason (front end error) status is null initialize it
-        if (task.getStatusId() == null) {
-            Status status = statusRepo.findByStatusId(1);
-            task.setStatusId(status);
-        }
+        // we want the status to be (todo) on the iniatialization also protects against form field tampering
+        Status status = statusRepo.findByStatusId(1);
+        task.setStatusId(status);
 
         taskService.createTask(task);
         model.addAttribute("project", project);
@@ -70,27 +68,24 @@ public class TaskController {
     @PostMapping("/deleteTask")
     public String deleteTask(@Valid @ModelAttribute("taskId") Long taskId,
             BindingResult theBindingResult,
+            @ModelAttribute("taskId") Long formTask,
             final RedirectAttributes redirectAttributes,
             Model model) {
-        // form validation
         Project project = projectService.getProjectbyid(ProjectController.activeProject);
+ 
+        //form validation
         if (theBindingResult.hasErrors()) {
             model.addAttribute("project", project);
             model.addAttribute("emptyTask", new Task());
             return "projectSetup";
         }
+        
         Task task = taskService.getTaskbyid(taskId);
-        List<Task> listOfTasks = taskRepo.findByProjectId(project);
-        boolean toggle = false;
-        for (Task prTask : listOfTasks) {
-            if (Objects.equals(prTask.getTaskId(), task.getTaskId())) {
-                toggle = true;
-            }
-        }
-//        System.out.println("*****************************************" + listOfTasks);
-        if (toggle) {
+
+        if (taskService.checkIfProjectOwnsATask(task, project)) {
             taskService.deleteTask(task);
             model.addAttribute("project", project);
+            System.out.println("******************************************WE ARE IN6");
             model.addAttribute("emptyTask", new Task());
             return "projectSetup";
         } else {
@@ -102,17 +97,30 @@ public class TaskController {
     @PostMapping("/updateTask")
     public String updateTask(@Valid @ModelAttribute("emptyTask") Task task,
             BindingResult theBindingResult,
+            @ModelAttribute("projectId") Long formProject,
+            final RedirectAttributes redirectAttributes,
             Model model) {
-        Project project = task.getProjectId();
+        Project project = projectService.getProjectbyid(ProjectController.activeProject);
+
+        //we can apply some ban here
+        if (formProject != ProjectController.activeProject) {
+            redirectAttributes.addFlashAttribute("createProjectError", "Please do not tamper with hidden form fields.");
+            return "redirect:/";
+        }
         // form validation
         if (theBindingResult.hasErrors()) {
             model.addAttribute("project", project);
             model.addAttribute("emptyTask", new Task());
             return "projectSetup";
         }
-        taskService.createTask(task);
-        model.addAttribute("project", project);
-        model.addAttribute("emptyTask", new Task());
-        return "projectSetup";
+        if (taskService.checkIfProjectOwnsATask(task, project)) {
+            taskService.createTask(task);
+            model.addAttribute("project", project);
+            model.addAttribute("emptyTask", new Task());
+            return "projectSetup";
+        } else {
+            redirectAttributes.addFlashAttribute("createProjectError", "Please do not tamper with hidden form fields.");
+            return "redirect:/";
+        }
     }
 }

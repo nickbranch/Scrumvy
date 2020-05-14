@@ -63,6 +63,7 @@ public class ProjectController {
     public String saveProject(@Valid @ModelAttribute("project") Project project,
             BindingResult theBindingResult,
             @ModelAttribute("userCollection") Long formUser,
+            final RedirectAttributes redirectAttributes,
             Model model) {
         if (theBindingResult.hasErrors()) {
             return "createProjectForm";
@@ -72,10 +73,10 @@ public class ProjectController {
 
         //we can apply some ban here
         if (formUser != activeUser) {
-            model.addAttribute("createProjectError", "Please do not tamper with hidden form fields.");
-            model.addAttribute("project", new Project());
-            return "createProjectForm";
+            redirectAttributes.addFlashAttribute("createProjectError", "Please do not tamper with hidden form fields.");
+            return "redirect:/";
         }
+        
         //unique name of project/user
         List<Project> tempList = projectService.getAllOwnedProjectsOfAUser(user.getId());
         boolean exists = false;
@@ -111,8 +112,13 @@ public class ProjectController {
             @ModelAttribute("projectId") Long formProject,
             @ModelAttribute("userCollection") Long formUser,
             final RedirectAttributes redirectAttributes,
-            Model model
-    ) {
+            Model model) {
+        // form validation
+        if (theBindingResult.hasErrors()) {
+            model.addAttribute("emptyTask", new Task());
+            return "projectSetup";
+        }
+
         project = trimTheProject(project);
 
         //we can apply some ban here
@@ -121,17 +127,10 @@ public class ProjectController {
             return "redirect:/";
         }
 
-        // form validation
-        if (theBindingResult.hasErrors()) {
-            model.addAttribute("emptyTask", new Task());
-            return "projectSetup";
-        }
-
         // check if project is owned by this user
         if (!projectService.checkIdOfOwnedProjectsFix(project)) {
-            model.addAttribute("createProjectError", "You do not own this project");
-            model.addAttribute("emptyTask", new Task());
-            return "projectSetup";
+            redirectAttributes.addFlashAttribute("createProjectError", "Please do not tamper with hidden form fields.");
+            return "redirect:/";
         }
 
         // unique name per project validation
@@ -169,7 +168,7 @@ public class ProjectController {
     }
 
     @PostMapping("/deleteProject")
-    public String deleteProject(@ModelAttribute("projectId") Long projectid,
+    public String deleteProject(@Valid @ModelAttribute("projectId") Long projectid,
             @ModelAttribute("projectId") Long formProject,
             final RedirectAttributes redirectAttributes,
             Model model
@@ -181,14 +180,12 @@ public class ProjectController {
         }
 
         Project project = projectService.getProjectbyid(projectid);
-        if (projectService.checkIfProjectIsOwned(project)) {
+        if (projectService.checkIdOfOwnedProjectsFix(project)) {
             projectService.deleteProject(projectService.getProjectbyid(projectid));
             return "redirect:/";
         } else {
-            model.addAttribute("deleteProjectError", "The project you are trying to delete is not yours.");
-            model.addAttribute(project);
-            model.addAttribute("emptyTask", new Task());
-            return "projectSetup";
+            redirectAttributes.addFlashAttribute("createProjectError", "Please do not tamper with hidden form fields.");
+            return "redirect:/";
         }
     }
 

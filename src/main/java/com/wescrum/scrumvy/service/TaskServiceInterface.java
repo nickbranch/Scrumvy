@@ -1,5 +1,6 @@
 package com.wescrum.scrumvy.service;
 
+import com.wescrum.scrumvy.entity.Project;
 import com.wescrum.scrumvy.entity.Task;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public interface TaskServiceInterface {
     public void deleteTask(Task task);
 
     public void updateTask(Task task);
-    
-    public List<Task> findByProjectId (Long projectId);
+
+    public boolean checkIfProjectOwnsATask(Task task, Project project);
  
 }
