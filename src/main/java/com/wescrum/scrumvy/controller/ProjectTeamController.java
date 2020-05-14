@@ -86,7 +86,6 @@ public class ProjectTeamController {
             redirectAttributes.addFlashAttribute("createProjectError", "Please do not tamper with hidden form fields.");
             return "redirect:/";
         }
-
         Project project = projectService.getProjectbyid(projectId);
         String userToBeFound = searchTerm.trim();
         User loggedInUser = userService.getLoggedinUser();
