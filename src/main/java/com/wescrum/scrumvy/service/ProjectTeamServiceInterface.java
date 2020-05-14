@@ -1,5 +1,6 @@
 package com.wescrum.scrumvy.service;
 
+import com.wescrum.scrumvy.entity.Project;
 import com.wescrum.scrumvy.entity.ProjectTeam;
 
 public interface ProjectTeamServiceInterface {
@@ -10,6 +11,6 @@ public interface ProjectTeamServiceInterface {
     public ProjectTeam getProjectTeambyid(Long projectTeamId);
 //
     public void deleteProjectTeam(ProjectTeam projectTeam);
-//
-//    public void updateProject(Project project);
+    
+    public boolean checkIfATeamIsPartOfTheActiveProject (ProjectTeam projectTeam, Project project);
 }
