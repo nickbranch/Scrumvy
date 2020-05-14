@@ -81,7 +81,7 @@ function categorizeTasksToTable(task) {
         case 1:
             $("#bodyOfTaskTable").append(
                     `<tr>
-          <td id="toDoTask" data-sprintId="${task.taskId}"> ${task.description} </td>
+          <td id="toDoTask" data-sprintId="${task.taskId}" > ${task.description} </td>
           <td> </td>
           <td> </td> 
           </tr>`)

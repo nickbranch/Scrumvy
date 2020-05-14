@@ -43,13 +43,12 @@ public class ProjectController {
     private ProjectRoleRepository projectRoleRepo;
     @Autowired
     private ProjectTeamRepository projectTeamRepo;
-    
+
     @Autowired
     private TaskRepository taskRepo;
-    
+
     @Autowired
     private SprintRepository sprintRepo;
-    
 
     @GetMapping("/createProject")
     public String createProject(Model model) {
@@ -87,7 +86,7 @@ public class ProjectController {
             if (pr.getProjectName().toLowerCase().equals(project.getProjectName().toLowerCase())) {
                 exists = true;
             }
-        }        
+        }
         if (exists) {
             model.addAttribute("createProjectError", "Sorry. It seems you already have a project named that way");
             model.addAttribute("project", project);
@@ -110,71 +109,36 @@ public class ProjectController {
         System.out.println(projectTeam.toString());
         return "redirect:/";
     }
-    
-//    @PostMapping("/projectDetails")
-//    public String showProject(@ModelAttribute("projectId") Long projectid,
-//                                Model model){
-//
-//        Project currentProject = projectService.getProjectbyid(projectid);
-//        List <Task> projectTasks = taskRepo.findByProjectId(currentProject);
-//        List <Sprint> projectSprints = sprintRepo.findByProjectId(currentProject);        
-//        List <ProjectTeam> projectTeam = projectTeamRepo.findByProjectId(currentProject);
-//        
-//        model.addAttribute("project", currentProject);
-//        model.addAttribute("projectTasks", projectTasks);
-//        model.addAttribute("projectSprints", projectSprints);
-//        model.addAttribute("projectTeam", projectTeam);
-//
-//        return "projectWorkspace";
-//    }
-    
+
     @GetMapping("/projectDetails/{id}")
     public String showProject(@PathVariable Long id,
-                                Model model){
+            Model model) {
 
         Project currentProject = projectService.getProjectbyid(id);
-        List <Task> projectTasks = taskRepo.findByProjectId(currentProject);
-        List <Sprint> projectSprints = sprintRepo.findByProjectId(currentProject);        
-        List <ProjectTeam> projectTeam = projectTeamRepo.findByProjectId(currentProject);
-        
+        List<Task> projectTasks = taskRepo.findByProjectId(currentProject);
+        List<Sprint> projectSprints = sprintRepo.findByProjectId(currentProject);
+        List<ProjectTeam> projectTeam = projectTeamRepo.findByProjectId(currentProject);
+
         // get current sprint according to current date:
         Date date = new Date();
-       List <Sprint> currentSprint = sprintRepo.findByProjectIdAndSprintStartDateBeforeAndSprintEndDateAfter(currentProject,date, date);
-        
-//       List<Task> currentTasks = new ArrayList();
-//                for (Task task : currentSprint.get(0).getTaskCollection()) {
-//                    currentTasks.add(task);
-//                }
-       
-       
-        System.out.println("-+_+_+_+_+_+_+_++_+_+_++_+_+_+_+_+_+_+_+_+_+_+_+_+");
-        System.out.println(currentSprint.toString());
-        System.out.println("-+_+_+_+_+_+_+_++_+_+_++_+_+_+_+_+_+_+_+_+_+_+_+_+");
-        
-        
+        List<Sprint> currentSprint = sprintRepo.findByProjectIdAndSprintStartDateBeforeAndSprintEndDateAfter(currentProject, date, date);
+
         model.addAttribute("project", currentProject);
-        
-//        //tasks of current sprint:
-//        model.addAttribute("currentTasks", currentTasks);
-        
+
         // current sprint:
-        if (!currentSprint.isEmpty()){
-        model.addAttribute("currentSprint", currentSprint.get(0));
+        if (!currentSprint.isEmpty()) {
+            model.addAttribute("currentSprint", currentSprint.get(0));
         }
-        
         //all project tasks
-        model.addAttribute("projectTasks", projectTasks); 
-        
+        model.addAttribute("projectTasks", projectTasks);
+
         //all project sprints
         model.addAttribute("projectSprints", projectSprints);
-        
+
         // project team
         model.addAttribute("projectTeam", projectTeam);
 
         return "workspace";
     }
-    
-    
-   
-       
+
 }

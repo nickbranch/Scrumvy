@@ -100,6 +100,14 @@
                                                             <input type="SUBMIT" class="btn btn-light" value="edit" />
                                                         </form:form>
                                                     </td>
+                                                    <td>
+                                                        <form:form method="POST" 
+                                                                   modelAttribute="sprint"
+                                                                   action="${pageContext.request.contextPath}/sprint/deleteSprint">
+                                                            <input type="hidden" name="sprintId" value="${sprint.sprintId}" />
+                                                            <button type="SUBMIT"><i class="fa fa-trash"></i> </button>
+                                                        </form:form>
+                                                    </td>
                                                     </tr>
                                                 </c:forEach>
                                                 </tbody>
@@ -111,7 +119,7 @@
                                                 <div class="col-9 pl-5">
                                                     <br>
                                                     <h4>Sprint backlog: </h4>
-<!--                                                     1 thing to clear and append-->
+
                                                     <div id="sprintDatedFromTask">
                                                         <h4 class="font-italic">
 
