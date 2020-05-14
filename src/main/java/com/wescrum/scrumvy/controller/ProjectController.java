@@ -10,6 +10,7 @@ import com.wescrum.scrumvy.repos.ProjectTeamRepository;
 import com.wescrum.scrumvy.service.ProjectServiceInterface;
 import com.wescrum.scrumvy.service.ProjectTeamServiceInterface;
 import com.wescrum.scrumvy.service.UserService;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.validation.Valid;
@@ -37,18 +38,20 @@ public class ProjectController {
     private ProjectRoleRepository projectRoleRepo;
     @Autowired
     private ProjectTeamRepository projectTeamRepo;
+    public static long activeProject;
+    public static long activeUser;
 
     @GetMapping("/createProject")
-    public String createProject(Model model) {
+    public String createProject(Model model, final RedirectAttributes redirectAttributes) {
         User user = userService.getLoggedinUser();
+        activeUser = user.getId();
 
         ProjectRole projectRole = projectRoleRepo.findByprojectRoleId(1);
         List<ProjectTeam> usersOwnedProjects = projectTeamRepo.findByUserIdAndProjectRoleId(user, projectRole);
 
-        int numberOfProjects = usersOwnedProjects.size();
-        if ((user.getPremium() == false) && (numberOfProjects >= 1)) {
-            model.addAttribute("createProjectError", "I would love to create a new project for you. If you want me to do this Go premium!");
-            return "forward:/";
+        if ((user.getPremium() == false) && (usersOwnedProjects.size() >= 1)) {
+            redirectAttributes.addFlashAttribute("createProjectError", "I would love to create a new project for you. If you want me to do this Go premium!");
+            return "redirect:/";
         } else {
             model.addAttribute("project", new Project());
             model.addAttribute("customUser", user);
@@ -59,15 +62,21 @@ public class ProjectController {
     @PostMapping("/saveProject")
     public String saveProject(@Valid @ModelAttribute("project") Project project,
             BindingResult theBindingResult,
+            @ModelAttribute("userCollection") Long formUser,
             Model model) {
-        project = trimTheProject(project);
-        User user = userService.getLoggedinUser();
-
-        // form validation
         if (theBindingResult.hasErrors()) {
             return "createProjectForm";
         }
+        project = trimTheProject(project);
+        User user = userService.getLoggedinUser();
 
+        //we can apply some ban here
+        if (formUser != activeUser) {
+            model.addAttribute("createProjectError", "Please do not tamper with hidden form fields.");
+            model.addAttribute("project", new Project());
+            return "createProjectForm";
+        }
+        //unique name of project/user
         List<Project> tempList = projectService.getAllOwnedProjectsOfAUser(user.getId());
         boolean exists = false;
         for (Project pr : tempList) {
@@ -77,7 +86,7 @@ public class ProjectController {
         }
         if (exists) {
             model.addAttribute("createProjectError", "Sorry. It seems you already have a project named that way");
-            model.addAttribute("project", project);
+            model.addAttribute("project", new Project());
             return "createProjectForm";
         }
 
@@ -93,26 +102,27 @@ public class ProjectController {
         user.getProjectsCollection().add(project);
         userService.saveUserWithProject(user);
 
-        System.out.println(projectTeam.toString());
         return "redirect:/";
     }
 
     @PostMapping("/updateProjectDetails")
     public String updateProjectDetails(@Valid @ModelAttribute("project") Project project,
             BindingResult theBindingResult,
-            Model model) {
-
+            @ModelAttribute("projectId") Long formProject,
+            @ModelAttribute("userCollection") Long formUser,
+            final RedirectAttributes redirectAttributes,
+            Model model
+    ) {
         project = trimTheProject(project);
+
+        //we can apply some ban here
+        if ((formProject != activeProject) && (formUser != activeUser)) {
+            redirectAttributes.addFlashAttribute("createProjectError", "Please do not tamper with hidden form fields.");
+            return "redirect:/";
+        }
 
         // form validation
         if (theBindingResult.hasErrors()) {
-            model.addAttribute("emptyTask", new Task());
-            return "projectSetup";
-        }
-        
-        // unique name per project validation
-        if (checkForSameName(project)) {
-            model.addAttribute("createProjectError", "Sorry. It seems you already have a project named that way");
             model.addAttribute("emptyTask", new Task());
             return "projectSetup";
         }
@@ -120,6 +130,13 @@ public class ProjectController {
         // check if project is owned by this user
         if (!projectService.checkIdOfOwnedProjectsFix(project)) {
             model.addAttribute("createProjectError", "You do not own this project");
+            model.addAttribute("emptyTask", new Task());
+            return "projectSetup";
+        }
+
+        // unique name per project validation
+        if (checkForSameName(project)) {
+            model.addAttribute("createProjectError", "Sorry. It seems you already have a project named that way");
             model.addAttribute("emptyTask", new Task());
             return "projectSetup";
         }
@@ -134,12 +151,16 @@ public class ProjectController {
     @PostMapping("/projectSettings")
     public String projectSettings(@ModelAttribute("projectId") Long projectid,
             Model model,
-            final RedirectAttributes redirectAttributes) {
+            final RedirectAttributes redirectAttributes
+    ) {
         Project project = projectService.getProjectbyid(projectid);
+        activeProject = project.getProjectId();
         if (projectService.checkIdOfOwnedProjectsFix(project)) {
             model.addAttribute("user", userService.getLoggedinUser());
             model.addAttribute("project", project);
-            model.addAttribute("emptyTask", new Task());
+            Task task = new Task();
+            task.setProjectId(projectService.getProjectbyid(activeProject));
+            model.addAttribute("emptyTask", task);
             return "projectSetup";
         } else {
             redirectAttributes.addFlashAttribute("createProjectError", "The project you are trying to join is not yours.");
@@ -149,7 +170,16 @@ public class ProjectController {
 
     @PostMapping("/deleteProject")
     public String deleteProject(@ModelAttribute("projectId") Long projectid,
-            Model model) {
+            @ModelAttribute("projectId") Long formProject,
+            final RedirectAttributes redirectAttributes,
+            Model model
+    ) {
+        //we can apply some ban here
+        if ((formProject != activeProject)) {
+            redirectAttributes.addFlashAttribute("createProjectError", "Please do not tamper with hidden form fields.");
+            return "redirect:/";
+        }
+
         Project project = projectService.getProjectbyid(projectid);
         if (projectService.checkIfProjectIsOwned(project)) {
             projectService.deleteProject(projectService.getProjectbyid(projectid));

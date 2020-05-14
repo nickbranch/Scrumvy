@@ -135,9 +135,9 @@
                 </td>
                 <td>
                     <button type="submit" class="btn btn-primary">Update</button>
-                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                 </td>
                 <!-- manually adding tokens csrf protection -->
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
             </form:form>
             <td>
                 <form method="POST"

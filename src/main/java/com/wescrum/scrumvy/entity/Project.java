@@ -44,7 +44,7 @@ public class Project implements Serializable {
     @Basic(optional = false)
     @Column(name = "project_id")
     private Long projectId;
-
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)

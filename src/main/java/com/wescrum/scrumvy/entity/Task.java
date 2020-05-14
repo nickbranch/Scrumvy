@@ -41,7 +41,7 @@ public class Task implements Serializable {
     @Column(name = "task_id")
     private Long taskId;
     
-    @Size(max = 150)
+    @Size(min = 1, max = 150)
     @Column(name = "description")
     private String description;
     
