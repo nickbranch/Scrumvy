@@ -94,10 +94,7 @@ public class ProjectController {
         ProjectRole projectRole = projectRoleRepo.findByprojectRoleId(1);
         projectService.createProject(project);
 
-        ProjectTeam projectTeam = new ProjectTeam();
-        projectTeam.setProjectId(project);
-        projectTeam.setUserId(user);
-        projectTeam.setProjectRoleId(projectRole);
+        ProjectTeam projectTeam = new ProjectTeam(projectRole,project,user);
         projectTeamService.saveTeam(projectTeam);
 
         user.getProjectsCollection().add(project);

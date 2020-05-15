@@ -41,6 +41,12 @@ public class ProjectTeam implements Serializable {
     @ManyToOne(optional = false)
     private User userId;
 
+    public ProjectTeam(ProjectRole projectRoleId, Project projectId, User userId) {
+        this.projectRoleId = projectRoleId;
+        this.projectId = projectId;
+        this.userId = userId;
+    }
+
     public ProjectTeam() {
     }
 

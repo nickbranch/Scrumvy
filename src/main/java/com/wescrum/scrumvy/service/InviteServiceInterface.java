@@ -18,5 +18,7 @@ public interface InviteServiceInterface {
     
     public boolean checkForDuplicate(Invite invite);
     
-
+    public boolean acceptInviteLogicCheck(Invite invite);
+    
+    public void performClearAfterAccept(Invite invite);
 }

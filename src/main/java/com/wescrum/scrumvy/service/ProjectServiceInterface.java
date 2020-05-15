@@ -20,5 +20,5 @@ public interface ProjectServiceInterface {
     public boolean checkIfProjectIsOwned(Project project);
 
     public boolean checkIdOfOwnedProjectsFix(Project project);
-
+    
 }

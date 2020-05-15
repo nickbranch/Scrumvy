@@ -1,6 +1,7 @@
 package com.wescrum.scrumvy.service;
 
 import com.wescrum.scrumvy.dto.UserDto;
+import com.wescrum.scrumvy.entity.Invite;
 import com.wescrum.scrumvy.entity.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -15,4 +16,6 @@ public interface UserService extends UserDetailsService {
     public void saveUserWithProject(User user);
 
     public User getLoggedinUser();
+    
+    public boolean checkIfUserIsPartOfAProject(Invite invite);
 }

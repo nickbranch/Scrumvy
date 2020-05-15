@@ -34,11 +34,12 @@
                 <c:forEach items="${receivedInvites}" var="receivedInvite">
                 <ul>
                     <li>
-                        <form:form method="GET"
-                                   modelAttribute="invite">                                   
+                        <form:form method="POST"
+                                   modelAttribute="invite"
+                                   action="${pageContext.request.contextPath}/invites/handleAccept">
                             You have been invited to project ${receivedInvite.projectId.projectName}
                             in the position of ${receivedInvite.projectRoleId.roleDescription}
-                            <input type="hidden" name="theRecInvite" value="${receivedInvite}"/>
+                            <input type="hidden" name="theRecInvite" value="${receivedInvite.inviteId}"/>
                             <input type="submit" class="button" name="Accept" value="Accept"/>        
                             <input type="submit" class="button" name="Reject" value="Reject"/>
                         </form:form>

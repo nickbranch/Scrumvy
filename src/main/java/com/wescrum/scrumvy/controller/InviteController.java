@@ -2,11 +2,12 @@ package com.wescrum.scrumvy.controller;
 
 import com.wescrum.scrumvy.entity.Invite;
 import com.wescrum.scrumvy.entity.Project;
+import com.wescrum.scrumvy.entity.ProjectTeam;
 import com.wescrum.scrumvy.entity.User;
 import com.wescrum.scrumvy.service.InviteServiceInterface;
 import com.wescrum.scrumvy.service.ProjectServiceInterface;
+import com.wescrum.scrumvy.service.ProjectTeamServiceInterface;
 import com.wescrum.scrumvy.service.UserService;
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +27,8 @@ public class InviteController {
     UserService userService;
     @Autowired
     ProjectServiceInterface projectService;
+    @Autowired
+    ProjectTeamServiceInterface projectTeamService;
 
     @PostMapping("/sendInvite")
     public String sendInvite(@ModelAttribute("invite") Invite invite,
@@ -42,7 +45,12 @@ public class InviteController {
         invite.setAccepted(Boolean.FALSE);
         invite.setReceivingUserId(userService.findByUserName(userName));
         invite.setProjectId(projectService.getProjectbyid(projectId));
-        if (inviteService.checkForDuplicate(invite)) {
+
+        if (userService.checkIfUserIsPartOfAProject(invite)) {
+            model.addAttribute("project", projectService.getProjectbyid(projectId));
+            model.addAttribute("couldNotFind", "This person is already part of this project");
+            return "manageTeam";
+        } else if (inviteService.checkForDuplicate(invite)) {
             model.addAttribute("project", projectService.getProjectbyid(projectId));
             model.addAttribute("couldNotFind", "You have already invited that person to that position.");
             return "manageTeam";
@@ -54,29 +62,32 @@ public class InviteController {
         }
     }
 
-//    @RequestMapping(params = "Accept", method = RequestMethod.GET)
-//    public String handleAcceptRedirect(@ModelAttribute("theRecInvite") Invite invite, Model model,
-//            final RedirectAttributes redirectAttributes) {
-//        if (invite.getReceivingUserId().getId() != ProjectController.activeUser) {
-//            redirectAttributes.addFlashAttribute("createProjectError", "Have you been playing with html :)?");
-//            
-//        }
-//       // if (acceptInviteLogicCheck(invite)) {
-//            // logic should check the active user, 
-//            // check if project belongs to the user
-//            // check if invite accepted status is still false
-//            // 
-//            // get the project
-//            // get the user
-//            // get the role
-//            // create project team object and set those values
-//            // save team dont know if it needs to be added to the project also
-//            // delete all the invites of this project that have accepted status 0 in this specific role
-//            // delete all the invites of this project to this specific user
-//            // delete the invite
-////        }
-////        return "redirect:/";
-////    }
+    @PostMapping("/handleAccept")
+    public String handleAccept(@ModelAttribute("theRecInvite") Invite invite, Model model,
+            final RedirectAttributes redirectAttributes) {        
+        if (invite.getReceivingUserId().getId() != ProjectController.activeUser) {
+            redirectAttributes.addFlashAttribute("createProjectError", "Have you been playing with html :)?");
+        }
+        
+        if (inviteService.acceptInviteLogicCheck(invite)) {
+            Project project = invite.getProjectId();
+            User user = invite.getReceivingUserId();
+            ProjectTeam projectTeam = new ProjectTeam(invite.getProjectRoleId(),project,user);
+            // save team - save project - save user in order to inform both tables
+            projectTeamService.saveTeam(projectTeam);
+            project.getProjectTeamCollection().add(projectTeam);
+
+            project.getUserCollection().add(user);
+
+            projectService.createProject(project);
+            System.out.println("**************************************************************************");
+            // delete all the invites of this project that have role scrum master (there can be only one)
+            // delete all the invites of this project to this specific user (user can only participate in one role)
+            inviteService.performClearAfterAccept(invite);
+            System.out.println("**************************************************************************");
+        }
+        return "redirect:/";
+    }
 
     @RequestMapping(params = "Reject", method = RequestMethod.GET)
     public String handleRejectRedirect(@ModelAttribute("theRecInvite") Invite invite, Model model,

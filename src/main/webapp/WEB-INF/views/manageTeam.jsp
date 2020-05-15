@@ -52,7 +52,9 @@
                     <form method="POST" action="/projectTeam/searchTeamMember">
                         <input type="hidden" name="projectId" value="${project.projectId}"/>
                         <input type="text" name="searchTerm"/>
-                        <input type="SUBMIT" value="Search"/>                       
+                        <input type="SUBMIT" value="Search"/>
+                        <!-- manually adding tokens csrf protection -->
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                     </form>
                 </td>
                 <c:if test="${userFound != null}">

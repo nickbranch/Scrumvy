@@ -29,18 +29,18 @@ public class Invite implements Serializable {
     @Basic(optional = false)
     @Column(name = "invite_id")
     private Long inviteId;
-    
+
     @Column(name = "accepted")
     private Boolean accepted;
-    
+
     @JoinColumn(name = "project_role_id", referencedColumnName = "project_role_id")
     @ManyToOne(optional = false)
     private ProjectRole projectRoleId;
-    
+
     @JoinColumn(name = "project_id", referencedColumnName = "project_id")
     @ManyToOne(optional = false)
     private Project projectId;
-    
+
     @JoinColumn(name = "receiving_user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private User receivingUserId;
@@ -116,5 +116,5 @@ public class Invite implements Serializable {
     public String toString() {
         return "com.wescrum.scrumvy.entity.Invite[ inviteId=" + inviteId + " ]";
     }
-    
+
 }

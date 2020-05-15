@@ -1,5 +1,6 @@
 package com.wescrum.scrumvy.service;
 
+import com.wescrum.scrumvy.controller.ProjectController;
 import com.wescrum.scrumvy.entity.Invite;
 import com.wescrum.scrumvy.entity.Project;
 import com.wescrum.scrumvy.entity.User;
@@ -59,5 +60,39 @@ public class InviteServiceImpl implements InviteServiceInterface {
             }
         }
         return toggle;
+    }
+
+    @Override
+    public boolean acceptInviteLogicCheck(Invite invite) {
+        boolean logicErrorTrigger = false;
+        //logic should check if the invite id belongs to the collection of invite ids of the project
+        //protect against hidden field form data tampering
+        List<Invite> getProjectsInvites = inviteRepo.findByProjectId(invite.getProjectId());
+        for (Invite projectsInvite : getProjectsInvites) {
+            if (projectsInvite.getInviteId() == invite.getInviteId()) {
+                logicErrorTrigger = true;
+            }
+        }
+        // logic should check the active user
+        if (invite.getReceivingUserId().getId() == ProjectController.activeUser) {
+            logicErrorTrigger = true;
+        }
+        // check if invite accepted status is still false
+        if (invite.getAccepted() == false) {
+            logicErrorTrigger = true;
+        }
+        return logicErrorTrigger;
+    }
+
+    @Override
+    public void performClearAfterAccept(Invite invite) {
+        List<Invite> cleanUpList = inviteRepo.findByProjectId(invite.getProjectId());
+        User toHaveInvitesDeleted = invite.getReceivingUserId();
+        for (Invite invForDel : cleanUpList) {
+            if ((invForDel.getProjectRoleId().getProjectRoleId() == 2)
+                    || (invForDel.getReceivingUserId() == invite.getReceivingUserId())) {
+                inviteRepo.delete(invForDel);
+            }
+        }
     }
 }
