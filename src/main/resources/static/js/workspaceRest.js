@@ -39,7 +39,7 @@ function makeTaskEditable(id) {
 $(".sprintSelector").on("click", function () {
     let sprintIdFromTable = $(event.currentTarget).attr("data-selectSprintId");
     console.log(sprintIdFromTable);
-   
+
     $("#bodyOfTaskTable").empty();
     $.ajax({
         url: "/getSprintTasks",
@@ -53,11 +53,12 @@ $(".sprintSelector").on("click", function () {
             fillSprintDates(taskForSprintDates);
             data.forEach(function (task) {
             categorizeTasksToTable(task);
+            dragDropFunctionality();
             })
         }
     })
-    })
-   
+})
+
 
 
 $(document).ready(function () {
@@ -69,44 +70,53 @@ $(document).ready(function () {
             sprintId: currentSprintId
         },
         success: function (data) {
-            data.forEach(function (task) {
-            categorizeTasksToTable(task)
+                data.forEach(function (task) {
+                categorizeTasksToTable(task);
+                dragDropFunctionality();
             })
         }
+
     })
+
+
 });
 
 function categorizeTasksToTable(task) {
     switch (task["statusId"]) {
         case 1:
             $("#bodyOfTaskTable").append(
-                    `<tr>
-          <td id="toDoTask" data-sprintId="${task.taskId}" > ${task.description} </td>
-          <td> </td>
-          <td> </td> 
-          </tr>`)
+                    ` 
+                    <tr >
+          <td  class="drop-target" id="${task.taskId}" data-sprintId="${task.taskId}" data-statusId="1" draggable="true" > ${task.description} </td>
+          <td class="drop-target" data-sprintId="${task.taskId}" data-statusId="2"> </td>
+          <td class="drop-target" data-sprintId="${task.taskId}" data-statusId="3"> </td> 
+          </tr>
+          `)
             break;
         case 2:
             $("#bodyOfTaskTable").append(
-                    `<tr>
-          <td> </td>
-          <td id="inProgressTask" data-sprintId="${task.taskId}"> ${task.description} </td>
-          <td> </td> 
+                    `
+                    <tr >
+          <td class="drop-target" data-sprintId="${task.taskId}" data-statusId="1"> </td>
+          <td class="drop-target" id="${task.taskId}" data-sprintId="${task.taskId}" data-statusId="2" draggable="true"> ${task.description} </td>
+          <td class="drop-target" data-sprintId="${task.taskId}" data-statusId="3"> </td> 
           </tr>`)
             break;
         case 3:
             $("#bodyOfTaskTable").append(
-                    `<tr>
-          <td> </td>
-          <td> </td>
-          <td id="completeTask" data-sprintId="${task.taskId}"> ${task.description} </td> 
-          </tr>`)
+                    ` 
+                    <tr  >
+          <td class="drop-target" data-sprintId="${task.taskId}" data-statusId="1"> </td>
+          <td class="drop-target" data-sprintId="${task.taskId}" data-statusId="2"> </td>
+          <td class="drop-target" id="${task.taskId}" data-sprintId="${task.taskId}" data-statusId="3" draggable="true"> ${task.description} </td> 
+          </tr>
+                   `)
             break;
     }
 }
 
 function fillSprintDates(task) {
-   
+
     $("#sprintDatedFromTask").empty();
     $("#sprintDatedFromTask").append(`
             <h4 class = "font-italic">
@@ -115,7 +125,64 @@ function fillSprintDates(task) {
 
             </h4>`)
 
+}
+
+function saveTaskStatusUpdate(taskId, statusId ) {
+    $.ajax({
+        url: "/updateTaskStatus",
+        type: "POST",
+        data: {
+            taskId: taskId,
+            statusId: statusId,
+        },
+        success: function (data) {
+            console.log(data)
             }
-            
-            
+        })   
+      }
+
+function handleDragStart(event) {
+    event.dataTransfer.setData("text/plain", event.currentTarget.id);
+
+}
+
+function preventDefault(event) {
+    event.preventDefault();
+}
+
+function handleDrop(event) {
+    let draggedElementId = event.dataTransfer.getData("text/plain");
+    let draggedElement = document.getElementById(draggedElementId);
+    if (draggedElementId === $(event.currentTarget).attr("data-sprintId")) {
+        console.log(draggedElementId);
+        $(event.currentTarget).attr("id", draggedElementId);
+        $(event.currentTarget).attr("draggable", true);
+        $(event.currentTarget).html(draggedElement.textContent);
+        draggedElement.innerHTML = "";
+        draggedElement.removeAttribute("id");
+        draggedElement.classList.remove("draggedElement");
+        let columnStatus = $(event.currentTarget).attr("data-statusId")
+        saveTaskStatusUpdate(draggedElementId, columnStatus);
+        
+    } else {
+        console.log("den perase")
+    }
+}
+
+function addDragStartEventListener(el) {
+    el.addEventListener("dragstart", handleDragStart);
+}
+
+function initDrop(el) {
+    el.addEventListener("dragover", preventDefault);
+    el.addEventListener("drop", handleDrop);
+}
+
+function dragDropFunctionality() {
+    let listItems = document.querySelectorAll("#bodyOfTaskTable td");
+    let dropTargets = document.querySelectorAll("#bodyOfTaskTable .drop-target");
+
+    listItems.forEach(addDragStartEventListener);
+    dropTargets.forEach(initDrop);
+}
             

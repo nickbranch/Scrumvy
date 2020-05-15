@@ -125,7 +125,7 @@ public class SprintController {
         System.out.println(sprintEndDate.toString());
 
         if (projectStartDate != null || projectEndDate != null) {
-            if ((sprintStartDate.compareTo(projectStartDate) < 0) || (sprintEndDate.compareTo(projectEndDate) > 0)) {
+            if ((sprintStartDate.compareTo(projectStartDate) < 0) && (sprintEndDate.compareTo(projectEndDate) > 0)) {
 
                 //send again current tasks
                 List<Task> currentTasks = new ArrayList();

@@ -6,17 +6,19 @@
 package com.wescrum.scrumvy.controller.restController;
 
 import com.wescrum.scrumvy.entity.Sprint;
+import com.wescrum.scrumvy.entity.Status;
 import com.wescrum.scrumvy.entity.Task;
 import com.wescrum.scrumvy.pojo.TasksJsonResponse;
 import com.wescrum.scrumvy.service.SprintServiceInterface;
+import com.wescrum.scrumvy.service.StatusServiceInterface;
 import com.wescrum.scrumvy.service.TaskServiceInterface;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -27,16 +29,17 @@ public class WorkspaceController {
 
     @Autowired
     SprintServiceInterface sprintService;
+    
+    @Autowired
+    StatusServiceInterface statusService;
 
     @PostMapping("/saveTask")
     public String saveTask(@ModelAttribute("task") Task task) {
 
-        System.out.println("##########################################");
         Task editedTask = taskService.getTaskbyid(task.getTaskId());
         editedTask.setDescription(task.getDescription());
         taskService.updateTask(editedTask);
         System.out.println(editedTask.getSprintCollection());
-//         return editedTask;
         return "hi";
     }
 
@@ -65,4 +68,15 @@ public class WorkspaceController {
         return listOfPojoTasks;
     }
 
+    @PostMapping("/updateTaskStatus")
+    public String updateTaskStatus(@RequestParam("taskId") Long taskId,
+                                   @RequestParam("statusId") Integer statusId) {
+        Task task = taskService.getTaskbyid(taskId);
+        Status status = statusService.getStatusbyid(statusId);
+        task.setStatusId(status);
+        taskService.createTask(task);
+        return "Task status updated";
+        
+    }
+    
 }
