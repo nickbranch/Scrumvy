@@ -42,10 +42,22 @@ public class InviteServiceImpl implements InviteServiceInterface {
     public List<Invite> getSentInvites(User user) {
         List<Project> usersProjects = projectService.getAllOwnedProjectsOfAUser(user.getId()); //owned projects
         List<Invite> projectInvites = new ArrayList();  // to be returned
-        for (Project usersProject : usersProjects) {
+        usersProjects.forEach((usersProject) -> {
             projectInvites.addAll(usersProject.getInviteCollection());
-        }
+        });
         return projectInvites;
     }
 
+    @Override
+    public boolean checkForDuplicate(Invite invite) {
+        List<Invite> checkReceivingUserInvites = inviteRepo.findByReceivingUserId(invite.getReceivingUserId());
+        boolean toggle = false;
+        for (Invite inv : checkReceivingUserInvites) {
+            if ((inv.getReceivingUserId() == invite.getReceivingUserId())
+                    && (inv.getProjectRoleId() == invite.getProjectRoleId())) {
+                toggle = true;
+            }
+        }
+        return toggle;
+    }
 }

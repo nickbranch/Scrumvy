@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -38,19 +39,20 @@ public class AfterLoginController {
     private InviteRepository inviteRepo;
 
     @GetMapping("/")
-    public String showHome(@ModelAttribute("createProjectError") final String error, ModelMap modelMap) {
+    public String showHome(@ModelAttribute("createProjectError") final String error, Model model) {
         User user = userService.getLoggedinUser();
+        ProjectController.activeUser = user.getId();
         String[] roles = {"ownedProjects", "joinedAsScrumMaster", "joinedAsDevTeam"};
         List<Invite> sentInvites = inviteService.getSentInvites(user);
         List<Invite> receivedInvites = inviteRepo.findByReceivingUserId(user);
 
         for (int i = 1; i <= 3; i++) {
             List<Project> listTobeAdded = userProjectListGenerator(i, user);
-            modelMap.addAttribute(roles[i - 1], listTobeAdded);
+            model.addAttribute(roles[i - 1], listTobeAdded);
         }
-        modelMap.addAttribute("createProjectError", error);
-        modelMap.addAttribute("sentInvites", sentInvites);
-        modelMap.addAttribute("receivedInvites", receivedInvites);
+        model.addAttribute("createProjectError", error);
+        model.addAttribute("sentInvites", sentInvites);
+        model.addAttribute("receivedInvites", receivedInvites);
         return "home";
     }
 

@@ -14,7 +14,6 @@
     </head>
 
     <body>
-        <h2>Scrumvy Company Home Page</h2>
         <hr>
         <p>Welcome to the Scrumvy home page!</p>
         <hr>
@@ -35,13 +34,13 @@
                 <c:forEach items="${receivedInvites}" var="receivedInvite">
                 <ul>
                     <li>
-                        <form:form method="POST"
-                                   modelAttribute="invite"
-                                   action="${pageContext.request.contextPath}/invites/handleAccept">
+                        <form:form method="GET"
+                                   modelAttribute="invite">                                   
                             You have been invited to project ${receivedInvite.projectId.projectName}
                             in the position of ${receivedInvite.projectRoleId.roleDescription}
-                            <input type="hidden" name="projectId" value="${project.projectId}"/>
-                            <input type="SUBMIT" value="TO BE IMPLEMENTED"/>                       
+                            <input type="hidden" name="theRecInvite" value="${receivedInvite}"/>
+                            <input type="submit" class="button" name="Accept" value="Accept"/>        
+                            <input type="submit" class="button" name="Reject" value="Reject"/>
                         </form:form>
                     </li>
                 </ul>
@@ -50,65 +49,65 @@
     </div> 
 
 
-        <h2>Invitations to your projects.</h2>
+    <h2>Invitations to your projects.</h2>
+    <div>
+        <p>
+            <c:forEach items="${sentInvites}" var="sentInvite">
+            <ul>
+                <li>
+                    <form:form method="POST"
+                               modelAttribute="invite"
+                               action="${pageContext.request.contextPath}/invites/handleAccept">
+                        You have invited  ${sentInvite.receivingUserId.username} 
+                        to project ${sentInvite.projectId.projectName}
+                        in the position of ${sentInvite.projectRoleId.roleDescription}
+                        <input type="hidden" name="projectId" value="${project.projectId}"/>
+                        <input type="SUBMIT" value="TO BE IMPLEMENTED"/>                       
+                    </form:form>
+                </li>
+            </ul>
+        </c:forEach>
+    </p>
+</div>
+
+
+
+
+<h2>Owned Projects</h2>
 <div>
     <p>
-        <c:forEach items="${sentInvites}" var="sentInvite">
+        <c:forEach items="${ownedProjects}" var="project">
         <ul>
             <li>
                 <form:form method="POST"
-                           modelAttribute="invite"
-                           action="${pageContext.request.contextPath}/invites/handleAccept">
-                    You have invited  ${sentInvite.receivingUserId.username} 
-                    to project ${sentInvite.projectId.projectName}
-                    in the position of ${sentInvite.projectRoleId.roleDescription}
+                           modelAttribute="project"
+                           action="/project/projectSettings">
+                    ${project.projectName}
                     <input type="hidden" name="projectId" value="${project.projectId}"/>
-                    <input type="SUBMIT" value="TO BE IMPLEMENTED"/>                       
+                    <input type="SUBMIT" value="Project Settings"/>                       
                 </form:form>
             </li>
         </ul>
     </c:forEach>
 </p>
 </div>
-
-
-
-
-        <h2>Owned Projects</h2>
-        <div>
-            <p>
-                <c:forEach items="${ownedProjects}" var="project">
-                <ul>
-                    <li>
-                        <form:form method="POST"
-                                   modelAttribute="project"
-                                   action="/project/projectSettings">
-                            ${project.projectName}
-                            <input type="hidden" name="projectId" value="${project.projectId}"/>
-                            <input type="SUBMIT" value="Project Settings"/>                       
-                        </form:form>
-                    </li>
-                </ul>
-            </c:forEach>
-        </p>
-    </div>
-    <h2>Projects you joined as a Scrum Master</h2>
-    <div>
-        <p>
-            <c:forEach items="${joinedAsScrumMaster}" var="project">
-            <ul>
-                <li>
-                    <form:form method="POST"
-                               modelAttribute="project"
-                               action="/project/projectSettings">
-                        ${project.projectName}
-                        <input type="hidden" name="projectId" value="${project.projectId}"/>
-                        <input type="SUBMIT" value="Project Settings"/>                       
-                    </form:form>
-                </li>
-            </ul>
-        </c:forEach>
-    </p>
+<h2>Projects you joined as a Scrum Master</h2>
+<div>
+    <p>
+        <c:forEach items="${joinedAsScrumMaster}" var="project">
+        <ul>
+            <li>
+                <form:form method="POST"
+                           modelAttribute="project"
+                           action="/project/projectSettings">
+                    ${project.projectName}
+                    <input type="hidden" name="projectId" value="${project.projectId}"/>
+                    <input type="SUBMIT" value="Project Settings"/>                       
+                </form:form>
+            </li>
+        </ul>
+    </c:forEach>
+</p>
 </div>
 <h2>Projects you joined as a Developer</h2>
 <div>

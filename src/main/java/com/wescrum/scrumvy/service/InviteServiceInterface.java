@@ -15,6 +15,8 @@ public interface InviteServiceInterface {
     public void deleteInvite(Invite invite);
 
     public List<Invite> getSentInvites(User user);
+    
+    public boolean checkForDuplicate(Invite invite);
+    
 
-    //public void editInvite(Invite invite);
 }
