@@ -9,7 +9,6 @@ import com.wescrum.scrumvy.repos.InviteRepository;
 import com.wescrum.scrumvy.repos.ProjectRoleRepository;
 import com.wescrum.scrumvy.repos.ProjectTeamRepository;
 import com.wescrum.scrumvy.service.InviteServiceInterface;
-import com.wescrum.scrumvy.service.ProjectServiceInterface;
 import com.wescrum.scrumvy.service.UserService;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +39,6 @@ public class AfterLoginController {
     @GetMapping("/")
     public String showHome(@ModelAttribute("createProjectError") final String error, Model model) {
         User user = userService.getLoggedinUser();
-        ProjectController.activeUser = user.getId();
         String[] roles = {"ownedProjects", "joinedAsScrumMaster", "joinedAsDevTeam"};
         List<Invite> sentInvites = inviteService.getSentInvites(user);
         List<Invite> receivedInvites = inviteRepo.findByReceivingUserId(user);

@@ -1,6 +1,5 @@
 package com.wescrum.scrumvy.controller;
 
-import static com.wescrum.scrumvy.controller.ProjectController.activeUser;
 import com.wescrum.scrumvy.entity.Invite;
 import com.wescrum.scrumvy.entity.Project;
 import com.wescrum.scrumvy.entity.ProjectRole;
@@ -14,7 +13,7 @@ import com.wescrum.scrumvy.service.ProjectTeamServiceInterface;
 import com.wescrum.scrumvy.service.UserService;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,10 +43,11 @@ public class ProjectTeamController {
     @PostMapping("/manageTeamMembers")
     public String manageTeamMembers(@ModelAttribute("projectId") Long projectid,
             Model model,
+            HttpServletRequest request,
             final RedirectAttributes redirectAttributes) {
 
         //we can apply some ban here
-        if (ProjectController.activeProject != projectid) {
+        if (request.getSession().getAttribute("activeProject") != projectid) {
             redirectAttributes.addFlashAttribute("createProjectError", "Please do not tamper with hidden form fields.");
             return "redirect:/";
         }
@@ -61,9 +61,11 @@ public class ProjectTeamController {
     @PostMapping("/releaseTeamMember")
     public String releaseTeamMember(@ModelAttribute("projectTeamId") Long projectTeamId,
             Model model,
+            HttpServletRequest request,
             final RedirectAttributes redirectAttributes) {
         ProjectTeam projectTeam = projectTeamService.getProjectTeambyid(projectTeamId);
-        Project project = projectService.getProjectbyid(ProjectController.activeProject);
+        Long pid = (Long) request.getSession().getAttribute("activeProject");
+        Project project = projectService.getProjectbyid(pid);
 
         if (projectTeamService.checkIfATeamIsPartOfTheActiveProject(projectTeam, project)) {
             User member = userService.findByUserId(projectTeam.getUserId().getId());
@@ -87,9 +89,10 @@ public class ProjectTeamController {
     public String searchTeamMember(@RequestParam("searchTerm") String searchTerm,
             @ModelAttribute("projectId") Long projectId,
             final RedirectAttributes redirectAttributes,
+            HttpServletRequest request,
             Model model) {
         //we can apply some ban here
-        if (ProjectController.activeProject != projectId) {
+        if (request.getSession().getAttribute("activeProject") != projectId) {
             redirectAttributes.addFlashAttribute("createProjectError", "Please do not tamper with hidden form fields.");
             return "redirect:/";
         }

@@ -12,6 +12,7 @@ import com.wescrum.scrumvy.service.ProjectTeamServiceInterface;
 import com.wescrum.scrumvy.service.UserService;
 import java.util.List;
 import java.util.Objects;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,8 +38,6 @@ public class ProjectController {
     private ProjectRoleRepository projectRoleRepo;
     @Autowired
     private ProjectTeamRepository projectTeamRepo;
-    public static long activeUser;
-    public static long activeProject;
 
     @GetMapping("/createProject")
     public String createProject(Model model, final RedirectAttributes redirectAttributes) {
@@ -107,6 +106,7 @@ public class ProjectController {
             @ModelAttribute("projectId") Long formProject,
             @ModelAttribute("userCollection") Long formUser,
             final RedirectAttributes redirectAttributes,
+            HttpServletRequest request,
             Model model) {
         // form validation
         if (theBindingResult.hasErrors()) {
@@ -117,7 +117,8 @@ public class ProjectController {
         project = trimTheProject(project);
 
         //we can apply some ban here
-        if ((formProject != activeProject) && (formUser != activeUser)) {
+        if ((formProject != request.getSession().getAttribute("activeProject")) && 
+            (formUser != Long.valueOf(userService.getLoggedinUser().getId()))) {
             redirectAttributes.addFlashAttribute("createProjectError", "Please do not tamper with hidden form fields.");
             return "redirect:/";
         }
@@ -145,15 +146,16 @@ public class ProjectController {
     @PostMapping("/projectSettings")
     public String projectSettings(@ModelAttribute("projectId") Long projectid,
             Model model,
+            HttpServletRequest request,
             final RedirectAttributes redirectAttributes
     ) {
         Project project = projectService.getProjectbyid(projectid);
-        activeProject = project.getProjectId();
-        if (projectService.checkIdOfOwnedProjectsFix(project)) {
+        request.getSession().setAttribute("activeProject", project.getProjectId());
+         if (projectService.checkIdOfOwnedProjectsFix(project)) {
             model.addAttribute("user", userService.getLoggedinUser());
             model.addAttribute("project", project);
             Task task = new Task();
-            task.setProjectId(projectService.getProjectbyid(activeProject));
+            task.setProjectId(project);
             model.addAttribute("emptyTask", task);
             return "projectSetup";
         } else {
@@ -166,10 +168,10 @@ public class ProjectController {
     public String deleteProject(@Valid @ModelAttribute("projectId") Long projectid,
             @ModelAttribute("projectId") Long formProject,
             final RedirectAttributes redirectAttributes,
-            Model model
-    ) {
+            Model model,
+            HttpServletRequest request) {
         //we can apply some ban here
-        if ((formProject != activeProject)) {
+         if ((formProject != request.getSession().getAttribute("activeProject"))) {
             redirectAttributes.addFlashAttribute("createProjectError", "Please do not tamper with hidden form fields.");
             return "redirect:/";
         }

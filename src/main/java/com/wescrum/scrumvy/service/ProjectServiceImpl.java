@@ -1,6 +1,5 @@
 package com.wescrum.scrumvy.service;
 
-import com.wescrum.scrumvy.entity.Invite;
 import com.wescrum.scrumvy.entity.Project;
 import com.wescrum.scrumvy.entity.ProjectTeam;
 import com.wescrum.scrumvy.repos.ProjectRepository;

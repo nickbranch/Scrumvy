@@ -8,6 +8,7 @@ import com.wescrum.scrumvy.service.InviteServiceInterface;
 import com.wescrum.scrumvy.service.ProjectServiceInterface;
 import com.wescrum.scrumvy.service.ProjectTeamServiceInterface;
 import com.wescrum.scrumvy.service.UserService;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,9 +35,10 @@ public class InviteController {
             @ModelAttribute("userName") String userName,
             @ModelAttribute("project") Long projectId,
             final RedirectAttributes redirectAttributes,
+            HttpServletRequest request,
             Model model) {
 
-        if (projectId != ProjectController.activeProject) {
+        if (projectId != request.getSession().getAttribute("activeProject")) {
             redirectAttributes.addFlashAttribute("createProjectError", "Please do not tamper with hidden form fields.");
             return "redirect:/";
         }
@@ -69,7 +71,7 @@ public class InviteController {
             return "redirect:/";
         }
         
-        if (invite.getReceivingUserId().getId() != ProjectController.activeUser) {
+        if (invite.getReceivingUserId().getId() != userService.getLoggedinUser().getId()) {
             redirectAttributes.addFlashAttribute("createProjectError", "Have you been playing with html :)?");
             return "redirect:/";
         }
@@ -117,7 +119,7 @@ public class InviteController {
             redirectAttributes.addFlashAttribute("createProjectError", "Sorry, that invite is not available anymore.");
             return "redirect:/";
         }
-        if (invite.getReceivingUserId().getId() != ProjectController.activeUser) {
+        if (invite.getReceivingUserId().getId() != userService.getLoggedinUser().getId()) {
             redirectAttributes.addFlashAttribute("createProjectError", "Have you been playing with html :)?");
             return "redirect:/";
         }

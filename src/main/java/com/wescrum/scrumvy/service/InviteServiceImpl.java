@@ -18,6 +18,9 @@ public class InviteServiceImpl implements InviteServiceInterface {
 
     @Autowired
     private ProjectServiceInterface projectService;
+    
+    @Autowired
+    private UserService userService;
 
     @Override
     public List<Invite> getAllInvites() {
@@ -71,7 +74,7 @@ public class InviteServiceImpl implements InviteServiceInterface {
         logicErrorTrigger = checkIfInviteIsPartOfThisProjectsInviteList(invite);
         logicErrorTrigger = projectService.checkIfProjectIsOwned(invite.getProjectId());
         // logic should check the active user
-        if (invite.getReceivingUserId().getId() == ProjectController.activeUser) {
+        if (invite.getReceivingUserId().getId() == userService.getLoggedinUser().getId()) {
             logicErrorTrigger = true;
         }
         // check if invite accepted status is still false

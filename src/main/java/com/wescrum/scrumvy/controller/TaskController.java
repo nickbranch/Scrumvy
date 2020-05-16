@@ -1,6 +1,5 @@
 package com.wescrum.scrumvy.controller;
 
-import static com.wescrum.scrumvy.controller.ProjectController.activeUser;
 import com.wescrum.scrumvy.entity.Project;
 import com.wescrum.scrumvy.entity.Status;
 import com.wescrum.scrumvy.entity.Task;
@@ -8,6 +7,7 @@ import com.wescrum.scrumvy.repos.StatusRepository;
 import com.wescrum.scrumvy.repos.TaskRepository;
 import com.wescrum.scrumvy.service.ProjectServiceInterface;
 import com.wescrum.scrumvy.service.TaskServiceInterface;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,10 +36,11 @@ public class TaskController {
             BindingResult theBindingResult,
             @ModelAttribute("projectId") Long formProject,
             final RedirectAttributes redirectAttributes,
+            HttpServletRequest request,
             Model model) {
 
         //we can apply some ban here
-        if (formProject != ProjectController.activeProject) {
+        if (formProject != request.getSession().getAttribute("activeProject")) {
             redirectAttributes.addFlashAttribute("createProjectError", "Please do not tamper with hidden form fields.");
             return "redirect:/";
         }
@@ -67,8 +68,10 @@ public class TaskController {
             BindingResult theBindingResult,
             @ModelAttribute("taskId") Long formTask,
             final RedirectAttributes redirectAttributes,
+            HttpServletRequest request,
             Model model) {
-        Project project = projectService.getProjectbyid(ProjectController.activeProject);
+        Long pid = (Long) request.getSession().getAttribute("activeProject");
+        Project project = projectService.getProjectbyid(pid);
  
         //form validation
         if (theBindingResult.hasErrors()) {
@@ -96,11 +99,13 @@ public class TaskController {
             BindingResult theBindingResult,
             @ModelAttribute("projectId") Long formProject,
             final RedirectAttributes redirectAttributes,
+            HttpServletRequest request,
             Model model) {
-        Project project = projectService.getProjectbyid(ProjectController.activeProject);
+        Long pid = (Long) request.getSession().getAttribute("activeProject");
+        Project project = projectService.getProjectbyid(pid);
 
         //we can apply some ban here
-        if (formProject != ProjectController.activeProject) {
+        if (formProject != pid) {
             redirectAttributes.addFlashAttribute("createProjectError", "Please do not tamper with hidden form fields.");
             return "redirect:/";
         }
