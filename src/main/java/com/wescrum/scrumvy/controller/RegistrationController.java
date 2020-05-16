@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/register")
@@ -45,6 +46,7 @@ public class RegistrationController {
     public String processRegistrationForm(
             @Valid @ModelAttribute("userDto") UserDto userDto,
             BindingResult theBindingResult,
+            RedirectAttributes redirectAttributes,
             Model model) {
 
         String userName = userDto.getUserName();
@@ -76,9 +78,7 @@ public class RegistrationController {
 
         // create user account        						
         userService.save(userDto);
-
-        logger.info("Successfully created user: " + userName);
-
-        return "registrationCompleted";
+        redirectAttributes.addAttribute("registrationSuccess", "Account has been created.");
+        return "redirect:/showLogin";
     }
 }

@@ -64,11 +64,11 @@ public class AfterLoginController {
         return usersProjects;
     }
 
-    // add request mapping for /systems
-    @GetMapping("/systems")
-    public String showSystems() {
+    //adminpanel
+    @GetMapping("/adminpanel")
+    public String showAdminPanel() {
 
-        return "systems";
+        return "adminPage";
     }
 
 }

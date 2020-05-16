@@ -72,6 +72,12 @@
                                 <div class="alert col-xs-offset-1 col-xs-10">
                                     You are logged out.</div>
                                 </c:if>
+                            <!-- Registration success --> 
+                            <c:if test="${registrationSuccess == 'Account has been created.'}">
+                                <div class="alert alert-success col-xs-offset-1 col-xs-10">
+                                    ${registrationSuccess}
+                                </div>
+                            </c:if>
                         </div>
                     </div>
                 </div>

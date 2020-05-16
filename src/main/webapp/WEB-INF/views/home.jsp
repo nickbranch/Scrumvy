@@ -134,24 +134,11 @@
 </p>
 </div>
 
-<!-- display user name and role -->
+<!-- display user name -->
 <div>
     <p>
         User:
         <security:authentication property="principal.username" />
-        <br> <br> Role(s)
-        <security:authentication property="principal.authorities" />
-    </p>
-    <br><br>
-    <hr>
-    <security:authorize access="hasRole('ADMIN')">
-
-        <!-- Add a link to point to /systems... this is for the managers -->
-        <p>
-            <a href="${pageContext.request.contextPath}/systems">IT Systems
-                Meeting</a> (only for admin peeps)
-        </p>
-    </security:authorize>
 
     <!--  Add log out button -->
     <form:form action="${pageContext.request.contextPath}/logout"

@@ -16,25 +16,17 @@ import org.springframework.stereotype.Component;
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
     @Autowired
-    private UserService userService;  //this will refer to the first implementation UserServiceImpl
+    private UserService userService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws IOException, ServletException {
-
-        System.out.println("\n\nIn customAuthenticationSuccessHandler\n\n");
-
         String userName = authentication.getName();
-
-        System.out.println("userName=" + userName);
-
         User user = userService.findByUserName(userName);
 
-        // we place the confirmed user to the session
         HttpSession session = request.getSession();
         session.setAttribute("user", user);
 
-        // and we forward the user to the homepage (default)
         response.sendRedirect(request.getContextPath() + "/");
     }
 }
