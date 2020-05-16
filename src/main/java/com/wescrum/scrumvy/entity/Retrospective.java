@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.wescrum.scrumvy.entity;
 
 import java.io.Serializable;
@@ -23,10 +18,6 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- *
- * @author nklad
- */
 @Entity
 @Table(name = "retrospective")
 @XmlRootElement
@@ -41,14 +32,17 @@ public class Retrospective implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "story_id")
+    @Column(name = "story_id")    
     private Long storyId;
+    
     @Size(max = 150)
     @Column(name = "description")
     private String description;
+    
     @Column(name = "timestamp")
     @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp;
+    
     @JoinColumn(name = "project_id", referencedColumnName = "project_id")
     @ManyToOne
     private Project projectId;
