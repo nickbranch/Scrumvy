@@ -15,10 +15,12 @@ public interface InviteServiceInterface {
     public void deleteInvite(Invite invite);
 
     public List<Invite> getSentInvites(User user);
-    
+
     public boolean checkForDuplicate(Invite invite);
-    
+
     public boolean acceptInviteLogicCheck(Invite invite);
-    
+
+    public boolean checkIfInviteIsPartOfThisProjectsInviteList(Invite invite);
+
     public void performClearAfterAccept(Invite invite);
 }

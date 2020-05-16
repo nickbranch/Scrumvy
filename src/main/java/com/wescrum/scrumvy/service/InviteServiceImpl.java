@@ -65,14 +65,11 @@ public class InviteServiceImpl implements InviteServiceInterface {
     @Override
     public boolean acceptInviteLogicCheck(Invite invite) {
         boolean logicErrorTrigger = false;
-        //logic should check if the invite id belongs to the collection of invite ids of the project
+        //logic should check if the invite id belongs to the collection 
+        // of invite ids of the project and if the project is owned by the user
         //protect against hidden field form data tampering
-        List<Invite> getProjectsInvites = inviteRepo.findByProjectId(invite.getProjectId());
-        for (Invite projectsInvite : getProjectsInvites) {
-            if (projectsInvite.getInviteId() == invite.getInviteId()) {
-                logicErrorTrigger = true;
-            }
-        }
+        logicErrorTrigger = checkIfInviteIsPartOfThisProjectsInviteList(invite);
+        logicErrorTrigger = projectService.checkIfProjectIsOwned(invite.getProjectId());
         // logic should check the active user
         if (invite.getReceivingUserId().getId() == ProjectController.activeUser) {
             logicErrorTrigger = true;
@@ -85,9 +82,22 @@ public class InviteServiceImpl implements InviteServiceInterface {
     }
 
     @Override
+    public boolean checkIfInviteIsPartOfThisProjectsInviteList(Invite invite) {
+        boolean logicErrorTrigger = false;
+        //logic should check if the invite id belongs to the collection of invite ids of the project
+        //protect against hidden field form data tampering
+        List<Invite> getProjectsInvites = inviteRepo.findByProjectId(invite.getProjectId());
+        for (Invite projectsInvite : getProjectsInvites) {
+            if (projectsInvite.getInviteId() == invite.getInviteId()) {
+                logicErrorTrigger = true;
+            }
+        }
+        return logicErrorTrigger;
+    }
+
+    @Override
     public void performClearAfterAccept(Invite invite) {
         List<Invite> cleanUpList = inviteRepo.findByProjectId(invite.getProjectId());
-        User toHaveInvitesDeleted = invite.getReceivingUserId();
         for (Invite invForDel : cleanUpList) {
             if ((invForDel.getProjectRoleId().getProjectRoleId() == 2)
                     || (invForDel.getReceivingUserId() == invite.getReceivingUserId())) {

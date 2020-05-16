@@ -64,39 +64,48 @@ public class InviteController {
 
     @PostMapping("/handleAccept")
     public String handleAccept(@ModelAttribute("theRecInvite") Invite invite, Model model,
-            final RedirectAttributes redirectAttributes) {        
+            final RedirectAttributes redirectAttributes) {
+        if (invite.getInviteId() == null) {
+            redirectAttributes.addFlashAttribute("createProjectError", "Sorry, that invite is not available anymore.");
+            return "redirect:/";
+        }
         if (invite.getReceivingUserId().getId() != ProjectController.activeUser) {
             redirectAttributes.addFlashAttribute("createProjectError", "Have you been playing with html :)?");
+            return "redirect:/";
         }
-        
         if (inviteService.acceptInviteLogicCheck(invite)) {
             Project project = invite.getProjectId();
             User user = invite.getReceivingUserId();
-            ProjectTeam projectTeam = new ProjectTeam(invite.getProjectRoleId(),project,user);
+            ProjectTeam projectTeam = new ProjectTeam(invite.getProjectRoleId(), project, user);
             // save team - save project - save user in order to inform both tables
             projectTeamService.saveTeam(projectTeam);
             project.getProjectTeamCollection().add(projectTeam);
-
             project.getUserCollection().add(user);
-
             projectService.createProject(project);
-            System.out.println("**************************************************************************");
             // delete all the invites of this project that have role scrum master (there can be only one)
             // delete all the invites of this project to this specific user (user can only participate in one role)
             inviteService.performClearAfterAccept(invite);
-            System.out.println("**************************************************************************");
         }
         return "redirect:/";
     }
 
-    @RequestMapping(params = "Reject", method = RequestMethod.GET)
-    public String handleRejectRedirect(@ModelAttribute("theRecInvite") Invite invite, Model model,
+    @PostMapping("/cancelInvite")
+    public String cancelInvite(@ModelAttribute("theRecInvite") Invite invite, Model model,
             final RedirectAttributes redirectAttributes) {
-        if (invite.getReceivingUserId().getId() != ProjectController.activeUser) {
-            redirectAttributes.addFlashAttribute("createProjectError", "Have you been playing with html :)?");
-
+        if (invite.getInviteId() == null) {
+            redirectAttributes.addFlashAttribute("createProjectError", "It seem the user already accepted your invitation.");
+            return "redirect:/";
+        }
+        boolean deleteTrigger = false;
+        if (invite != null) {
+            if ((projectService.checkIfProjectIsOwned(invite.getProjectId()))
+                    && (inviteService.checkIfInviteIsPartOfThisProjectsInviteList(invite))) {
+                deleteTrigger = true;
+            }
+        }
+        if (deleteTrigger) {
+            inviteService.deleteInvite(invite);
         }
         return "redirect:/";
     }
-
 }

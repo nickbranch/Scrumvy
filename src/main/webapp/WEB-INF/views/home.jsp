@@ -41,6 +41,11 @@
                             in the position of ${receivedInvite.projectRoleId.roleDescription}
                             <input type="hidden" name="theRecInvite" value="${receivedInvite.inviteId}"/>
                             <input type="submit" class="button" name="Accept" value="Accept"/>        
+                        </form:form>
+                        <form:form method="POST"
+                                   modelAttribute="invite"
+                                   action="${pageContext.request.contextPath}/invites/handleReject">
+                            <input type="hidden" name="theRecInvite" value="${receivedInvite.inviteId}"/>
                             <input type="submit" class="button" name="Reject" value="Reject"/>
                         </form:form>
                     </li>
@@ -58,12 +63,12 @@
                 <li>
                     <form:form method="POST"
                                modelAttribute="invite"
-                               action="${pageContext.request.contextPath}/invites/handleAccept">
-                        You have invited  ${sentInvite.receivingUserId.username} 
+                               action="${pageContext.request.contextPath}/invites/cancelInvite">
+                        You have invited ${sentInvite.receivingUserId.username} 
                         to project ${sentInvite.projectId.projectName}
                         in the position of ${sentInvite.projectRoleId.roleDescription}
-                        <input type="hidden" name="projectId" value="${project.projectId}"/>
-                        <input type="SUBMIT" value="TO BE IMPLEMENTED"/>                       
+                        <input type="hidden" name="theRecInvite" value="${sentInvite.inviteId}"/>
+                        <input type="submit" class="button" name="Cancel" value="Cancel"/>
                     </form:form>
                 </li>
             </ul>
