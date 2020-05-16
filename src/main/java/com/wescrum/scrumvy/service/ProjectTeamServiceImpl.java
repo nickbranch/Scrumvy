@@ -13,6 +13,9 @@ public class ProjectTeamServiceImpl implements ProjectTeamServiceInterface {
 
     @Autowired
     ProjectTeamRepository projectTeamRepository;
+    
+    @Autowired
+    private ProjectServiceInterface projectService;
 
     @Override
     public void saveTeam(ProjectTeam projectTeam) {

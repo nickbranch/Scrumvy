@@ -64,8 +64,14 @@ public class ProjectTeamController {
             final RedirectAttributes redirectAttributes) {
         ProjectTeam projectTeam = projectTeamService.getProjectTeambyid(projectTeamId);
         Project project = projectService.getProjectbyid(ProjectController.activeProject);
+
         if (projectTeamService.checkIfATeamIsPartOfTheActiveProject(projectTeam, project)) {
+            User member = userService.findByUserId(projectTeam.getUserId().getId());
+            project.getUserCollection().remove(member);
+            
+            projectService.createProject(project);            
             projectTeamService.deleteProjectTeam(projectTeam);
+
             ArrayList<ProjectRole> roleList = findAvailableRoles(project);
             model.addAttribute("availableRoles", roleList);
             model.addAttribute("project", project);
@@ -74,6 +80,7 @@ public class ProjectTeamController {
             redirectAttributes.addFlashAttribute("createProjectError", "Please do not tamper with hidden form fields.");
             return "redirect:/";
         }
+
     }
 
     @PostMapping("/searchTeamMember")

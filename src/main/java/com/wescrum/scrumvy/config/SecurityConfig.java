@@ -26,7 +26,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/adminpanel/**").hasRole("ADMIN")
                 .antMatchers("/").hasRole("EMPLOYEE")                
                 .and()
-//                .csrf().disable()
                 .formLogin()
                 .loginPage("/showLogin")
                 .loginProcessingUrl("/authentication")

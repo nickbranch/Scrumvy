@@ -10,7 +10,6 @@ import com.wescrum.scrumvy.repos.ProjectTeamRepository;
 import com.wescrum.scrumvy.service.ProjectServiceInterface;
 import com.wescrum.scrumvy.service.ProjectTeamServiceInterface;
 import com.wescrum.scrumvy.service.UserService;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.validation.Valid;
@@ -38,13 +37,12 @@ public class ProjectController {
     private ProjectRoleRepository projectRoleRepo;
     @Autowired
     private ProjectTeamRepository projectTeamRepo;
-    public static long activeProject;
     public static long activeUser;
+    public static long activeProject;
 
     @GetMapping("/createProject")
     public String createProject(Model model, final RedirectAttributes redirectAttributes) {
         User user = userService.getLoggedinUser();
-        activeUser = user.getId();
 
         ProjectRole projectRole = projectRoleRepo.findByprojectRoleId(1);
         List<ProjectTeam> usersOwnedProjects = projectTeamRepo.findByUserIdAndProjectRoleId(user, projectRole);
@@ -72,11 +70,11 @@ public class ProjectController {
         User user = userService.getLoggedinUser();
 
         //we can apply some ban here
-        if (formUser != activeUser) {
+        if (formUser != Long.valueOf(user.getId())) {
             redirectAttributes.addFlashAttribute("createProjectError", "Please do not tamper with hidden form fields.");
             return "redirect:/";
         }
-        
+
         //unique name of project/user
         List<Project> tempList = projectService.getAllOwnedProjectsOfAUser(user.getId());
         boolean exists = false;
@@ -94,7 +92,7 @@ public class ProjectController {
         ProjectRole projectRole = projectRoleRepo.findByprojectRoleId(1);
         projectService.createProject(project);
 
-        ProjectTeam projectTeam = new ProjectTeam(projectRole,project,user);
+        ProjectTeam projectTeam = new ProjectTeam(projectRole, project, user);
         projectTeamService.saveTeam(projectTeam);
 
         user.getProjectsCollection().add(project);

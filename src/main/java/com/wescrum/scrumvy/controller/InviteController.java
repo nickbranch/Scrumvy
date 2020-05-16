@@ -14,7 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -69,10 +68,12 @@ public class InviteController {
             redirectAttributes.addFlashAttribute("createProjectError", "Sorry, that invite is not available anymore.");
             return "redirect:/";
         }
+        
         if (invite.getReceivingUserId().getId() != ProjectController.activeUser) {
             redirectAttributes.addFlashAttribute("createProjectError", "Have you been playing with html :)?");
             return "redirect:/";
         }
+        
         if (inviteService.handleInviteLogicCheck(invite)) {
             Project project = invite.getProjectId();
             User user = invite.getReceivingUserId();
