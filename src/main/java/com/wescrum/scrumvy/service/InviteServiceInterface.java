@@ -18,7 +18,7 @@ public interface InviteServiceInterface {
 
     public boolean checkForDuplicate(Invite invite);
 
-    public boolean acceptInviteLogicCheck(Invite invite);
+    public boolean handleInviteLogicCheck(Invite invite);
 
     public boolean checkIfInviteIsPartOfThisProjectsInviteList(Invite invite);
 

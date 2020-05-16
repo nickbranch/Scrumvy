@@ -73,7 +73,7 @@ public class InviteController {
             redirectAttributes.addFlashAttribute("createProjectError", "Have you been playing with html :)?");
             return "redirect:/";
         }
-        if (inviteService.acceptInviteLogicCheck(invite)) {
+        if (inviteService.handleInviteLogicCheck(invite)) {
             Project project = invite.getProjectId();
             User user = invite.getReceivingUserId();
             ProjectTeam projectTeam = new ProjectTeam(invite.getProjectRoleId(), project, user);
@@ -104,6 +104,23 @@ public class InviteController {
             }
         }
         if (deleteTrigger) {
+            inviteService.deleteInvite(invite);
+        }
+        return "redirect:/";
+    }
+
+    @PostMapping("/handleReject")
+    public String handleReject(@ModelAttribute("theRecInvite") Invite invite, Model model,
+            final RedirectAttributes redirectAttributes) {
+        if (invite.getInviteId() == null) {
+            redirectAttributes.addFlashAttribute("createProjectError", "Sorry, that invite is not available anymore.");
+            return "redirect:/";
+        }
+        if (invite.getReceivingUserId().getId() != ProjectController.activeUser) {
+            redirectAttributes.addFlashAttribute("createProjectError", "Have you been playing with html :)?");
+            return "redirect:/";
+        }
+        if (inviteService.handleInviteLogicCheck(invite)) {
             inviteService.deleteInvite(invite);
         }
         return "redirect:/";

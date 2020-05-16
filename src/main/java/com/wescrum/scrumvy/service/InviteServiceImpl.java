@@ -63,7 +63,7 @@ public class InviteServiceImpl implements InviteServiceInterface {
     }
 
     @Override
-    public boolean acceptInviteLogicCheck(Invite invite) {
+    public boolean handleInviteLogicCheck(Invite invite) {
         boolean logicErrorTrigger = false;
         //logic should check if the invite id belongs to the collection 
         // of invite ids of the project and if the project is owned by the user
