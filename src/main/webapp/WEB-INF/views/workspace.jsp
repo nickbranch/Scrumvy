@@ -12,7 +12,7 @@
     <head>
         <meta name="_csrf" content="${_csrf.token}"/>
         <!-- default header name is X-CSRF-TOKEN -->
-        <meta name="_csrf_header" content="${_csrf.headerName}"/>
+        <meta name="_csrf_header" content="${_csrf.parameterName}"/>
         <!-- ... -->
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Workspace</title>
@@ -45,8 +45,6 @@
                                         <td> ${status.count} </td>
                                         <td id="taskDescription_${task.taskId}" class="editable">${task.description}</td>                             
                                         <td >
-    <!--                                    <div id="taskStartDate_${task.taskId}" style="visibility:hidden"> ${task.taskStartDate}</div>
-                                            <div id="taskEndDate_${task.taskId}" style="visibility:hidden ">${task.taskStartDate}</div>-->
                                             <button type="button" class="btn btn-light" onclick="makeTaskEditable(${task.taskId})">edit</button>
                                         </td>
                                     </tr>
@@ -117,6 +115,7 @@
                                                 </div>
 
                                                 <div class="col-9 pl-5">
+
                                                     <br>
                                                     <h4>Sprint backlog: </h4>
 
@@ -129,33 +128,80 @@
                                                         </h4>
                                                     </div>
                                                     <br>
+                                                    <div class="row">
+                                                        <table id="tasksTable" class="table table-striped col text-center" data-sprintId="${currentSprint.sprintId}">
+                                                            <thead class=" text-center">
+                                                                <tr>
+                                                                    <th scope="col" colspan="4">Sprint Management</th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th scope="col"> TO DO </th>
+                                                                    <th scope="col"> IN PROGRESS </th>
+                                                                    <th scope="col"> COMPLETE </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="bodyOfTaskTable">
 
-                                                    <table id="tasksTable" class="table table-striped col text-center" data-sprintId="${currentSprint.sprintId}">
-                                                        <thead class=" text-center">
-                                                            <tr>
-                                                                <th scope="col" colspan="4">Sprint Management</th>
-                                                            </tr>
-                                                            <tr>
-                                                                <th scope="col"> TO DO </th>
-                                                                <th scope="col"> IN PROGRESS </th>
-                                                                <th scope="col"> COMPLETE </th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody id="bodyOfTaskTable">
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                            <div class="row" style="height:70px;"></div>
+                                                            <label for="retrospective"> <strong>Retrospective:</strong></label>
+                                                    <div class="row ">
+                                                        <div class="col-4 d-flex overflow-auto"  style="height:20vh">
 
-                                                        </tbody>
-                                                    </table>
+                                                            <br/>
+                                                            <ul id="retrospectiveList" class="list-group list-group-flush">
+                                                                <c:forEach items="${retroList}" var="retro" >
+                                                                    <li class="list-group-item">${retro.description} &nbsp; &nbsp; &nbsp; <small><em><fmt:formatDate type="date" value="${retro.timestamp}"/></em></small> </li>
+                                                                </c:forEach>
+                                                            </ul>
+                                                        </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <br/>
+                                                             <input id="retroProjectId" type="hidden" name="projectIdForRetro" value="${project.projectId}" />
+                                                            <input id="retrospectiveStory" type="text">
+                                                            <button id="retrospeciveBtn" type="button" class="btn btn-light">Pin</button>
+                                                            <div class="row">
+                                                            <p id="retroAjaxError"></p>
+                                                            </div>
+                                                        </div>
+                                                       
+                                                           
+                                                    <br/>
+                                                    <label for="dailyScrum"><strong>Daily Scrum:</strong></label>
+                                                    <div class="row ">
+                                                        <div class="col-4 d-flex overflow-auto"  style="height:20vh">
 
+                                                            <br/>
+                                                            <ul id="dailyScrumList" class="list-group list-group-flush">
+                                                                 <c:forEach items="${dailyScrumList}" var="dailyScrum" >
+                                                                     <li class="list-group-item">${dailyScrum.description} &nbsp; &nbsp; &nbsp; <small><em><fmt:formatDate type="date" value="${dailyScrum.timestamp}"/></em></small> </li>
+                                                                </c:forEach>
+                                                            </ul>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <br/>
+                                                            <input id="dailyScrumProjectId" type="hidden" name="projectIdForDailyScrum" value="${project.projectId}" />
+                                                            <input id="dailyScrumStory" type="text">
+                                                            <button id="dailyScrumBtn" type="button" class="btn btn-light">Pin</button>
+                                                            <div class="row">
+                                                            <p id="dailyScrumAjaxError"></p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                  </div>
                                                 </div>
                                                 </div>
                                                 </div>
 
-                                               
+
                                                 <script
                                                     src="https://code.jquery.com/jquery-3.4.1.min.js"
                                                     integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
                                                 crossorigin="anonymous"></script>
-<!--                                                 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>-->
                                                 <script src="${pageContext.request.contextPath}/js/workspaceRest.js"></script>
 
                                                 </body>

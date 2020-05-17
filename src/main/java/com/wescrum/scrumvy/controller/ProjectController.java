@@ -1,14 +1,18 @@
 package com.wescrum.scrumvy.controller;
 
+import com.wescrum.scrumvy.entity.DailyScrumRecord;
 import com.wescrum.scrumvy.entity.Project;
 import com.wescrum.scrumvy.entity.ProjectRole;
 import com.wescrum.scrumvy.entity.ProjectTeam;
+import com.wescrum.scrumvy.entity.Retrospective;
 import com.wescrum.scrumvy.entity.Sprint;
 import com.wescrum.scrumvy.entity.Task;
 import com.wescrum.scrumvy.entity.User;
+import com.wescrum.scrumvy.repos.DailyScrumRecordRepository;
 import com.wescrum.scrumvy.repos.ProjectRepository;
 import com.wescrum.scrumvy.repos.ProjectRoleRepository;
 import com.wescrum.scrumvy.repos.ProjectTeamRepository;
+import com.wescrum.scrumvy.repos.RetrospectiveRepository;
 import com.wescrum.scrumvy.repos.SprintRepository;
 import com.wescrum.scrumvy.repos.TaskRepository;
 import com.wescrum.scrumvy.service.ProjectServiceImpl;
@@ -49,6 +53,12 @@ public class ProjectController {
 
     @Autowired
     private SprintRepository sprintRepo;
+    
+    @Autowired
+    private DailyScrumRecordRepository dailyScrumRepo;
+    
+    @Autowired
+    private RetrospectiveRepository retroRepo;
 
     @GetMapping("/createProject")
     public String createProject(Model model) {
@@ -118,6 +128,8 @@ public class ProjectController {
         List<Task> projectTasks = taskRepo.findByProjectId(currentProject);
         List<Sprint> projectSprints = sprintRepo.findByProjectId(currentProject);
         List<ProjectTeam> projectTeam = projectTeamRepo.findByProjectId(currentProject);
+        List<Retrospective> retroList = retroRepo.findByProjectId(currentProject);
+        List<DailyScrumRecord> dailyScrumList = dailyScrumRepo.findByProjectId(currentProject);
 
         // get current sprint according to current date:
         Date date = new Date();
@@ -137,6 +149,12 @@ public class ProjectController {
 
         // project team
         model.addAttribute("projectTeam", projectTeam);
+        
+        // retro list
+        model.addAttribute("retroList", retroList);
+        
+        // daily scrum list
+        model.addAttribute("dailyScrumList", dailyScrumList);
 
         return "workspace";
     }

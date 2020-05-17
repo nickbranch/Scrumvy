@@ -5,17 +5,26 @@
  */
 package com.wescrum.scrumvy.controller.restController;
 
+import com.wescrum.scrumvy.entity.DailyScrumRecord;
+import com.wescrum.scrumvy.entity.Project;
+import com.wescrum.scrumvy.entity.Retrospective;
 import com.wescrum.scrumvy.entity.Sprint;
 import com.wescrum.scrumvy.entity.Status;
 import com.wescrum.scrumvy.entity.Task;
 import com.wescrum.scrumvy.pojo.TasksJsonResponse;
+import com.wescrum.scrumvy.service.DailyScrumRecordServiceInterface;
+import com.wescrum.scrumvy.service.ProjectServiceInterface;
+import com.wescrum.scrumvy.service.RetrospectiveServiceInterface;
 import com.wescrum.scrumvy.service.SprintServiceInterface;
 import com.wescrum.scrumvy.service.StatusServiceInterface;
 import com.wescrum.scrumvy.service.TaskServiceInterface;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,6 +41,15 @@ public class WorkspaceController {
     
     @Autowired
     StatusServiceInterface statusService;
+    
+    @Autowired
+    RetrospectiveServiceInterface retroService;
+    
+    @Autowired
+    ProjectServiceInterface projectService;
+    
+    @Autowired
+    DailyScrumRecordServiceInterface dailyScrumService;
 
     @PostMapping("/saveTask")
     public String saveTask(@ModelAttribute("task") Task task) {
@@ -76,7 +94,33 @@ public class WorkspaceController {
         task.setStatusId(status);
         taskService.createTask(task);
         return "Task status updated";
-        
-    }
+    }    
     
+    @PostMapping("/addRetrospective")
+    public String addRetrospectiveToProject(@RequestParam("projectId") Long projectId,
+                                            @RequestParam("description") String description) {
+        Project project = projectService.getProjectbyid(projectId);
+        Retrospective retro = new Retrospective();
+        retro.setDescription(description);
+        retro.setProjectId(project);
+        retro.setTimestamp(new Date());
+        retroService.createRetrospective(retro);
+        return "Retro saved!";
+    }
+
+    @PostMapping("/addDailyScrum")
+    public String addDailyScrum(@RequestParam("projectId") Long projectId,
+                                @RequestParam("description") String description) {
+
+        Project project = projectService.getProjectbyid(projectId);
+        DailyScrumRecord dailyScrum = new DailyScrumRecord();
+        dailyScrum.setDescription(description);
+        dailyScrum.setProjectId(project);
+        dailyScrum.setTimestamp(new Date());
+        dailyScrumService.createDailyScrumRecord(dailyScrum);
+        return "Daily Scrum saved!";
+    }
+
+
 }
+

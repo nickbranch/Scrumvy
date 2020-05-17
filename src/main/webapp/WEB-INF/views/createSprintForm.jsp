@@ -70,9 +70,7 @@
                                 <button type="SUBMIT" class="btn btn-primary">Create</button>
                             </div>
                             <!-- manually adding tokens csrf protection -->
-                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-
-
+<!--                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />-->
                         </form:form>
                     </div>
                 </div>
