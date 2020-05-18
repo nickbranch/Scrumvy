@@ -1,7 +1,10 @@
 package com.wescrum.scrumvy.service;
 
 import com.wescrum.scrumvy.dto.UserDto;
+import com.wescrum.scrumvy.entity.Project;
 import com.wescrum.scrumvy.entity.User;
+import java.util.Optional;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface UserService extends UserDetailsService {
@@ -15,4 +18,7 @@ public interface UserService extends UserDetailsService {
     public void saveUserWithProject(User user);
 
     public User getLoggedinUser();
+    
+    
+    public boolean checkIfUserIsPartOfProject(User user, Project project);
 }

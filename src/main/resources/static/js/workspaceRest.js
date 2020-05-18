@@ -23,7 +23,7 @@ function fillTableWithTasks(sprintIdFromTable){
         },
         data: data,
         success: function (data) {
-            console.log(data);
+       
             let taskForSprintDates = data[0];
             fillSprintDates(taskForSprintDates);
             data.forEach(function (task) {
@@ -41,6 +41,8 @@ function fillTableWithTasks(sprintIdFromTable){
 function makeTaskEditable(id) {
     let btn = $(event.target);
     let sprintIdFromTable = $("#tasksTable").attr("data-sprintId");
+    let descriptionBeforeEdit = $("#taskDescription_" + id).html();
+   
     if ($(event.target).html() === "edit") {
         $(event.target).parent().siblings(".editable").attr("contenteditable", true);
         $(event.target).parent().siblings(".editable").css('border', '2px solid rgb(75,0,130)');
@@ -50,6 +52,7 @@ function makeTaskEditable(id) {
         data[header] = token;
         data['taskId'] = id;
         data['description'] = $("#taskDescription_" + id).html();
+        data['descriptionBefore'] = descriptionBeforeEdit;
         $.ajax({
             url: "/saveTask",
             type: "POST",
@@ -61,7 +64,6 @@ function makeTaskEditable(id) {
             },
             data: data,
             success: function (data) {
-//                console.log(data);
                 $("#bodyOfTaskTable").empty();
                 fillTableWithTasks(sprintIdFromTable)
                 btn.parent().siblings(".editable").attr("contenteditable", false);
@@ -75,6 +77,7 @@ function makeTaskEditable(id) {
 
 $(".sprintSelector").on("click", function () {
     let sprintIdFromTable = $(event.currentTarget).attr("data-selectSprintId");
+    //check with rest controller to see if this is the legit sprint
     console.log(sprintIdFromTable);
     $("#bodyOfTaskTable").empty();
     fillTableWithTasks(sprintIdFromTable);

@@ -24,7 +24,7 @@
             <div id="mainRow" class="row">
                 <div  class="col-lg-12">
                     <div class="">
-                        <!-- Create Srint Form -->
+                        <!-- Create Sprint Form -->
                         <form:form action="${pageContext.request.contextPath}/sprint/saveSprint"  method="POST"
                                    modelAttribute="sprint"
                                    class="form-horizontal">
@@ -37,6 +37,7 @@
                                                 ${createSprintError}
                                             </div>
                                         </c:if> 
+                                         
                                     </div>
                                 </div>
                             </div>
@@ -69,8 +70,7 @@
                             <div style="margin-top: 10px" class="form-group">						
                                 <button type="SUBMIT" class="btn btn-primary">Create</button>
                             </div>
-                            <!-- manually adding tokens csrf protection -->
-<!--                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />-->
+
                         </form:form>
                     </div>
                 </div>

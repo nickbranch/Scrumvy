@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -52,13 +53,15 @@ public class WorkspaceController {
     DailyScrumRecordServiceInterface dailyScrumService;
 
     @PostMapping("/saveTask")
-    public String saveTask(@ModelAttribute("task") Task task) {
+    public String saveTask(@ModelAttribute("task") Task task,
+            @RequestParam("descriptionBefore") String descriptionBefore) {
 
         Task editedTask = taskService.getTaskbyid(task.getTaskId());
         editedTask.setDescription(task.getDescription());
         taskService.updateTask(editedTask);
-        System.out.println(editedTask.getSprintCollection());
-        return "hi";
+        
+        return "Successfully edited";
+
     }
 
     @PostMapping("/getSprintTasks")

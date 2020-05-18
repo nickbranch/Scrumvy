@@ -43,12 +43,15 @@ public class Retrospective implements Serializable {
     @Basic(optional = false)
     @Column(name = "story_id")
     private Long storyId;
+    
     @Size(max = 150)
     @Column(name = "description")
     private String description;
+    
     @Column(name = "timestamp")
     @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp;
+    
     @JoinColumn(name = "project_id", referencedColumnName = "project_id")
     @ManyToOne
     private Project projectId;

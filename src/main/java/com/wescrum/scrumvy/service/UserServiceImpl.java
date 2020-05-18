@@ -3,6 +3,7 @@ package com.wescrum.scrumvy.service;
 import com.wescrum.scrumvy.dto.UserDto;
 import com.wescrum.scrumvy.dao.RoleDao;
 import com.wescrum.scrumvy.dao.UserDao;
+import com.wescrum.scrumvy.entity.Project;
 import com.wescrum.scrumvy.entity.Role;
 import com.wescrum.scrumvy.entity.User;
 import com.wescrum.scrumvy.repos.UserRepository;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -92,5 +94,13 @@ public class UserServiceImpl implements UserService {
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean checkIfUserIsPartOfProject(User user, Project project) {
+       if (project.getUserCollection().contains(user)){
+           return true;
+       }
+       return false;
     }
 }
