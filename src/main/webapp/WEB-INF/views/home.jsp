@@ -85,7 +85,7 @@
         <c:forEach items="${ownedProjects}" var="project">
         <ul>
             <li>
-                <form:form method="POST"
+                <form:form method="GET"
                            modelAttribute="project"
                            action="/project/projectSettings">
                     ${project.projectName}

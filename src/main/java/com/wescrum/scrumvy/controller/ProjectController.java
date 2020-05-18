@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -103,8 +104,7 @@ public class ProjectController {
     @PostMapping("/updateProjectDetails")
     public String updateProjectDetails(@Valid @ModelAttribute("project") Project project,
             BindingResult theBindingResult,
-            @ModelAttribute("projectId") Long formProject,
-            @ModelAttribute("userCollection") Long formUser,
+            @ModelAttribute("projectId") Long formProject, @ModelAttribute("userCollection") Long formUser,
             final RedirectAttributes redirectAttributes,
             HttpServletRequest request,
             Model model) {
@@ -136,14 +136,16 @@ public class ProjectController {
             return "projectSetup";
         }
 
-        model.addAttribute("project", project);
-        model.addAttribute("emptyTask", new Task());
+//        model.addAttribute("project", project);
+        redirectAttributes.addFlashAttribute("projectId", project.getProjectId());
+//        model.addAttribute("emptyTask", new Task());
 
         projectService.createProject(project);
-        return "projectSetup";
+        return "redirect:/project/projectSettings";
     }
 
-    @PostMapping("/projectSettings")
+//    @PostMapping("/projectSettings")
+    @RequestMapping(value = "/projectSettings", method = RequestMethod.GET)
     public String projectSettings(@ModelAttribute("projectId") Long projectid,
             Model model,
             HttpServletRequest request,
