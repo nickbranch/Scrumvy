@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setEmail(userDto.getEmail());
-        // default role is employee . for admin we give manual approve directly from db.
+        // default role is simpleuser . for admin we give manual approve directly from db.
         user.setRoleCollection(Arrays.asList(roleDao.findRoleByName("ROLE_EMPLOYEE")));
         // save user in the database
         userDao.save(user);
