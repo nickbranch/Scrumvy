@@ -1,224 +1,292 @@
-@import url("//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css");
-body {
-    background-color:transparent;
-}
-html, body {
-    height:100%;
-}
-
-.error {
-    margin:1px;
-    font-weight: bold;
-    color:#f7ff00;
-}
-
-#loginError {
-    margin-top:20px;
-    width:52%;
-    text-align: center;
-}
-.input-group-addon {
-    background-color: #512cd7b3;
-}
-.bottom-fix {
-    margin-bottom: 2px;
+/*FRANT*/
+/* HOME PAGE LIST OF PROJECTS CSS */
+.list-group {
+  margin: 0;
+  padding: 20px;
+  top: 50%;
+  left: 50%;
+  width: 70%;
+  background: #fff;
+  border-radius: 10px;
+  color: black;
 }
 
-.login-form {
-    width: 45%;
-    padding:10px;
-    text-align: center;
-    border-radius: 27px 27px 27px 27px;
-    -moz-border-radius: 27px 27px 27px 27px;
-    -webkit-border-radius: 27px 27px 27px 27px;
-    border: 5px solid #ffffff;
-    -webkit-box-shadow: 10px 9px 22px 16px rgba(7,185,212,0.41);
-    -moz-box-shadow: 10px 9px 22px 16px rgba(7,185,212,0.41);
-    box-shadow: 10px 9px 22px 16px rgba(7,185,212,0.41);
-    font-style: italic;
+.list-group :hover {
+  color: white;
 }
 
-#hiddenParagraph {
-    display: none;
+ul.list-group li:hover {
+  background: #020749;
 }
 
-#errors {
-    margin:7px;
-    width:90%;
-    color: white;
-    background-color: #46ffeeb5;
-    border:none;
-    margin-left: 20px
-}
-#regbtn {
-    background-color: #18bae8;
-    color: white;
-    width:90%;
-}
-.btn {
-    width:90%;
+ul.list-group li:hover a {
+  color: #fff;
 }
 
-img {
-    margin-bottom: 10%;
+/* LOGIN AND REGISTRATION CSS */
+.login,
+.image {
+  min-height: 100vh;
 }
 
-.container {
-    margin-right: 0;
-    margin-left: 0;
-    min-height: 100%;
-    overflow: hidden;
-    min-width: 100%;
-}
-#left, #right {
-    margin-bottom: -9999px;
-    padding-bottom: 9999px;
+.bg-image {
+  background-image: url("/img/6.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 100%;
 }
 
-#left {
-    background-color: white;
+/* ALL THE BUTTONS YOU NEED */
+
+.deleteButton {
+  box-shadow: 0px 1px 0px 0px #c21b1b;
+  background: linear-gradient(to bottom, #c74545 5%, #bd2a4e 100%);
+  background-color: #c74545;
+  border-radius: 6px;
+  border: 1px solid #ab1937;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: Arial;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 5px 19px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #2f6627;
+}
+.deleteButton:hover {
+  background: linear-gradient(to bottom, #bd2a4e 5%, #c74545 100%);
+  background-color: #bd2a4e;
+}
+.deleteButton:active {
+  position: relative;
+  top: 1px;
 }
 
-#right {
-    background-image: url('/img/bgimg.jpg');
-    color:white;
-    padding-left: 50px;
+.newProjectButton {
+  box-shadow: 0px 1px 0px 0px #3e7327;
+  background: linear-gradient(to bottom, #77b55a 5%, #72b352 100%);
+  background-color: #77b55a;
+  border-radius: 6px;
+  border: 1px solid #4b8f29;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: Arial;
+  font-size: 19px;
+  font-weight: bold;
+  padding: 6px 24px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #5b8a3c;
+}
+.newProjectButton:hover {
+  background: linear-gradient(to bottom, #72b352 5%, #77b55a 100%);
+  background-color: #72b352;
+}
+.newProjectButton:active {
+  position: relative;
+  top: 1px;
 }
 
-#contentleft {
-    margin-top:25%;
+html * {
+  font-family: sans-serif !important;
 }
 
-.login-form{
-    margin-top: 30%;
+.editButton {
+  box-shadow: 0px 1px 0px 0px #9fb4f2;
+  background: linear-gradient(to bottom, #224785 5%, #1e37d6 100%);
+  background-color: #224785;
+  border-radius: 6px;
+  border: 1px solid #4e6096;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: Arial;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 5px 19px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #283966;
+}
+.editButton:hover {
+  background: linear-gradient(to bottom, #1e37d6 5%, #224785 100%);
+  background-color: #1e37d6;
+}
+.editButton:active {
+  position: relative;
+  top: 1px;
 }
 
-@media screen and (max-width: 450px) {
-    .login-form{
-        margin-top: 10%;
-    }
-
-    .register-form{
-        margin-top: 10%;
-    }
+.getPermiumButton {
+  box-shadow: 0px 1px 0px 0px #fff6af;
+  background: linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
+  background-color: #ffec64;
+  border-radius: 6px;
+  border: 1px solid #ffaa22;
+  display: inline-block;
+  cursor: pointer;
+  color: #333333;
+  font-family: Arial;
+  font-size: 21px;
+  font-weight: bold;
+  padding: 13px 33px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #ffee66;
+}
+.getPermiumButton:hover {
+  background: linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
+  background-color: #ffab23;
+}
+.getPermiumButton:active {
+  position: relative;
+  top: 1px;
 }
 
-@media screen and (max-width:365px) {
-
-    #contentleft {
-        margin-top:5%;
-    }
-    .form-control {
-        width: 90%;
-        height: 90%;
-    }
-    .btn {
-        margin-top: 10px;
-        width: 90%;
-    }
-    #lgnbtn {
-        background-color: #02074b !important;
-        color: #fff;
-    }
-    #regbtn {
-        background-color: #3e46ad !important;
-        color: #fff;
-    }
+.inviteButton {
+  box-shadow: 0px 1px 0px 0px #9fb4f2;
+  background: linear-gradient(to bottom, #502285 5%, #6e20d4 100%);
+  background-color: #502285;
+  border-radius: 6px;
+  border: 1px solid #4e6096;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: Arial;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 6px 24px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #283966;
+}
+.inviteButton:hover {
+  background: linear-gradient(to bottom, #6e20d4 5%, #502285 100%);
+  background-color: #6e20d4;
+}
+.inviteButton:active {
+  position: relative;
+  top: 1px;
 }
 
-@media screen and (max-width:770px) {
-    .login-form {
-        width: 100%;
-        margin-top:5%;
-    }
-
-    #right {
-        padding-left: 5px;
-        padding-right: 5px;
-    }
-
-    #contentleft {
-        margin-top:5%;
-    }
-    .form-control {
-        width: 90%;
-        height: 90%;
-    }
-    .btn {
-        margin-top: 10px;
-        width: 90%;
-    }
-    #lgnbtn {
-        background-color: #02074b !important;
-        color: #fff;
-    }
-    #regbtn {
-        background-color: #3e46ad !important;
-        color: #fff;
-    }
-    .img-fluid {
-        max-width:50%;
-        text-align: center;
-    }
-    img {
-        margin-bottom: 1%;
-    }
-
-    #left {
-        text-align: center;
-    }
+.loginButton {
+  
+  background-color:rgb(63, 70, 173);
+  border-radius: 6px;
+  border: 1px solid;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: Arial;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 9px 45px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #283966;
+}
+.loginButton:hover {
+  background: linear-gradient(to bottom, #490073 5%, #002174 100%);
+  background-color: #490073;
+}
+.loginButton:active {
+  position: relative;
+  top: 1px;
 }
 
-@media screen and (max-height: 365px){
-    #left {
-        display: none;
-    }
-    #hiddenParagraph {
-        display: block;
-    }
-
-    #right {
-        padding-left: 5px;
-        padding-right: 5px;
-    }
-    .login-form {
-        margin: 1%;
-        border:none;
-        width:100%;
-    }
+.registerButton {
+  box-shadow: 0px 1px 0px 0px #fff6af;
+  background: linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
+  background-color: #ffec64;
+  border-radius: 6px;
+  border: 1px solid #ffaa22;
+  display: inline-block;
+  cursor: pointer;
+  color: #333333;
+  font-family: Arial;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 9px 27px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #283966;
+}
+.registerButton:hover {
+  background: linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
+  background-color: #ffab23;
+}
+.registerButton:active {
+  position: relative;
+  top: 1px;
 }
 
-
-@media screen and (max-width: 768px){
-    .login-form {
-        width: 100%;
-    }
-
-    #right {
-        padding-left: 5px;
-        padding-right: 5px;
-    }
-
-    .main{
-        margin-left: 40%; 
-    }
-
-    .register-form{
-        margin-top: 20%;
-    }
-
+.cancelButton {
+  box-shadow: 0px 1px 0px 0px #85847d;
+  background: linear-gradient(to bottom, #a8a79e 5%, #d6d3cf 100%);
+  background-color: #a8a79e;
+  border-radius: 6px;
+  border: 1px solid #8c8273;
+  display: inline-block;
+  cursor: pointer;
+  color: #3d383d;
+  font-family: Arial;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 9px 76px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #a8a79e;
 }
 
-.login-main-text{
-    padding: 60px;
-    color:black;
+.cancelButton:hover {
+  background: linear-gradient(to bottom, #d6d3cf 5%, #a8a79e 100%);
+  background-color: #d6d3cf;
+}
+.cancelButton:active {
+  position: relative;
+  top: 1px;
 }
 
-.login-main-text h2{
-    font-weight: 300;
+.projectWorkSpaceButton {
+  box-shadow: 0px 1px 0px 0px #5c5f80;
+  background: linear-gradient(to bottom, #3d46aa 5%, #2e336e 100%);
+  background-color: #3d46aa;
+  border-radius: 6px;
+  border: 1px solid #4c5182;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: Arial;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 6px 24px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #4d54a1;
 }
-
-.btn-black{
-    background-color:#3e46ad !important;
-    color: #fff;
+.projectWorkSpaceButton:hover {
+  background: linear-gradient(to bottom, #2e336e 5%, #3d46aa 100%);
+  background-color: #2e336e;
+}
+.projectWorkSpaceButton:active {
+  position: relative;
+  top: 1px;
+}
+.editProjectButton {
+  box-shadow: 0px 1px 0px 0px #91b8b3;
+	background:linear-gradient(to bottom, #768d87 5%, #6c7c7c 100%);
+	background-color:#768d87;
+	border-radius:6px;
+	border:1px solid #566963;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: Arial;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 6px 24px;
+  text-decoration: none;
+  text-shadow:0px 1px 0px #2b665e;
+}
+.editProjectButton:hover {
+ background:linear-gradient(to bottom, #6c7c7c 5%, #768d87 100%);
+	background-color:#6c7c7c;
+}
+.editProjectButton:active {
+  position: relative;
+  top: 1px;
 }
