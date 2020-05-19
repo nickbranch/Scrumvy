@@ -4,6 +4,7 @@ import com.wescrum.scrumvy.dto.UserDto;
 import com.wescrum.scrumvy.dao.RoleDao;
 import com.wescrum.scrumvy.dao.UserDao;
 import com.wescrum.scrumvy.entity.Invite;
+import com.wescrum.scrumvy.entity.Project;
 import com.wescrum.scrumvy.entity.ProjectTeam;
 import com.wescrum.scrumvy.entity.Role;
 import com.wescrum.scrumvy.entity.User;
@@ -39,7 +40,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
-    
+
     @Autowired
     private ProjectTeamRepository projectTeamRepo;
 
@@ -91,11 +92,19 @@ public class UserServiceImpl implements UserService {
         List<ProjectTeam> checkProjectMembers = projectTeamRepo.findByProjectId(invite.getProjectId());
         boolean toggle = false;
         for (ProjectTeam pt : checkProjectMembers) {
-            if ((pt.getUserId()== invite.getReceivingUserId())) {
+            if ((pt.getUserId() == invite.getReceivingUserId())) {
                 toggle = true;
             }
         }
         return toggle;
+    }
+
+    @Override
+    public boolean checkIfUserIsPartOfProject(User user, Project project) {
+        if (project.getUserCollection().contains(user)) {
+            return true;
+        }
+        return false;
     }
 
     @Override

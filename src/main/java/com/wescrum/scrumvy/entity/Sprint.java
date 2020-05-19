@@ -3,13 +3,19 @@ package com.wescrum.scrumvy.entity;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.ArrayList;
+import java.util.Collection;
+
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -19,6 +25,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "sprints")
@@ -38,12 +45,21 @@ public class Sprint implements Serializable {
     private Long sprintId;
     @Column(name = "sprint_start_date")
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date sprintStartDate;
     @Column(name = "sprint_end_date")
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date sprintEndDate;
-    @ManyToMany(mappedBy = "sprintCollection")
-    private Collection<Task> taskCollection;
+    
+//    @ManyToMany(mappedBy = "sprintCollection")
+    @ManyToMany
+    @JoinTable(name = "sprint_tasks", 
+            joinColumns = @JoinColumn(name = "sprint_id"),
+            inverseJoinColumns = @JoinColumn(name = "task_id"))
+//    @ManyToMany(fetch = FetchType.LAZY,mappedBy = "sprintCollection")
+    private Collection<Task> taskCollection ;
+    
     @JoinColumn(name = "project_id", referencedColumnName = "project_id")
     @ManyToOne(optional = false)
     private Project projectId;

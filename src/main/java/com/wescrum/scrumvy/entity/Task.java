@@ -4,13 +4,13 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -55,10 +55,13 @@ public class Task implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date taskEndDate;
     
-    @JoinTable(name = "sprint_tasks", joinColumns = {
-        @JoinColumn(name = "task_id", referencedColumnName = "task_id")}, inverseJoinColumns = {
-        @JoinColumn(name = "sprint_id", referencedColumnName = "sprint_id")})
-    @ManyToMany
+    
+//    @ManyToMany
+//    @JoinTable(name = "sprint_tasks", 
+//            joinColumns = @JoinColumn(name = "task_id"),
+//            inverseJoinColumns = @JoinColumn(name = "sprint_id"))
+
+    @ManyToMany (mappedBy = "taskCollection", cascade=CascadeType.ALL)
     private Collection<Sprint> sprintCollection;
     
     @JoinColumn(name = "project_id", referencedColumnName = "project_id")
@@ -155,10 +158,7 @@ public class Task implements Serializable {
 
     @Override
     public String toString() {
-        return "Task{" + "taskId=" + taskId + ", description=" + description + ", "
-                + "taskStartDate=" + taskStartDate + ", taskEndDate=" + taskEndDate + ", "
-                + "sprintCollection=" + sprintCollection + ", projectId=" + projectId + ", "
-                + "statusId=" + statusId + '}';
+        return "com.wescrum.scrumvy.entity.Task[ taskId=" + taskId + " ]";
     }
         
 }

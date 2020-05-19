@@ -24,9 +24,11 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         String userName = authentication.getName();
         User user = userService.findByUserName(userName);
 
+        // we place the confirmed user to the session
         HttpSession session = request.getSession();
         session.setAttribute("user", user);
 
+        // and we forward the user to the homepage (default)
         response.sendRedirect(request.getContextPath() + "/");
     }
 }

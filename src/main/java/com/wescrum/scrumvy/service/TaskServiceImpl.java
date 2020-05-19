@@ -42,7 +42,6 @@ public class TaskServiceImpl implements TaskServiceInterface {
     @Override
     public boolean checkIfProjectOwnsATask(Task task, Project project) {
         List<Task> listOfTasks = taskRepo.findByProjectId(project);
-        //        System.out.println("*****************************************" + listOfTasks);
         boolean toggle = false;
         for (Task prTask : listOfTasks) {
             if (Objects.equals(prTask.getTaskId(), task.getTaskId())) {

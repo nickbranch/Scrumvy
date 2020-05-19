@@ -92,6 +92,9 @@
                     <input type="hidden" name="projectId" value="${project.projectId}"/>
                     <input type="SUBMIT" value="Project Settings"/>                       
                 </form:form>
+                <br>
+                <a href="${pageContext.request.contextPath}/project/projectDetails/${project.projectId}" class="btn btn-primary" role="button"
+                   aria-pressed="true">Project Workspace </a>
             </li>
         </ul>
     </c:forEach>
@@ -103,13 +106,9 @@
         <c:forEach items="${joinedAsScrumMaster}" var="project">
         <ul>
             <li>
-                <form:form method="POST"
-                           modelAttribute="project"
-                           action="/project/projectSettings">
-                    ${project.projectName}
-                    <input type="hidden" name="projectId" value="${project.projectId}"/>
-                    <input type="SUBMIT" value="Project Settings"/>                       
-                </form:form>
+                ${project.projectName}
+                <a href="${pageContext.request.contextPath}/project/projectDetails/${project.projectId}" class="btn btn-primary" role="button"
+                   aria-pressed="true">Project Workspace </a>
             </li>
         </ul>
     </c:forEach>
@@ -121,13 +120,9 @@
         <c:forEach items="${joinedAsDevTeam}" var="project">
         <ul>
             <li>
-                <form:form method="POST"
-                           modelAttribute="project"
-                           action="/project/projectSettings">
-                    ${project.projectName}
-                    <input type="hidden" name="projectId" value="${project.projectId}"/>
-                    <input type="SUBMIT" value="Project Settings"/>                       
-                </form:form>
+                ${project.projectName}
+                <a href="${pageContext.request.contextPath}/project/projectDetails/${project.projectId}" class="btn btn-primary" role="button"
+                   aria-pressed="true">Project Workspace </a>
             </li>
         </ul>
     </c:forEach>
@@ -140,11 +135,11 @@
         User:
         <security:authentication property="principal.username" />
 
-    <!--  Add log out button -->
-    <form:form action="${pageContext.request.contextPath}/logout"
-               method="POST">
-        <input type="submit" value="Logout">
-    </form:form>
+        <!--  Add log out button -->
+        <form:form action="${pageContext.request.contextPath}/logout"
+                   method="POST">
+            <input type="submit" value="Logout">
+        </form:form>
 
-    </body>
-    </html>
+        </body>
+        </html>
