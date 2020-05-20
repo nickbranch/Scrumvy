@@ -135,6 +135,12 @@
         User:
         <security:authentication property="principal.username" />
 
+        <form:form action="${pageContext.request.contextPath}/pay"
+                   method="POST">
+            <input type="submit" value="Do you want more projects? Go Premium.">
+        </form:form>
+
+
         <!--  Add log out button -->
         <form:form action="${pageContext.request.contextPath}/logout"
                    method="POST">
