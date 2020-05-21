@@ -1,10 +1,8 @@
 package com.wescrum.scrumvy.config;
 
-import com.wescrum.scrumvy.controller.LoginController;
 import com.wescrum.scrumvy.entity.User;
 import com.wescrum.scrumvy.service.UserService;
 import java.io.IOException;
-import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
