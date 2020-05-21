@@ -23,16 +23,12 @@ public class AfterLoginController {
 
     @Autowired
     private UserService userService;
-
     @Autowired
     private ProjectRoleRepository projectRoleRepo;
-
     @Autowired
     private ProjectTeamRepository projectTeamRepo;
-
     @Autowired
     private InviteServiceInterface inviteService;
-
     @Autowired
     private InviteRepository inviteRepo;
 
@@ -43,7 +39,7 @@ public class AfterLoginController {
         List<Invite> sentInvites = inviteService.getSentInvites(user);
         List<Invite> receivedInvites = inviteRepo.findByReceivingUserId(user);
 
-        System.out.println(userService.listLoggedInUsers());
+        //System.out.println(userService.listLoggedInUsers());
 
         for (int i = 1; i <= 3; i++) {
             List<Project> listTobeAdded = userProjectListGenerator(i, user);

@@ -37,8 +37,6 @@ public class ProjectTeamController {
     private ProjectTeamServiceInterface projectTeamService;
     @Autowired
     private ProjectRoleRepository projectRoleRepo;
-    @Autowired
-    private ProjectTeamRepository projectTeamRepo;
 
     @PostMapping("/manageTeamMembers")
     public String manageTeamMembers(@ModelAttribute("projectId") Long projectid,

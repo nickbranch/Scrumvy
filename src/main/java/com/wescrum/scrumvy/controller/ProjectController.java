@@ -50,19 +50,14 @@ public class ProjectController {
     private ProjectRoleRepository projectRoleRepo;
     @Autowired
     private ProjectTeamRepository projectTeamRepo;
-
     @Autowired
     private TaskRepository taskRepo;
-
     @Autowired
     private SprintRepository sprintRepo;
-
     @Autowired
     private DailyScrumRecordRepository dailyScrumRepo;
-
     @Autowired
     private RetrospectiveRepository retroRepo;
-
     @Autowired
     private ProjectRoleServiceImpl projectRoleService;
 

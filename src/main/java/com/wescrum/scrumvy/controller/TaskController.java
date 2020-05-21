@@ -25,9 +25,7 @@ public class TaskController {
     @Autowired
     private ProjectServiceInterface projectService;
     @Autowired
-    TaskServiceInterface taskService;
-    @Autowired
-    TaskRepository taskRepo;
+    private TaskServiceInterface taskService;
     @Autowired
     private StatusRepository statusRepo;
 
@@ -85,7 +83,6 @@ public class TaskController {
         if (taskService.checkIfProjectOwnsATask(task, project)) {
             taskService.deleteTask(task);
             model.addAttribute("project", project);
-            System.out.println("******************************************WE ARE IN6");
             model.addAttribute("emptyTask", new Task());
             return "projectSetup";
         } else {
