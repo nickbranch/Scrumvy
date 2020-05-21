@@ -1,220 +1,231 @@
-<%-- 
-    Document   : projectSetup
-    Created on : May 6, 2020, 3:32:14 AM
-    Author     : nklad
---%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %> 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <script src="https://kit.fontawesome.com/f651b3da4d.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
               integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <link rel="stylesheet" href="css/style.css">
-        <link rel="stylesheet"
-              href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
-        <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+        <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/homepage.css">
         <title>${project.projectName} Project Settings</title>
     </head>
 
     <body>
-        <table class="table table-dark text-center">
-            <thead>
-                <tr>
-                    <th colspan=6 scope="col" class="text-center"><h1>Project "${project.projectName}" Settings</h1></th>
-                    <th colspan="6">                            
-                        <div class="form-group">
-                            <div class="col-xs-15">
-                                <div>
-                                    <!-- Check for errors --> 
-                                    <c:if test="${createProjectError != null}">
-                                        <div class="alert alert-danger col-xs-offset-1 col-xs-10">
-                                            ${createProjectError}
-                                        </div>
-                                    </c:if>
-                                </div>
-                            </div>
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:rgb(63, 70, 173);">
+            <a class="navbar-brand" href="#"><i class="fab fa-stripe-s"></i>crumvy</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/">Home<span class="sr-only"></span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="${pageContext.request.contextPath}/goPremium" class="nav-link">Pricing</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            Projects
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">Owner</a>
+                            <a class="dropdown-item" href="#">Developer</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Drafts</a>
                         </div>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th scope="col">Project Name</th>
-                    <th scope="col">Project Description</th>
-                    <th scope="col">Start Date</th>
-                    <th scope="col">End Date</th>
-                    <th scope="col">Actions</th>
-                </tr>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About Us</a>
+                    </li>
+                </ul>
+                <form:form action="${pageContext.request.contextPath}/logout" method="POST" class="form-inline my-2 my-lg-0">
+                    <input type="submit" value="&#xf2f5Logout" class=" btn btn-outline-info my-2 my-sm-0">
+                </form:form>
+            </div>
+        </nav>
+        <!-- end of navbar -->
 
-                <tr>
-                    <form:form method="POST"
-                               modelAttribute="project"
+        <div class="row ">
+            <div class="col-lg-4 md-4 py-5 bg-light col ">
+                <a id="back" class="back" href="${pageContext.request.contextPath}/"><i class="fas fa-arrow-circle-left"></i></a>
+                <h3 class="display d-flex justify-content-center"><i class="fas fa-cogs mr-1"></i>Project ${project.projectName}
+                    Settings</h3>
+                    <form:form method="POST" modelAttribute="project"
                                action="${pageContext.request.contextPath}/project/updateProjectDetails">
-                <input type="hidden" name="projectId" value="${project.projectId}"/>
-                <input type="hidden" name="userCollection" value="${user.id}"/>
-                <td> 
-                    <form:input path="projectName" placeholder="${project.startDate}" class="form-control" /><br>
-                    <form:errors path="projectName" cssClass="error" />
-                </td>
-                <td>
-                    <form:input path="projectDescription" placeholder="${project.projectDescription}" class="form-control" /><br>
-                    <form:errors path="projectDescription" cssClass="error" />
-                </td>
-                <td>
-                    <form:input type="date" path="startDate" class="form-control" />
-                    <fmt:formatDate type = "date" value = "${project.startDate}" />
-                    <form:errors path="startDate" cssClass="error" />
-                </td>
-                <td>
-                    <form:input type="date" path="endDate" class="form-control" />
-                    <fmt:formatDate type = "date" value = "${project.endDate}" />
-                    <form:errors path="endDate" cssClass="error" />
-                </td>
-                <td>
-                    <button type="submit" class="btn btn-primary">Update</button>
-                </td>
-                <!-- manually adding tokens csrf protection -->
-                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-            </form:form>
-        </tr>
+                    <input type="hidden" name="projectId" value="${project.projectId}" />
+                    <input type="hidden" name="userCollection" value="${user.id}" />
 
+                    <div class="form-group py-3 ml-2">
+                        <label for="projectName">Project Name</label>
+                        <form:input path="projectName" placeholder="${project.startDate}" class="form-control" /><br>
+                        <form:errors path="projectName" cssClass="error" />
+                    </div>
+                    <div class="form-group py-1 ml-2">
+                        <label for="projectDescription">Project Description</label>
+                        <form:input path="projectDescription" placeholder="${project.projectDescription}" class="form-control" /><br>
+                        <form:errors path="projectDescription" cssClass="error" />
+                    </div>
+                    <div class="form-row py-1 ml-2">
+                        <div class="form-group col-md-6">
+                            <label for="date">Start Date</label>
+                            <form:input type="date" path="startDate" class="form-control" />
+                            <fmt:formatDate type="date" value="${project.startDate}" />
+                            <form:errors path="startDate" cssClass="error" />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="date">End Date</label>
+                            <form:input type="date" path="endDate" class="form-control" />
+                            <fmt:formatDate type="date" value="${project.endDate}" />
+                            <form:errors path="endDate" cssClass="error" />
+                        </div>
+                    </div>
+                    <div class="col d-flex justify-content-center ">
+                        <input type="submit" value="&#xf079 Update" class="btn btn-dark btn-lg" style="background-color: #3F46AD;">
+                    </div>
+                    <!-- manually adding tokens csrf protection -->
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                </form:form>
 
-        <th colspan=6 scope="col" class="text-center"><h1>Tasks</h1></th>
-        <th colspan="6">                            
-            <div class="form-group">
-                <div class="col-xs-15">
-                    <div>
-                        <!-- Check for errors --> 
-                        <c:if test="${taskError != null}">
-                            <div class="alert alert-danger col-xs-offset-1 col-xs-10">
-                                ${taskError}
-                            </div>
-                        </c:if>
+                <div class="form-group">
+                    <div class="col-xs-15">
+                        <div>
+                            <!-- Check for errors -->
+                            <c:if test="${createProjectError != null}">
+                                <div class="alert alert-danger col-xs-offset-1 col-xs-10">
+                                    ${createProjectError}
+                                </div>
+                            </c:if>
+                        </div>
                     </div>
                 </div>
+
+                <div class="py-5">
+                    <form:form class="form1 ml-2" method="POST" modelAttribute="project" action="${pageContext.request.contextPath}/project/deleteProject">
+                        <input type="hidden" name="projectId" value="${project.projectId}" />
+                        <input type="SUBMIT" class="btn btn-danger btn-md" value="&#xf1f8 Delete Project" />
+                    </form:form>
+
+                    <form:form class="form1" method="POST" modelAttribute="project" action="${pageContext.request.contextPath}/projectTeam/manageTeamMembers">
+                        <input type="hidden" name="projectId" value="${project.projectId}" />
+                        <input type="SUBMIT" class="btn btn-warning btn-md" value="&#xf509 Manage Team Members" />
+                    </form:form>
+
+                    <form:form class="form2" method="GET" modelAttribute="project" action="${pageContext.request.contextPath}/project/projectDetails/${project.projectId}">
+                        <input type="hidden" name="projectId" value="${project.projectId}" />
+                        <input type="SUBMIT" class="btn btn-md" value="Go to WorkSpace" style="background-color: #3F46AD;color:white" />
+                    </form:form>
+                </div>
+
             </div>
-        </th>
+            <!-- end of left part -->
 
-        <tr>
-            <th scope="col">Task Name</th>
-            <th scope="col">Start Date</th>
-            <th scope="col">End Date</th>
-            <th scope="col">Actions</th>
-        </tr>
+            <div class="col-lg-8 md-8 py-5">
+                <h3 class="display d-flex justify-content-center mr-5"><i class="fas fa-thumbtack mr-1"></i>Tasks</h3>
 
+                <form:form method="POST" modelAttribute="emptyTask" action="${pageContext.request.contextPath}/tasks/saveTask">
+                    <div class="form-row py-1">
+                        <div class="col">
+                            <label for="description">Description</label>
+                            <form:input path="description" placeholder="${emptyTask.description}" class="form-control" /><br>
+                            <form:errors path="description" cssClass="error" />
+                        </div>
+                        <div class="col">
+                            <label for="taskStartDate">Start Date</label>
+                            <form:input type="date" path="taskStartDate" value="${emptyTask.taskStartDate}" class="form-control" />
+                            <fmt:formatDate type="date" value="${emptyTask.taskStartDate}" />
+                            <form:errors path="taskStartDate" cssClass="error" />
+                        </div>
+                        <div class="col">
+                            <label for="taskEndDate">End Date</label>
+                            <form:input type="date" path="taskEndDate" value="${emptyTask.taskEndDate}" class="form-control" />
+                            <fmt:formatDate type="date" value="${emptyTask.taskEndDate}" />
+                            <form:errors path="taskEndDate" cssClass="error" />
+                        </div>
+                        <input type="hidden" name="projectId" value="${project.projectId}" />
+                        <div class="col">
+                            <br>
+                            <input type="submit" value="&#xf0c7 Save New Task" class="btn btn-success btn-lg mt-1" />
+                        </div>
+                        <!-- manually adding tokens csrf protection -->
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                    </div>
+                </form:form>
 
-        <c:forEach items="${project.taskCollection}" var="task">
-            <form:form method="POST"
-                       modelAttribute="emptyTask"
-                       action="${pageContext.request.contextPath}/tasks/updateTask">
-                <tr>
-                <input type="hidden" name="taskId" value="${task.taskId}"/>
-                <input type="hidden" name="projectId" value="${project.projectId}"/>
-                <input type="hidden" name="statusId" value="${task.statusId.statusId}"/>
-                <td>
-                    <form:input path="description" value="${task.description}" class="form-control" /><br>
-                    <form:errors path="description" cssClass="error" />
-                </td>
-                <td>
-                    <form:input type="date" path="taskStartDate" value = "${task.taskStartDate}" class="form-control" />
-                    <fmt:formatDate type = "date" value = "${task.taskStartDate}" />
-                    <form:errors path="taskStartDate" cssClass="error" />
-                </td>
-                <td>
-                    <form:input type="date" path="taskEndDate" value = "${task.taskEndDate}" class="form-control" />
-                    <fmt:formatDate type = "date" value = "${task.taskEndDate}" />                        
-                    <form:errors path="taskEndDate" cssClass="error" />
-                </td>
-                <td>
-                    <button type="submit" class="btn btn-primary">Update</button>
-                </td>
-                <!-- manually adding tokens csrf protection -->
-                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-            </form:form>
-            <td>
-                <form method="POST"
-                      action="${pageContext.request.contextPath}/tasks/deleteTask">
-                    <input type="hidden" name="taskId" value="${task.taskId}"/>
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-                </form>
-            </td>
-        </c:forEach>
+                <c:forEach items="${project.taskCollection}" var="task">
+                    <form:form method="POST" modelAttribute="emptyTask"
+                               action="${pageContext.request.contextPath}/tasks/updateTask">
+                        <input type="hidden" name="taskId" value="${task.taskId}" />
+                        <input type="hidden" name="projectId" value="${project.projectId}" />
+                        <input type="hidden" name="statusId" value="${task.statusId.statusId}" />
+                        <div class="form-row py-1">
+                            <div class="col-3">
+                                <form:input path="description" value="${task.description}" class="form-control" /><br>
+                                <form:errors path="description" cssClass="error" />
+                            </div>
+                            <div class="col">
+                                <form:input type="date" path="taskStartDate" value="${task.taskStartDate}" class="form-control" />
+                                <fmt:formatDate type="date" value="${task.taskStartDate}" />
+                                <form:errors path="taskStartDate" cssClass="error" />
+                            </div>
+                            <div class="col">
+                                <form:input type="date" path="taskEndDate" value="${task.taskEndDate}" class="form-control" />
+                                <fmt:formatDate type="date" value="${task.taskEndDate}" />
+                                <form:errors path="taskEndDate" cssClass="error" />
+                            </div>
+                            <div class="col">
+                                <input type="submit" value="&#xf067 Update" class="btn btn-dark btn-lg"
+                                       style="background-color: #3F46AD;float:right;">
+                            </div>
+                            <!-- manually adding tokens csrf protection -->
+                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                        </form:form>
+                        <div class="col">
+                            <form method="POST" action="${pageContext.request.contextPath}/tasks/deleteTask">
+                                <input type="hidden" name="taskId" value="${task.taskId}" />
+                                <input type="submit" value="&#xf1f8 Delete" class="btn btn-danger btn-lg" />
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                            </form>
+                        </div>
+                    </div>
+                </c:forEach>
+            </div>
+        </div>
 
-    </tr>
-
-    <tr>
-        <form:form method="POST"
-                   modelAttribute="emptyTask"
-                   action="${pageContext.request.contextPath}/tasks/saveTask">
-            <td>
-                <form:input path="description" placeholder="${emptyTask.description}" class="form-control" /><br>
-                <form:errors path="description" cssClass="error" />
-            </td>
-            <td>
-                <form:input type="date" path="taskStartDate" value="${emptyTask.taskStartDate}" class="form-control" />
-                <fmt:formatDate type = "date" value = "${emptyTask.taskStartDate}" />
-                <form:errors path="taskStartDate" cssClass="error" />
-            </td>
-            <td>
-                <form:input type="date" path="taskEndDate" value="${emptyTask.taskEndDate}" class="form-control" />
-                <fmt:formatDate type = "date" value = "${emptyTask.taskEndDate}" />
-                <form:errors path="taskEndDate" cssClass="error" />
-            </td>
-        <input type="hidden" name="projectId" value="${project.projectId}"/>
-        <td>
-            <button type="submit" class="btn btn-primary">Save New Task</button>
-        </td>
-        <!-- manually adding tokens csrf protection -->
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-    </form:form>
-</tr>
-<tr>
-    <td>
-        <form:form method="POST"
-                   modelAttribute="project"
-                   action="/project/deleteProject">
-            <input type="hidden" name="projectId" value="${project.projectId}"/>
-            <input type="SUBMIT" class="btn btn-danger" value="Delete Project"/>                       
-        </form:form>
-    </td>
-
-
-    <td>
-        <form:form method="POST"
-                   modelAttribute="project"
-                   action="/projectTeam/manageTeamMembers">
-            <input type="hidden" name="projectId" value="${project.projectId}"/>
-            <input type="SUBMIT" class="btn btn-warning" value="Manage Team Members"/>                       
-        </form:form>
-    </td>
-</tr>
-<tr>
-    <th colspan="2">                            
         <div class="form-group">
             <div class="col-xs-15">
                 <div>
-                    <!-- Check for errors --> 
-                    <c:if test="${deleteProjectError != null}">
+                    <!-- Check for errors -->
+                    <c:if test="${taskError != null}">
                         <div class="alert alert-danger col-xs-offset-1 col-xs-10">
-                            ${deleteProjectError}
+                            ${taskError}
                         </div>
                     </c:if>
                 </div>
             </div>
         </div>
-    </th>
-</tr>
 
-</tbody>
-</table>
-</body>
+        <!-- end of right part? -->
+
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+                integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+                integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+                integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    </body>
+
 </html>

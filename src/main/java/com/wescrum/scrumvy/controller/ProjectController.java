@@ -89,11 +89,13 @@ public class ProjectController {
             @ModelAttribute("userCollection") Long formUser,
             final RedirectAttributes redirectAttributes,
             Model model) {
+        User user = userService.getLoggedinUser();
         if (theBindingResult.hasErrors()) {
+            model.addAttribute("customUser", user);
+            model.addAttribute("project", new Project());
             return "createProjectForm";
         }
         project = trimTheProject(project);
-        User user = userService.getLoggedinUser();
 
         //we can apply some ban here
         if (formUser != Long.valueOf(user.getId())) {
@@ -112,6 +114,7 @@ public class ProjectController {
         if (exists) {
             model.addAttribute("createProjectError", "Sorry. It seems you already have a project named that way");
             model.addAttribute("project", new Project());
+            model.addAttribute("customUser", user);
             return "createProjectForm";
         }
 
@@ -143,8 +146,8 @@ public class ProjectController {
         project = trimTheProject(project);
 
         //we can apply some ban here
-        if ((formProject != request.getSession().getAttribute("activeProject")) && 
-            (formUser != Long.valueOf(userService.getLoggedinUser().getId()))) {
+        if ((formProject != request.getSession().getAttribute("activeProject"))
+                && (formUser != Long.valueOf(userService.getLoggedinUser().getId()))) {
             redirectAttributes.addFlashAttribute("createProjectError", "Please do not tamper with hidden form fields.");
             return "redirect:/";
         }
@@ -179,7 +182,7 @@ public class ProjectController {
     ) {
         Project project = projectService.getProjectbyid(projectid);
         request.getSession().setAttribute("activeProject", project.getProjectId());
-         if (projectService.checkIdOfOwnedProjectsFix(project)) {
+        if (projectService.checkIdOfOwnedProjectsFix(project)) {
             model.addAttribute("user", userService.getLoggedinUser());
             model.addAttribute("project", project);
             Task task = new Task();
@@ -199,7 +202,7 @@ public class ProjectController {
             Model model,
             HttpServletRequest request) {
         //we can apply some ban here
-         if ((formProject != request.getSession().getAttribute("activeProject"))) {
+        if ((formProject != request.getSession().getAttribute("activeProject"))) {
             redirectAttributes.addFlashAttribute("createProjectError", "Please do not tamper with hidden form fields.");
             return "redirect:/";
         }
@@ -230,7 +233,9 @@ public class ProjectController {
             }
         }
         return false;
-    }@GetMapping("/projectDetails/{id}")
+    }
+
+    @GetMapping("/projectDetails/{id}")
 //    @PostMapping("/projectDetails")
     public String showProject(@PathVariable Long id,
             Model model,
@@ -239,7 +244,6 @@ public class ProjectController {
 
         Project currentProject = projectService.getProjectbyid(id);
         User user = userService.getLoggedinUser();
-        
 
         request.getSession().setAttribute("activeProject", currentProject.getProjectId());
 
@@ -282,7 +286,7 @@ public class ProjectController {
 
             model.addAttribute("isProductOwner", isProductOnwer);
             model.addAttribute("isScrumMaster", isScrumMaster);
-            
+
             String loggedInUser = user.getUsername();//chat
             model.addAttribute("loggedInUser", loggedInUser);//chat
 
@@ -325,6 +329,5 @@ public class ProjectController {
         }
         return false;
     }
-
 
 }
