@@ -50,22 +50,21 @@ public class SprintController {
 
         Project project = projectService.getProjectbyid(projectid);
 
-        if(project.getProjectId()== request.getSession().getAttribute("activeProject")){  
-            
-        model.addAttribute("activeTasks", getActiveTasks(project));
+        if (project.getProjectId() == request.getSession().getAttribute("activeProject")) {
 
-        model.addAttribute("sprint", new Sprint());
+            model.addAttribute("activeTasks", getActiveTasks(project));
 
-        model.addAttribute("project", project);
+            model.addAttribute("sprint", new Sprint());
 
-        return "createSprintForm";
-        } 
-        
-         redirectAttributes.addFlashAttribute("editTaskError", "Please do not tamper with hidden form fields.");
-         return "redirect:/project/projectDetails/" + request.getSession().getAttribute("activeProject");
+            model.addAttribute("project", project);
+
+            return "createSprintForm";
+        }
+
+        redirectAttributes.addFlashAttribute("editTaskError", "Please do not tamper with hidden form fields.");
+        return "redirect:/project/projectDetails/" + request.getSession().getAttribute("activeProject");
     }
-    
-    
+
     // CREATE BUTTON IN CREATE SPRINT FORM
     @PostMapping("/saveSprint")
     public String saveSprint(@Valid @ModelAttribute("sprint") Sprint sprint,
@@ -73,78 +72,76 @@ public class SprintController {
             Model model,
             HttpServletRequest request,
             final RedirectAttributes redirectAttributes) {
-        
+
         Project project = projectService.getProjectbyid(sprint.getProjectId().getProjectId());
-        
-        Long currentProjectId = (Long)request.getSession().getAttribute("activeProject");
+
+        Long currentProjectId = (Long) request.getSession().getAttribute("activeProject");
         Project currentproject = projectService.getProjectbyid(currentProjectId);
-       
+
         // check if sprint belongs to the active Project
-        if(project.getProjectId()== request.getSession().getAttribute("activeProject")){
+        if (project.getProjectId() == request.getSession().getAttribute("activeProject")) {
 
-        Date sprintStartDate = sprint.getSprintStartDate();
+            Date sprintStartDate = sprint.getSprintStartDate();
+            Date sprintEndDate = sprint.getSprintEndDate();
+            Date projectStartDate = currentproject.getStartDate();
+            Date projectEndDate = currentproject.getEndDate();
 
-        Date sprintEndDate = sprint.getSprintEndDate();
+            // check if sprint already exists with these dates:
+            if (sprintRepo.findBySprintStartDateAndSprintEndDate(sprintStartDate, sprintEndDate).isPresent()) {
 
-        Date projectStartDate = currentproject.getStartDate();
-
-        Date projectEndDate = currentproject.getEndDate();
-
-         // check if sprint already exists with these dates:
-         List <Sprint> projectSprints = sprintRepo.findByProjectId(currentproject);
-         
-         
-         for(Sprint sprintCheck : projectSprints){
-             System.out.println("lalalalalalallalalala");
-             //doesnt work -  null pointer exception whith empty dates
-             if (sprintCheck.getSprintStartDate().compareTo(sprintStartDate)== 0 || sprintCheck.getSprintEndDate().compareTo(sprintEndDate)==0){
-            System.out.println("TATATATATATATATATATATATATATATATA");
-             model.addAttribute("createSprintError", "You already have a sprint with these dates");
-             model.addAttribute("activeTasks", getActiveTasks(currentproject));
-             model.addAttribute("sprint", new Sprint());
-             model.addAttribute("project", currentproject);
-             return "createSprintForm";
-         }
-         }
-        
-        
-        if (projectStartDate != null || projectEndDate != null) {
-
-            if ((sprintStartDate.compareTo(projectStartDate) < 0) && (sprintEndDate.compareTo(projectEndDate) > 0)) {
-
+                model.addAttribute("createSprintError", "You already have a sprint with these dates");
                 model.addAttribute("activeTasks", getActiveTasks(currentproject));
-
-                model.addAttribute("createSprintError", "Make sure the dates are consistent with the current project schedule");
-
                 model.addAttribute("sprint", new Sprint());
-
                 model.addAttribute("project", currentproject);
-
                 return "createSprintForm";
             }
+
+            // check if dates are null:    
+            if (sprintStartDate == null || sprintEndDate == null) {
+
+                model.addAttribute("createSprintError", "Sorry, date fields are mandatory");
+                model.addAttribute("activeTasks", getActiveTasks(currentproject));
+                model.addAttribute("sprint", new Sprint());
+                model.addAttribute("project", currentproject);
+                return "createSprintForm";
+            }
+
+            if (projectStartDate != null || projectEndDate != null) {
+
+                if ((sprintStartDate.compareTo(projectStartDate) < 0) && (sprintEndDate.compareTo(projectEndDate) > 0)) {
+
+                    model.addAttribute("activeTasks", getActiveTasks(currentproject));
+
+                    model.addAttribute("createSprintError", "Make sure the dates are consistent with the current project schedule");
+
+                    model.addAttribute("sprint", new Sprint());
+
+                    model.addAttribute("project", currentproject);
+
+                    return "createSprintForm";
+                }
+            }
+
+            updateTaskWithSprintDates(sprint);
+
+            sprintService.createSprint(sprint);
+
+            model.addAttribute("project", currentproject);
+
+            List<Task> projectTasks = taskRepo.findByProjectId(currentproject);
+            model.addAttribute("projectTasks", projectTasks);
+
+            List<Sprint> projectSprints = sprintRepo.findByProjectId(currentproject);
+            model.addAttribute("projectSprints", projectSprints);
+
+//        redirectAttributes.addFlashAttribute("projectId", project.getProjectId());
+            return "redirect:/project/projectDetails/" + currentProjectId;
         }
 
-        updateTaskWithSprintDates(sprint);
-
-        sprintService.createSprint(sprint);
-
-        model.addAttribute("project", currentproject);
-
-        List<Task> projectTasks = taskRepo.findByProjectId(currentproject);
-        model.addAttribute("projectTasks", projectTasks);
-
-//        List<Sprint> projectSprints = sprintRepo.findByProjectId(project);
-        model.addAttribute("projectSprints", projectSprints);
-        
-//        redirectAttributes.addFlashAttribute("projectId", project.getProjectId());
-        return "redirect:/project/projectDetails/" + currentProjectId;
-        }       
-    
         redirectAttributes.addFlashAttribute("editTaskError", "Please do not tamper with hidden form fields.");
-         return "redirect:/project/projectDetails/" + currentProjectId;
+        return "redirect:/project/projectDetails/" + currentProjectId;
     }
 
-    
     // UPDATE BUTTON IN UPDATE SPRINT FORM
     @PostMapping("/saveUpdatedSprint")
     public String updateSprint(@ModelAttribute("sprint") Sprint sprint,
@@ -153,78 +150,75 @@ public class SprintController {
             final RedirectAttributes redirectAttributes) {
 
         Project project = projectService.getProjectbyid(sprint.getProjectId().getProjectId());
-        
-        Long currentProjectId = (Long)request.getSession().getAttribute("activeProject");
+
+        Long currentProjectId = (Long) request.getSession().getAttribute("activeProject");
         Project currentproject = projectService.getProjectbyid(currentProjectId);
-        
-        if(project.getProjectId()== request.getSession().getAttribute("activeProject") && (sprintRepo.findByProjectIdAndSprintId(currentproject, sprint.getSprintId())).isPresent()){
-        
-        
-        Date sprintStartDate = sprint.getSprintStartDate();
-        Date sprintEndDate = sprint.getSprintEndDate();
-        Date projectStartDate = currentproject.getStartDate();
-        Date projectEndDate = currentproject.getEndDate();
-        System.out.println(sprintStartDate.toString());
 
-        System.out.println(sprintEndDate.toString());
+        if (project.getProjectId() == request.getSession().getAttribute("activeProject") && (sprintRepo.findByProjectIdAndSprintId(currentproject, sprint.getSprintId())).isPresent()) {
 
-        if (projectStartDate != null || projectEndDate != null) {
-            if ((sprintStartDate.compareTo(projectStartDate) < 0) && (sprintEndDate.compareTo(projectEndDate) > 0)) {
+            Date sprintStartDate = sprint.getSprintStartDate();
+            Date sprintEndDate = sprint.getSprintEndDate();
+            Date projectStartDate = currentproject.getStartDate();
+            Date projectEndDate = currentproject.getEndDate();
+            System.out.println(sprintStartDate.toString());
 
-                //send again current tasks
-                List<Task> currentTasks = new ArrayList();
-                for (Task task : sprint.getTaskCollection()) {
-                    currentTasks.add(task);
+            System.out.println(sprintEndDate.toString());
+
+            if (projectStartDate != null || projectEndDate != null) {
+                if ((sprintStartDate.compareTo(projectStartDate) < 0) && (sprintEndDate.compareTo(projectEndDate) > 0)) {
+
+                    //send again current tasks
+                    List<Task> currentTasks = new ArrayList();
+                    for (Task task : sprint.getTaskCollection()) {
+                        currentTasks.add(task);
+                    }
+
+                    model.addAttribute("currentTasks", currentTasks);
+
+                    model.addAttribute("activeTasks", getActiveTasks(currentproject));
+
+                    model.addAttribute("createSprintError", "Make sure the dates are consistent with the current project schedule");
+
+                    model.addAttribute("sprint", sprint);
+
+                    model.addAttribute("project", currentproject);
+
+                    return "updateSprintForm";
                 }
-
-                model.addAttribute("currentTasks", currentTasks);
-
-                model.addAttribute("activeTasks", getActiveTasks(currentproject));
-
-                model.addAttribute("createSprintError", "Make sure the dates are consistent with the current project schedule");
-
-                model.addAttribute("sprint", sprint);
-
-                model.addAttribute("project", currentproject);
-
-                return "updateSprintForm";
             }
-        }
-        updateTaskWithSprintDates(sprint);
+            updateTaskWithSprintDates(sprint);
 
-        sprintService.createSprint(sprint);
+            sprintService.createSprint(sprint);
+
+            model.addAttribute("project", currentproject);
+
+            List<Task> projectTasks = taskRepo.findByProjectId(currentproject);
+            model.addAttribute("projectTasks", projectTasks);
+
+            List<Sprint> projectSprints = sprintRepo.findByProjectId(currentproject);
+            model.addAttribute("projectSprints", projectSprints);
+
+            return "redirect:/project/projectDetails/" + currentProjectId;
+        }
+
+        List<Task> currentTasks = new ArrayList();
+        for (Task task : sprint.getTaskCollection()) {
+            currentTasks.add(task);
+        }
+
+        model.addAttribute("currentTasks", currentTasks);
+
+        model.addAttribute("activeTasks", getActiveTasks(currentproject));
+
+        model.addAttribute("createSprintError", "Please do not tamper with hidden form fields.");
+
+        model.addAttribute("sprint", sprint);
 
         model.addAttribute("project", currentproject);
 
-        List<Task> projectTasks = taskRepo.findByProjectId(currentproject);
-        model.addAttribute("projectTasks", projectTasks);
-
-        List<Sprint> projectSprints = sprintRepo.findByProjectId(currentproject);
-        model.addAttribute("projectSprints", projectSprints);
-
-        return "redirect:/project/projectDetails/" + currentProjectId;
-        }
-        
-         List<Task> currentTasks = new ArrayList();
-                for (Task task : sprint.getTaskCollection()) {
-                    currentTasks.add(task);
-                }
-
-                model.addAttribute("currentTasks", currentTasks);
-
-                model.addAttribute("activeTasks", getActiveTasks(currentproject));
-
-                model.addAttribute("createSprintError", "Please do not tamper with hidden form fields.");
-
-                model.addAttribute("sprint", sprint);
-
-                model.addAttribute("project", currentproject);
-
-                return "updateSprintForm";
+        return "updateSprintForm";
     }
 
-    
-    
     @PostMapping("/updateSprint")
     public String updateSprint(@ModelAttribute("sprintId") Long sprintId,
             Model model,
@@ -232,38 +226,37 @@ public class SprintController {
             final RedirectAttributes redirectAttributes) {
 
         Sprint sprint = sprintService.getSprintbyid(sprintId);
-          
+
         // check if sprint belongs to the project:
-        Long currentProjectId = (Long)request.getSession().getAttribute("activeProject");
+        Long currentProjectId = (Long) request.getSession().getAttribute("activeProject");
         Project currentproject = projectService.getProjectbyid(currentProjectId);
-        if ((sprintRepo.findByProjectIdAndSprintId(currentproject, sprintId)).isPresent()){
+        if ((sprintRepo.findByProjectIdAndSprintId(currentproject, sprintId)).isPresent()) {
 
-        List<Task> currentTasks = new ArrayList();
-        for (Task task : sprint.getTaskCollection()) {
-            currentTasks.add(task);
-        }
+            List<Task> currentTasks = new ArrayList();
+            for (Task task : sprint.getTaskCollection()) {
+                currentTasks.add(task);
+            }
 
-        Project project = sprint.getProjectId();
+            Project project = sprint.getProjectId();
 
-        model.addAttribute("activeTasks", getActiveTasks(project));
+            model.addAttribute("activeTasks", getActiveTasks(project));
 
-        model.addAttribute("currentTasks", currentTasks);
+            model.addAttribute("currentTasks", currentTasks);
 
-        model.addAttribute("project", project);
+            model.addAttribute("project", project);
 
-        model.addAttribute("sprint", sprint);
+            model.addAttribute("sprint", sprint);
 
-        return "updateSprintForm";
-        
+            return "updateSprintForm";
+
         } else {
-             
-         redirectAttributes.addFlashAttribute("editTaskError", "Please do not tamper with hidden form fields.");
-         
-         return "redirect:/project/projectDetails/" + request.getSession().getAttribute("activeProject");
+
+            redirectAttributes.addFlashAttribute("editTaskError", "Please do not tamper with hidden form fields.");
+
+            return "redirect:/project/projectDetails/" + request.getSession().getAttribute("activeProject");
+        }
     }
-    }
-    
-    
+
     @PostMapping("/deleteSprint")
     public String deleteSprint(@ModelAttribute("sprintId") Long sprintId,
             Model model,
@@ -271,31 +264,30 @@ public class SprintController {
             final RedirectAttributes redirectAttributes) {
 
         Sprint sprint = sprintService.getSprintbyid(sprintId);
-        Long currentProjectId = (Long)request.getSession().getAttribute("activeProject");
+        Long currentProjectId = (Long) request.getSession().getAttribute("activeProject");
         Project currentproject = projectService.getProjectbyid(currentProjectId);
-        if ((sprintRepo.findByProjectIdAndSprintId(currentproject, sprintId)).isPresent()){
-           
-        sprintService.deleteSprint(sprint);
+        if ((sprintRepo.findByProjectIdAndSprintId(currentproject, sprintId)).isPresent()) {
 
-        model.addAttribute("project", currentproject);
+            sprintService.deleteSprint(sprint);
 
-        List<Task> projectTasks = taskRepo.findByProjectId(currentproject);
+            model.addAttribute("project", currentproject);
 
-        model.addAttribute("projectTasks", projectTasks);
+            List<Task> projectTasks = taskRepo.findByProjectId(currentproject);
 
-        List<Sprint> projectSprints = sprintRepo.findByProjectId(currentproject);
+            model.addAttribute("projectTasks", projectTasks);
 
-        model.addAttribute("projectSprints", projectSprints);
+            List<Sprint> projectSprints = sprintRepo.findByProjectId(currentproject);
 
-        return "redirect:/project/projectDetails/" + currentProjectId;
-    }   
-        else {
-            
-         redirectAttributes.addFlashAttribute("editTaskError", "Please do not tamper with hidden form fields.");
-         return "redirect:/project/projectDetails/" + currentProjectId;
+            model.addAttribute("projectSprints", projectSprints);
+
+            return "redirect:/project/projectDetails/" + currentProjectId;
+        } else {
+
+            redirectAttributes.addFlashAttribute("editTaskError", "Please do not tamper with hidden form fields.");
+            return "redirect:/project/projectDetails/" + currentProjectId;
+        }
+
     }
-    
-}
 
     private void updateTaskWithSprintDates(Sprint sprint) {
 
@@ -303,13 +295,13 @@ public class SprintController {
         Date sprintEndDate = sprint.getSprintEndDate();
 
         for (Task task : sprint.getTaskCollection()) {
-            
+
             Task updateTask = taskService.getTaskbyid(task.getTaskId());
-            
+
             updateTask.setTaskStartDate(sprintStartDate);
-            
+
             updateTask.setTaskEndDate(sprintEndDate);
-            
+
             taskService.createTask(updateTask);
         }
     }

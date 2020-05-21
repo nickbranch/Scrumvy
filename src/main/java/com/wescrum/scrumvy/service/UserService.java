@@ -4,6 +4,7 @@ import com.wescrum.scrumvy.dto.UserDto;
 import com.wescrum.scrumvy.entity.Invite;
 import com.wescrum.scrumvy.entity.Project;
 import com.wescrum.scrumvy.entity.User;
+import java.util.List;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface UserService extends UserDetailsService {
@@ -21,4 +22,6 @@ public interface UserService extends UserDetailsService {
     public boolean checkIfUserIsPartOfAProject(Invite invite); //invite implementation
     
     public boolean checkIfUserIsPartOfProject(User user, Project project); //validation implementation
+    
+    public List<String> listLoggedInUsers();
 }

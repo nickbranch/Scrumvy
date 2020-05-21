@@ -34,7 +34,7 @@
                         <a href="${pageContext.request.contextPath}/" class="nav-link">Home</a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">Pricing</a>
+                        <a class="nav-link">Pricing</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -78,7 +78,7 @@
                                 <li class="list-group-item">Documentation + Help Desk</li>
                             </ul>
                             <div class="card-body">
-                                <a href="#" class="btn btn-dark" style="background-color:rgb(63, 70, 173);">Try for free</a>
+                                <a href="${pageContext.request.contextPath}/" class="btn btn-dark" style="background-color:rgb(63, 70, 173);">Free plan</a>
                             </div>
                         </div>
                     </div>

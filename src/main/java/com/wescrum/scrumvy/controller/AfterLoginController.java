@@ -10,12 +10,9 @@ import com.wescrum.scrumvy.repos.ProjectRoleRepository;
 import com.wescrum.scrumvy.repos.ProjectTeamRepository;
 import com.wescrum.scrumvy.service.InviteServiceInterface;
 import com.wescrum.scrumvy.service.UserService;
-import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.session.SessionRegistry;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,19 +36,14 @@ public class AfterLoginController {
     @Autowired
     private InviteRepository inviteRepo;
 
-    @Autowired
-    private SessionRegistry sessionRegistry;
-    public static ArrayList<User> loggedInUsers = new ArrayList<User>();
-
     @GetMapping("/")
     public String showHome(@ModelAttribute("createProjectError") String error, Model model) {
         User user = userService.getLoggedinUser();
-        loggedInUsers.add(user);
         String[] roles = {"ownedProjects", "joinedAsScrumMaster", "joinedAsDevTeam"};
         List<Invite> sentInvites = inviteService.getSentInvites(user);
         List<Invite> receivedInvites = inviteRepo.findByReceivingUserId(user);
 
-        System.out.println(listLoggedInUsers());
+        System.out.println(userService.listLoggedInUsers());
 
         for (int i = 1; i <= 3; i++) {
             List<Project> listTobeAdded = userProjectListGenerator(i, user);
@@ -75,20 +67,6 @@ public class AfterLoginController {
             usersProjects.add(usersTeamProject.getProjectId());
         }
         return usersProjects;
-    }
-
-    public List<String> listLoggedInUsers() {
-        List<Object> principals = sessionRegistry.getAllPrincipals();
-
-        List<String> loggedUsers = new ArrayList<String>();
-
-        for (Object principal : principals) {
-            if (principal instanceof org.springframework.security.core.userdetails.UserDetails) {
-                String userName = ((org.springframework.security.core.userdetails.UserDetails) principal).getUsername();
-                loggedUsers.add(userName);
-            }
-        }
-        return loggedUsers;
     }
 
     //adminpanel

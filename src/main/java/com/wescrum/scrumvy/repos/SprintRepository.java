@@ -17,4 +17,6 @@ public interface SprintRepository extends JpaRepository<Sprint, Long> {
      public List<Sprint> findByProjectIdAndSprintStartDateBeforeAndSprintEndDateAfter(Project projectId, Date date1, Date date2);
      
      public Optional<Sprint> findByProjectIdAndSprintId(Project projectId, Long sprintId);
+     
+     public Optional<Sprint> findBySprintStartDateAndSprintEndDate(Date startDate, Date endDate);
 }

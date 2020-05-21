@@ -28,7 +28,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-link">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
                         <a href="${pageContext.request.contextPath}/goPremium" class="nav-link">Pricing</a>
@@ -73,11 +73,6 @@
                 </div>
 
                 <!-- end of left side -->
-
-
-
-
-
                 <div class="col-lg-8 md-8 text-left">
                     <h1>Welcome  <security:authentication property="principal.username" />!</h1>
                     <p>Plan and structure work in a way that’s best for you. Set priorities and deadlines. <p> </p> Share details and assign tasks.
@@ -99,8 +94,6 @@
                                                 ${project.projectName}
 
                                                 <input type="hidden"  name="projectId" value="${project.projectId}" />
-
-
                                                 <span class="badge badge-pill badge-secondary">Owner</span>
                                                 <span class="pull-right button-group d-flex justify-content-end">
                                                     <input type="SUBMIT" class="btn btn-secondary m-1" value="Edit Project" />
@@ -114,7 +107,6 @@
                             </div>
 
                         </div>
-
 
                         <!-- Projects as Scrum Master -->
                         <div id="menu1" class="tab-pane fade">
@@ -172,9 +164,9 @@
                                     <span>
                                         <form:form action="${pageContext.request.contextPath}/pay"
                                                    method="POST">
-                                            <input type="submit" value="Go Premium!">
+                                            <input type="submit" value="Go Premium!" class="btn btn-dark btn-lg mb-2"
+                                                   style="background-color: #3F46AD; border:none;">
                                         </form:form>
-
                                     </span>
                                     <span>
                                         <svg width="66px" height="43px" viewbox="0 0 66 43" version="1.1"

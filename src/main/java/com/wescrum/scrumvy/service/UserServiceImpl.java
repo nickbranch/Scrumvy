@@ -10,6 +10,7 @@ import com.wescrum.scrumvy.entity.Role;
 import com.wescrum.scrumvy.entity.User;
 import com.wescrum.scrumvy.repos.ProjectTeamRepository;
 import com.wescrum.scrumvy.repos.UserRepository;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.session.SessionRegistry;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -42,6 +44,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ProjectTeamRepository projectTeamRepo;
+
+    @Autowired
+    private SessionRegistry sessionRegistry;
 
     @Override
     @Transactional
@@ -87,6 +92,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<String> listLoggedInUsers() {
+        List<Object> principals = sessionRegistry.getAllPrincipals();
+        List<String> loggedUsers = new ArrayList<String>();
+
+        for (Object principal : principals) {
+            if (principal instanceof org.springframework.security.core.userdetails.UserDetails) {
+                String userName = ((org.springframework.security.core.userdetails.UserDetails) principal).getUsername();
+                loggedUsers.add(userName);
+            }
+        }
+        return loggedUsers;
+    }
+
+    @Override
     public boolean checkIfUserIsPartOfAProject(Invite invite) {
         List<ProjectTeam> checkProjectMembers = projectTeamRepo.findByProjectId(invite.getProjectId());
         boolean toggle = false;
@@ -120,5 +139,5 @@ public class UserServiceImpl implements UserService {
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
     }
- 
+
 }
