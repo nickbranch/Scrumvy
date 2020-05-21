@@ -1,0 +1,8 @@
+body{
+    font-family: 'Lato', sans-serif;
+}
+input[type="submit"] {
+    font-family: "Font Awesome 5 Free";
+    font-size: 1.3333333333333333em;
+    font-weight: 900;
+}

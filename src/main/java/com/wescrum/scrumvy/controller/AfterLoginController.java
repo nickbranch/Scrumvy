@@ -35,10 +35,13 @@ public class AfterLoginController {
 
     @Autowired
     private InviteRepository inviteRepo;
+    
+    public static ArrayList<User> loggedInUsers = new ArrayList<User>();
 
     @GetMapping("/")
-    public String showHome(@ModelAttribute("createProjectError") final String error, Model model) {
+    public String showHome(@ModelAttribute("createProjectError") String error, Model model) {
         User user = userService.getLoggedinUser();
+        loggedInUsers.add(user);
         String[] roles = {"ownedProjects", "joinedAsScrumMaster", "joinedAsDevTeam"};
         List<Invite> sentInvites = inviteService.getSentInvites(user);
         List<Invite> receivedInvites = inviteRepo.findByReceivingUserId(user);
@@ -46,6 +49,9 @@ public class AfterLoginController {
         for (int i = 1; i <= 3; i++) {
             List<Project> listTobeAdded = userProjectListGenerator(i, user);
             model.addAttribute(roles[i - 1], listTobeAdded);
+        }
+        if("".equals(error)){
+            error = null;
         }
         model.addAttribute("createProjectError", error);
         model.addAttribute("sentInvites", sentInvites);

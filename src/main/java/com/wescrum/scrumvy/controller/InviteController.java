@@ -96,7 +96,7 @@ public class InviteController {
     public String cancelInvite(@ModelAttribute("theRecInvite") Invite invite, Model model,
             final RedirectAttributes redirectAttributes) {
         if (invite.getInviteId() == null) {
-            redirectAttributes.addFlashAttribute("createProjectError", "It seem the user already accepted your invitation.");
+            redirectAttributes.addFlashAttribute("createProjectError", "That invitation is no longer available.");
             return "redirect:/";
         }
         boolean deleteTrigger = false;

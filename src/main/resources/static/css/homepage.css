@@ -1,0 +1,46 @@
+
+body{
+    font-family: 'Lato', sans-serif;
+}
+
+.list-group :hover {
+    color: white;
+}
+
+ul.list-group li:hover {
+    background: #020749;
+}
+
+ul.list-group li:hover a {
+    color: #fff;
+}
+
+.wrapper {
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+}
+.cta {
+    display: flex;
+    padding: 10px 30px;
+    text-decoration: none;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    color: white;
+    background: #6225E6;
+    transition: 1s;
+    box-shadow: 6px 6px 0 black;
+    transform: skewX(-15deg);
+}
+
+.form1 {
+    display:inline-block;margin-right:10px;
+}
+.form2 {
+    display:inline-block; 
+}
+input[type="submit"] {
+    font-family: "Font Awesome 5 Free";
+    font-size: 1.3333333333333333em;
+    font-weight: 900;
+}
