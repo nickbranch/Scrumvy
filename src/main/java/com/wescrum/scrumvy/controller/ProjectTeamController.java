@@ -6,7 +6,6 @@ import com.wescrum.scrumvy.entity.ProjectRole;
 import com.wescrum.scrumvy.entity.ProjectTeam;
 import com.wescrum.scrumvy.entity.User;
 import com.wescrum.scrumvy.repos.ProjectRoleRepository;
-import com.wescrum.scrumvy.repos.ProjectTeamRepository;
 import com.wescrum.scrumvy.repos.UserRepository;
 import com.wescrum.scrumvy.service.ProjectServiceInterface;
 import com.wescrum.scrumvy.service.ProjectTeamServiceInterface;

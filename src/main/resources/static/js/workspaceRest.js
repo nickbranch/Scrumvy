@@ -31,8 +31,8 @@ function fillTableWithTasks(sprintIdFromTable){
                 //changes the sprintId data from table 
                 $("#tasksTable").attr("data-sprintId", sprintIdFromTable);                
             })
-        } 
-        $("#inspectError").html("Please do not tamper with hidden fields.");
+        } else{
+        $("#inspectError").html("Please do not tamper with hidden fields.");}
         }
     })   
 }
@@ -116,9 +116,9 @@ function categorizeTasksToTable(task) {
             $("#bodyOfTaskTable").append(
                     ` 
                     <tr >
-          <td  class="drop-target" id="${task.taskId}" data-sprintId="${task.taskId}" data-statusId="1" draggable="true" > ${task.description} </td>
-          <td class="drop-target" data-sprintId="${task.taskId}" data-statusId="2"> </td>
-          <td class="drop-target" data-sprintId="${task.taskId}" data-statusId="3"> </td> 
+          <td  class="drop-target" id="${task.taskId}" data-sprintId="${task.taskId}" data-statusId="1" draggable="true" style="background-color:rgb(227, 255, 248)" > ${task.description} </td>
+          <td class="drop-target" data-sprintId="${task.taskId}" data-statusId="2" style="background-color:rgb(255, 239, 217)"> </td>
+          <td class="drop-target" data-sprintId="${task.taskId}" data-statusId="3" style="background-color:rgb(222, 255, 222)"> </td> 
           </tr>
           `)
             break;
@@ -126,18 +126,18 @@ function categorizeTasksToTable(task) {
             $("#bodyOfTaskTable").append(
                     `
                     <tr >
-          <td class="drop-target" data-sprintId="${task.taskId}" data-statusId="1"> </td>
-          <td class="drop-target" id="${task.taskId}" data-sprintId="${task.taskId}" data-statusId="2" draggable="true"> ${task.description} </td>
-          <td class="drop-target" data-sprintId="${task.taskId}" data-statusId="3"> </td> 
+          <td class="drop-target" data-sprintId="${task.taskId}" data-statusId="1" style="background-color:rgb(227, 255, 248)"> </td>
+          <td class="drop-target" id="${task.taskId}" data-sprintId="${task.taskId}" data-statusId="2" draggable="true" style="background-color:rgb(255, 239, 217)" > ${task.description} </td>
+          <td class="drop-target" data-sprintId="${task.taskId}" data-statusId="3" style="background-color:rgb(222, 255, 222)"> </td> 
           </tr>`)
             break;
         case 3:
             $("#bodyOfTaskTable").append(
                     ` 
                     <tr  >
-          <td class="drop-target" data-sprintId="${task.taskId}" data-statusId="1"> </td>
-          <td class="drop-target" data-sprintId="${task.taskId}" data-statusId="2"> </td>
-          <td class="drop-target" id="${task.taskId}" data-sprintId="${task.taskId}" data-statusId="3" draggable="true"> ${task.description} </td> 
+          <td class="drop-target" data-sprintId="${task.taskId}" data-statusId="1" style="background-color:rgb(227, 255, 248)"> </td>
+          <td class="drop-target" data-sprintId="${task.taskId}" data-statusId="2" style="background-color:rgb(255, 239, 217)"> </td>
+          <td class="drop-target" id="${task.taskId}" data-sprintId="${task.taskId}" data-statusId="3" draggable="true" style="background-color:rgb(222, 255, 222)"> ${task.description} </td> 
           </tr>
                    `)
             break;

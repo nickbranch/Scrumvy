@@ -62,8 +62,6 @@ public class RegistrationController {
         if (existing != null) {
             model.addAttribute("userDto", new UserDto());
             model.addAttribute("registrationError", "User name already exists.");
-
-            logger.warning("User name already exists.");
             return "registrationForm";
         }
 
@@ -71,8 +69,6 @@ public class RegistrationController {
         if (EmailExists != null) {
             model.addAttribute("userDto", new UserDto());
             model.addAttribute("registrationError", "Email already exists.");
-
-            logger.warning("Email already exists.");
             return "registrationForm";
         }
 

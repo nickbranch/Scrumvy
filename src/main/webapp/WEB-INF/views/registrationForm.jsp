@@ -79,7 +79,7 @@
                                         </div>
                                     </form:form>
 
-                                    <button type="submit" class="cancelButton mt-2">Cancel</button>
+                                        <a href="${pageContext.request.contextPath}/"><button type="submit" class="cancelButton mt-2">Cancel</button></a>
                                 </div>
                             </div>
                         </div><!-- End -->

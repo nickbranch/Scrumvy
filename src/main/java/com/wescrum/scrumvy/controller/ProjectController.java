@@ -160,9 +160,7 @@ public class ProjectController {
             return "projectSetup";
         }
 
-//        model.addAttribute("project", project);
         redirectAttributes.addFlashAttribute("projectId", project.getProjectId());
-//        model.addAttribute("emptyTask", new Task());
 
         projectService.createProject(project);
         return "redirect:/project/projectSettings";
@@ -231,7 +229,6 @@ public class ProjectController {
     }
 
     @GetMapping("/projectDetails/{id}")
-//    @PostMapping("/projectDetails")
     public String showProject(@PathVariable Long id,
             Model model,
             HttpServletRequest request,

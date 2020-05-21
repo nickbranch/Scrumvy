@@ -4,7 +4,6 @@ import com.wescrum.scrumvy.entity.Project;
 import com.wescrum.scrumvy.entity.Status;
 import com.wescrum.scrumvy.entity.Task;
 import com.wescrum.scrumvy.repos.StatusRepository;
-import com.wescrum.scrumvy.repos.TaskRepository;
 import com.wescrum.scrumvy.service.ProjectServiceInterface;
 import com.wescrum.scrumvy.service.TaskServiceInterface;
 import javax.servlet.http.HttpServletRequest;
