@@ -32,8 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().maximumSessions(1).sessionRegistry(sessionRegistry());
         http.authorizeRequests()
                 .antMatchers("/adminpanel/**").hasRole("ADMIN")
-                .antMatchers("/").hasRole("SIMPLEUSER")
-                .antMatchers("/").hasRole("ADMIN")
+                .antMatchers("/").hasAnyRole("SIMPLEUSER","ADMIN")
                 .and()
                 .formLogin()
                 .loginPage("/showLogin")
