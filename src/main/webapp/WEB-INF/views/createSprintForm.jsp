@@ -88,34 +88,39 @@
                                                 ${createSprintError}
                                             </div>
                                         </c:if>
-                                        
+
                                         <div class="form-row py-1">
-                                            <div class="form-group col-md-6">
-                                                <label for="date">Start Date</label>
-                                                <form:input type="date" path="sprintStartDate" class="form-control" id="startdate"/>
-                                                <form:errors path="sprintStartDate" cssClass="error" />
+                                            <c:if test="${fn:length(activeTasks) > 0}">
+                                                <div class="form-group col-md-6">
+                                                    <label for="date">Start Date</label>
+                                                    <form:input type="date" path="sprintStartDate" class="form-control" id="startdate"/>
+                                                    <form:errors path="sprintStartDate" cssClass="error" />
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label for="date">End Date</label>
+                                                    <form:input type="date" path="sprintEndDate" class="form-control" id="enddate"/>
+                                                    <form:errors path="sprintStartDate" cssClass="error" />
+                                                </div>
                                             </div>
-                                            <div class="form-group col-md-6">
-                                                <label for="date">End Date</label>
-                                                <form:input type="date" path="sprintEndDate" class="form-control" id="enddate"/>
-                                                <form:errors path="sprintStartDate" cssClass="error" />
-                                            </div>
-                                        </div>
-                                        <p class="py-3"><strong>Select tasks. You may control-click (Windows) or command-click (Mac) to
-                                                select more than one.</strong></p>
+                                            <p class="py-3"><strong>Select tasks. You may control-click (Windows) or command-click (Mac) to
+                                                    select more than one.</strong></p>
+                                                </c:if>
 
+                                        <c:if test="${fn:length(activeTasks) == 0}">
+                                            <p style="color: rgb(0,128,0)"><i class="fa fa-check"></i><em> All tasks are complete</em> </p>
+                                                </c:if>
                                         <!-- This works  -->
-                                        <form:select path="taskCollection" multiple="true">
-
-                                            <form:options items="${activeTasks}" itemValue="taskId" itemLabel="description" />
-
-                                        </form:select>
-
+                                        <c:if test="${fn:length(activeTasks) > 0}">
+                                            <form:select path="taskCollection" multiple="true">
+                                                <form:options items="${activeTasks}" itemValue="taskId" itemLabel="description"/>
+                                            </form:select>
+                                        </c:if>
                                         <input type="hidden" name="projectId" value="${project.projectId}" />
 
-
-                                        <button type="submit" class="btn btn-dark btn-lg " style="background-color:rgb(63, 70, 173);"><i
-                                                class="fas fa-plus m-1"></i>Create</button>
+                                        <c:if test="${fn:length(activeTasks) > 0}">
+                                            <button type="submit" class="btn btn-dark btn-lg " style="background-color:rgb(63, 70, 173);"><i
+                                                    class="fas fa-plus m-1"></i>Create</button>
+                                            </c:if>
                                         </form:form>
                                 </div>
                             </div>
@@ -126,10 +131,6 @@
 
             </div>
         </div>
-
-
-
-
 
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
         <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"

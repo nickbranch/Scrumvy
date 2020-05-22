@@ -9,7 +9,6 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
               integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -104,20 +103,28 @@
 
                                         <p><strong>Current tasks</strong></p>
 
+                                        <c:if test="${fn:length(currentTasks) == 0}">
+                                            <p style="color: rgb(0,128,0)"> <i class="fa fa-exclamation"></i><em> There are currently no tasks assigned to this sprint.</em> </P>
+                                                </c:if>
                                         <!-- This works  -->
-
                                         <!--add current tasks column with for each also add clear field -->
-                                        <form:select path="taskCollection" multiple="true">
-                                            <form:options items="${currentTasks}" itemValue="taskId" itemLabel="description" />
-                                        </form:select>
+                                        <c:if test="${fn:length(currentTasks) > 0}">
+                                            <form:select path="taskCollection" multiple="true">
+                                                <form:options items="${currentTasks}" itemValue="taskId" itemLabel="description" />
+                                            </form:select>
+                                        </c:if>
 
                                         <p><strong>Add another task from the project</strong></p>
-
+                                        <c:if test="${fn:length(activeTasks) == 0}">
+                                            <p style="color: rgb(0,128,0)"><i class="fa fa-check"></i><em> All tasks are complete</em> </p>
+                                                </c:if>
 
                                         <div class="container" >
-                                            <form:select path="taskCollection" multiple="true">
-                                                <form:options items="${activeTasks}" itemValue="taskId" itemLabel="description" />
-                                            </form:select>
+                                            <c:if test="${fn:length(activeTasks) > 0}">
+                                                <form:select path="taskCollection" multiple="true">
+                                                    <form:options items="${activeTasks}" itemValue="taskId" itemLabel="description" />
+                                                </form:select>
+                                            </c:if>
                                             <input type="hidden" name="projectId" value="${project.projectId}" />
                                             <input type="hidden" name="sprintId" value="${sprint.sprintId}" />
                                             <!-- Create sprint Button -->

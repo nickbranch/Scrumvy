@@ -29,26 +29,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class WorkspaceController {
 
     @Autowired
-    TaskServiceInterface taskService;
-
+    private TaskServiceInterface taskService;
     @Autowired
-    SprintServiceInterface sprintService;
-    
+    private SprintServiceInterface sprintService;
     @Autowired
-    StatusServiceInterface statusService;
-    
+    private StatusServiceInterface statusService;
     @Autowired
-    RetrospectiveServiceInterface retroService;
-    
+    private RetrospectiveServiceInterface retroService;
     @Autowired
-    ProjectServiceInterface projectService;
-    
+    private ProjectServiceInterface projectService;
     @Autowired
-    DailyScrumRecordServiceInterface dailyScrumService;
-    
+    private DailyScrumRecordServiceInterface dailyScrumService;
     @Autowired
-    SprintRepository sprintRepo;
-
+    private SprintRepository sprintRepo;
 
     @PostMapping("/saveTask")
     public String saveTask(@ModelAttribute("task") Task task,
@@ -57,55 +50,59 @@ public class WorkspaceController {
         Task editedTask = taskService.getTaskbyid(task.getTaskId());
         editedTask.setDescription(task.getDescription());
         taskService.updateTask(editedTask);
-        
+
         return "Successfully edited";
 
     }
 
     @PostMapping("/getSprintTasks")
-   public List<TasksJsonResponse> getSprintTasks(@ModelAttribute("sprintId") Long sprintId,
-                                                    HttpServletRequest request) {
+    public List<TasksJsonResponse> getSprintTasks(@ModelAttribute("sprintId") Long sprintId,
+            HttpServletRequest request) {
 
         Sprint sprint = sprintService.getSprintbyid(sprintId);
         List<TasksJsonResponse> listOfPojoTasks = new ArrayList();
-        
-        Long currentProjectId = (Long)request.getSession().getAttribute("activeProject");
+
+        Long currentProjectId = (Long) request.getSession().getAttribute("activeProject");
         Project currentproject = projectService.getProjectbyid(currentProjectId);
-        if ((sprintRepo.findByProjectIdAndSprintId(currentproject, sprintId)).isPresent()){
+        if ((sprintRepo.findByProjectIdAndSprintId(currentproject, sprintId)).isPresent()) {
 
-        List<Task> sprintTasks = (List) sprint.getTaskCollection();
-        System.out.println(sprintId + ":" + sprintTasks.toString());
+            List<Task> sprintTasks = (List) sprint.getTaskCollection();
+            System.out.println(sprintId + ":" + sprintTasks.toString());
 
-        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
-        String sprintStartDateFormated = formatter.format(sprint.getSprintStartDate());
-        String sprintEndDateFormated = formatter.format(sprint.getSprintEndDate());
-        System.out.println(sprintStartDateFormated +"-"+ sprintEndDateFormated);
+            SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
+            String sprintStartDateFormated = formatter.format(sprint.getSprintStartDate());
+            String sprintEndDateFormated = formatter.format(sprint.getSprintEndDate());
+            System.out.println(sprintStartDateFormated + "-" + sprintEndDateFormated);
 
-        for (Task task : sprintTasks) {
-            
-            TasksJsonResponse pojoTask = new TasksJsonResponse(task.getTaskId(), task.getDescription(), task.getStatusId().getStatusId(), sprintStartDateFormated, sprintEndDateFormated);
-            listOfPojoTasks.add(pojoTask);
-            System.out.println(pojoTask);
+            if (sprintTasks.isEmpty()) {
+                listOfPojoTasks.add(new TasksJsonResponse(sprintStartDateFormated, sprintEndDateFormated));
+                return listOfPojoTasks;
+            }
+
+            for (Task task : sprintTasks) {
+                TasksJsonResponse pojoTask = new TasksJsonResponse(task.getTaskId(), task.getDescription(), task.getStatusId().getStatusId(), sprintStartDateFormated, sprintEndDateFormated);
+                listOfPojoTasks.add(pojoTask);
+                System.out.println(pojoTask);
+            }
+
+            return listOfPojoTasks;
         }
-
         return listOfPojoTasks;
-    }
-          return listOfPojoTasks;
     }
 
     @PostMapping("/updateTaskStatus")
     public String updateTaskStatus(@RequestParam("taskId") Long taskId,
-                                   @RequestParam("statusId") Integer statusId) {
+            @RequestParam("statusId") Integer statusId) {
         Task task = taskService.getTaskbyid(taskId);
         Status status = statusService.getStatusbyid(statusId);
         task.setStatusId(status);
         taskService.createTask(task);
         return "Task status updated";
-    }    
-    
+    }
+
     @PostMapping("/addRetrospective")
     public String addRetrospectiveToProject(@RequestParam("projectId") Long projectId,
-                                            @RequestParam("description") String description) {
+            @RequestParam("description") String description) {
         Project project = projectService.getProjectbyid(projectId);
         Retrospective retro = new Retrospective();
         retro.setDescription(description);
@@ -117,7 +114,7 @@ public class WorkspaceController {
 
     @PostMapping("/addDailyScrum")
     public String addDailyScrum(@RequestParam("projectId") Long projectId,
-                                @RequestParam("description") String description) {
+            @RequestParam("description") String description) {
 
         Project project = projectService.getProjectbyid(projectId);
         DailyScrumRecord dailyScrum = new DailyScrumRecord();

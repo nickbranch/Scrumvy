@@ -92,12 +92,10 @@
                                         <li class="list-group-item  ">
                                             <form:form method="GET" modelAttribute="project" action="/project/projectSettings">
                                                 ${project.projectName}
-
                                                 <input type="hidden"  name="projectId" value="${project.projectId}" />
                                                 <span class="badge badge-pill badge-secondary">Owner</span>
                                                 <span class="pull-right button-group d-flex justify-content-end">
                                                     <input type="SUBMIT" class="btn btn-secondary m-1" value="Edit Project" />
-
                                                 </form:form>
                                                 <a href="${pageContext.request.contextPath}/project/projectDetails/${project.projectId}" class="btn btn-dark m-1" style="background-color:rgb(63, 70, 173);">Project Workspace</a>
                                             </span>
@@ -107,7 +105,6 @@
                             </div>
 
                         </div>
-
                         <!-- Projects as Scrum Master -->
                         <div id="menu1" class="tab-pane fade">
 
@@ -145,7 +142,6 @@
                 </div>
 
                 <!-- end of center side -->
-
 
                 <div class="col-lg-2 md-2 sidenav py-3">
                     <ul class="list-group">
@@ -221,14 +217,12 @@
                                                 <input type="hidden" name="theRecInvite" value="${receivedInvite.inviteId}" />
                                                 <input type="submit" class="btn btn-danger" name="Reject"  value="&#xf00d" />
                                             </form:form>
-
                                         </c:forEach>
                                 </div>
 
                             </div>
                         </div>
                     </div>
-
 
                     <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog"
                          aria-labelledby="exampleModalLabel" aria-hidden="true">

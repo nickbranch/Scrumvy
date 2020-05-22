@@ -166,7 +166,6 @@ public class ProjectController {
         return "redirect:/project/projectSettings";
     }
 
-//    @PostMapping("/projectSettings")
     @RequestMapping(value = "/projectSettings", method = RequestMethod.GET)
     public String projectSettings(@ModelAttribute("projectId") Long projectid,
             Model model,

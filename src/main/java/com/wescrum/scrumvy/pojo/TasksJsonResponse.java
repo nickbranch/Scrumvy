@@ -1,7 +1,7 @@
 package com.wescrum.scrumvy.pojo;
 
 public class TasksJsonResponse {
-    
+
     // CARE THE DATES, THEY ARE SPRINT DATES
     private Long taskId;
     private String description;
@@ -13,6 +13,11 @@ public class TasksJsonResponse {
         this.taskId = taskId;
         this.description = description;
         this.statusId = statusId;
+        this.sprintStartDate = sprintStartDate;
+        this.sprintEndDate = sprintEndDate;
+    }
+
+    public TasksJsonResponse(String sprintStartDate, String sprintEndDate) {
         this.sprintStartDate = sprintStartDate;
         this.sprintEndDate = sprintEndDate;
     }
