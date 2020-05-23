@@ -1,0 +1,83 @@
+/*body{
+    font-family: 'Lato', sans-serif;
+}
+input[type="submit"] {
+    font-family: "Font Awesome 5 Free";
+    font-size: 1.3333333333333333em;
+    font-weight: 900;
+}*/
+
+.problemInfo {
+    border:1px solid black;
+    color:red
+}
+
+.createnewsprint {
+    background: #3f46ad;
+}
+
+.chat-history {
+    border-radius: 10px;
+    height: 300px;
+    overflow: auto;
+}
+.chat-history ul {
+    list-style: none;
+    padding:1px;
+}
+
+.theUser {
+    border-radius: 200px 200px 0px 200px;
+    -moz-border-radius: 200px 200px 0px 200px;
+    -webkit-border-radius: 200px 200px 0px 200px;
+    border: 2px;
+    margin: 4px;
+    overflow: auto;
+    overflow-wrap: anywhere;
+    padding-left: 25px;
+    font-size: 14px;
+    background-color: #eee;
+    color: black;
+}
+
+.theOtherUser {
+    border-radius: 200px 200px 200px 0px;
+    -moz-border-radius: 200px 200px 200px 0px;
+    -webkit-border-radius: 200px 200px 200px 0px;
+    border: 2px solid;
+    margin: 4px;
+    overflow: auto;
+    overflow-wrap: anywhere;
+    padding-left: 25px;
+    font-size: 14px;
+    background: #3f46ad;
+    color: white;
+}
+
+#message-to-send {
+    border-radius:10px;
+    background-color:white;
+}
+
+#people-list ul {
+    list-style: none;
+}
+
+.loggedInChat {
+    padding:5px;
+    background: #3f46ad;
+    color:white;
+    border-radius: 5px;
+}
+
+#sendBtn {
+    background:#3f46ad;
+    color:white;
+}
+
+.chat-container {
+    border-radius: 5px;
+    width:600px;
+    padding:5px;
+    margin:3px;
+}

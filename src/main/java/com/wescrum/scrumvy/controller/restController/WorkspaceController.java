@@ -58,7 +58,6 @@ public class WorkspaceController {
     @PostMapping("/getSprintTasks")
     public List<TasksJsonResponse> getSprintTasks(@ModelAttribute("sprintId") Long sprintId,
             HttpServletRequest request) {
-
         Sprint sprint = sprintService.getSprintbyid(sprintId);
         List<TasksJsonResponse> listOfPojoTasks = new ArrayList();
 

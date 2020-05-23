@@ -5,8 +5,8 @@ let header = $("meta[name='_csrf_header']").attr("content");
 let csrf = {};
 csrf[header] = token;
 
-function fillTableWithTasks(sprintIdFromTable){
-    
+function fillTableWithTasks(sprintIdFromTable) {
+
     let data = {};
     data[header] = token;
     data['sprintId'] = sprintIdFromTable;
@@ -22,19 +22,20 @@ function fillTableWithTasks(sprintIdFromTable){
         },
         data: data,
         success: function (data) {
-             if (data.length != 0){
-            let taskForSprintDates = data[0];
-            fillSprintDates(taskForSprintDates);
-            data.forEach(function (task) {
-                categorizeTasksToTable(task);
-                dragDropFunctionality();
-                //changes the sprintId data from table 
-                $("#tasksTable").attr("data-sprintId", sprintIdFromTable);                
-            })
-        } else{
-        $("#inspectError").html("Please do not tamper with hidden fields.");}
+            if (data.length != 0) {
+                let taskForSprintDates = data[0];
+                fillSprintDates(taskForSprintDates);
+                data.forEach(function (task) {
+                    categorizeTasksToTable(task);
+                    dragDropFunctionality();
+                    //changes the sprintId data from table 
+                    $("#tasksTable").attr("data-sprintId", sprintIdFromTable);
+                })
+            } else {
+                $("#inspectError").html("Please do not tamper with hidden fields.");
+            }
         }
-    })   
+    })
 }
 
 
@@ -43,8 +44,8 @@ function makeTaskEditable(id) {
     let btn = $(event.target);
     let sprintIdFromTable = $("#tasksTable").attr("data-sprintId");
     let descriptionBeforeEdit = $("#taskDescription_" + id).html();
-   
-    if ($(event.target).html() === "edit") {
+
+    if ($(event.target).html() === "Edit") {
         $(event.target).parent().siblings(".editable").attr("contenteditable", true);
         $(event.target).parent().siblings(".editable").css('border', '2px solid rgb(75,0,130)');
         $(event.target).html("Save");
@@ -69,7 +70,7 @@ function makeTaskEditable(id) {
                 fillTableWithTasks(sprintIdFromTable)
                 btn.parent().siblings(".editable").attr("contenteditable", false);
                 btn.parent().siblings(".editable").removeAttr("style");
-                btn.html("edit");
+                btn.html("Edit");
             }
         })
     }
@@ -79,7 +80,6 @@ function makeTaskEditable(id) {
 $(".sprintSelector").on("click", function () {
     let sprintIdFromTable = $(event.currentTarget).attr("data-selectSprintId");
     //check with rest controller to see if this is the legit sprint
-    console.log(sprintIdFromTable);
     $("#bodyOfTaskTable").empty();
     fillTableWithTasks(sprintIdFromTable);
 })
@@ -88,26 +88,33 @@ $(".sprintSelector").on("click", function () {
 
 $(document).ready(function () {
     let currentSprintId = $("#tasksTable").attr("data-sprintId");
-    let data = {};
-    data[header] = token;
-    data['sprintId'] = currentSprintId;
-    $.ajax({
-        url: "/getSprintTasks",
-        type: "POST",
-        ajaxOptions: {
-            beforeSend: function (xhr)
-            {
-                xhr.setRequestHeader(header, token);
+    if (currentSprintId.length == 0) {
+        $("#sprintDatedFromTask").empty();
+        $("#sprintDatedFromTask").append(
+                `<p style="color:gray"><em> There are currently no ongoing sprints</em> </p>`
+                )
+    } else {
+        let data = {};
+        data[header] = token;
+        data['sprintId'] = currentSprintId;
+        $.ajax({
+            url: "/getSprintTasks",
+            type: "POST",
+            ajaxOptions: {
+                beforeSend: function (xhr)
+                {
+                    xhr.setRequestHeader(header, token);
+                }
+            },
+            data: data,
+            success: function (data) {
+                data.forEach(function (task) {
+                    categorizeTasksToTable(task);
+                    dragDropFunctionality();
+                })
             }
-        },
-        data: data,
-        success: function (data) {
-            data.forEach(function (task) {
-                categorizeTasksToTable(task);
-                dragDropFunctionality();
-            })
-        }
-    })
+        })
+    }
 });
 
 function categorizeTasksToTable(task) {
@@ -191,10 +198,10 @@ function handleDrop(event) {
     let draggedElement = document.getElementById(draggedElementId);
     let draggedElementStatusId = draggedElement.getAttribute("data-statusId");
 
-    if (draggedElementId === $(event.currentTarget).attr("data-sprintId") 
-        && draggedElementStatusId != $(event.currentTarget).attr("data-statusId")){
-    
-        console.log( "THIS IS  THE" , $(event.currentTarget));
+    if (draggedElementId === $(event.currentTarget).attr("data-sprintId")
+            && draggedElementStatusId != $(event.currentTarget).attr("data-statusId")) {
+
+        console.log("THIS IS  THE", $(event.currentTarget));
         $(event.currentTarget).attr("id", draggedElementId);
         $(event.currentTarget).attr("draggable", true);
         $(event.currentTarget).html(draggedElement.textContent);
@@ -226,17 +233,17 @@ function dragDropFunctionality() {
     listItems.forEach(addDragStartEventListener);
     dropTargets.forEach(initDrop);
 }
- 
-    
-    // RETROSPECTIVE BUTTON
-    $("#retrospeciveBtn").on("click", function(){
-        let newScrumStory = $("#retrospectiveStory").val();
-        console.log(newScrumStory);
-        let data = {};
-        data[header] = token;
-        data['projectId'] = $("#retroProjectId").val();
-        data['description'] = newScrumStory;
-        $.ajax({
+
+
+// RETROSPECTIVE BUTTON
+$("#retrospeciveBtn").on("click", function () {
+    let newScrumStory = $("#retrospectiveStory").val();
+    console.log(newScrumStory);
+    let data = {};
+    data[header] = token;
+    data['projectId'] = $("#retroProjectId").val();
+    data['description'] = newScrumStory;
+    $.ajax({
         url: "/addRetrospective",
         type: "POST",
         ajaxOptions: {
@@ -247,28 +254,29 @@ function dragDropFunctionality() {
         },
         data: data,
         success: function (data) {
-        console.log(data)
+            console.log(data)
             $("#retrospectiveList").append(`
                 <li class="list-group-item">${newScrumStory}</li>`)
-        $("#retrospectiveStory").val("");
+            $("#retrospectiveStory").val("");
         },
-        error: function (data){
-             console.log(data)
-             let msg="Exceeded maximum amount of characters"
-             $("#retroAjaxError").text(msg);}
-         }) 
+        error: function (data) {
+            console.log(data)
+            let msg = "Exceeded maximum amount of characters"
+            $("#retroAjaxError").text(msg);
+        }
     })
-    
-    
-    // DAILY SCRUM BUTTON
-     $("#dailyScrumBtn").on("click", function(){
-        let newDailyScrumStory = $("#dailyScrumStory").val();
-        console.log(newDailyScrumStory);
-        let data = {};
-        data[header] = token;
-        data['projectId'] = $("#dailyScrumProjectId").val();
-        data['description'] = newDailyScrumStory;
-        $.ajax({
+})
+
+
+// DAILY SCRUM BUTTON
+$("#dailyScrumBtn").on("click", function () {
+    let newDailyScrumStory = $("#dailyScrumStory").val();
+    console.log(newDailyScrumStory);
+    let data = {};
+    data[header] = token;
+    data['projectId'] = $("#dailyScrumProjectId").val();
+    data['description'] = newDailyScrumStory;
+    $.ajax({
         url: "/addDailyScrum",
         type: "POST",
         ajaxOptions: {
@@ -279,15 +287,15 @@ function dragDropFunctionality() {
         },
         data: data,
         success: function (data) {
-        console.log(data)
+            console.log(data)
             $("#dailyScrumList").append(`
                 <li class="list-group-item">${newDailyScrumStory}</li>`)
-        $("#dailyScrumStory").val("");
+            $("#dailyScrumStory").val("");
         },
-         error: function (data){
-             console.log(data)
-             let msg="Exceeded maximum amount of characters"
-             $("#dailyScrumAjaxError").text(msg);
-         }
-         }) 
+        error: function (data) {
+            console.log(data)
+            let msg = "Exceeded maximum amount of characters"
+            $("#dailyScrumAjaxError").text(msg);
+        }
     })
+})

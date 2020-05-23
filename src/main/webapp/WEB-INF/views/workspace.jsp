@@ -5,6 +5,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%> 
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
 
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -28,14 +30,16 @@
         <!--    end libs for stomp and sockjs-->
         <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
-        <!--<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css">-->
+        <%--        <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">--%>
+<!--        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css">-->
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/chat.css">
+
 
         <style>
             body {
                 font-family: 'Lato', sans-serif;
             }
         </style>
-
     </head>
 
     <body>
@@ -79,9 +83,9 @@
                 </form>
             </div>
         </nav>
+
+
         <!-- end of navbar  -->
-
-
         <!-- Check for errors --> 
         <c:if test="${editTaskError != null}">
             <div class="alert alert-danger col-xs-offset-1 col-xs-10">
@@ -90,18 +94,68 @@
         </c:if>
 
         <div class="d-flex flex-row bd-highlight ">
-            <h1 class="p-3 bd-highlight py-5" >${project.projectName}</h1>
-        </div>
-        <!-- ΠΕΣ ΣΤΟΝ ΗΛΙΑ ΝΑ ΤΟ ΒΑΛΕΙ ΚΑΛΑ ΚΑΤΩ ΑΠΤΟ ΟΝΟΜΑ -->
-        <h4 class="font-italic">
-            <fmt:formatDate type="date" value="${project.startDate}"/> - 
+            <h1 class="p-3 bd-highlight" > Project "${project.projectName}"</h1>
+        </div>        
+        <h4 class="font-italic px-3">
+            <fmt:formatDate type="date" value="${project.startDate}"/> /
             <fmt:formatDate  type="date" value="${project.endDate}" />
         </h4>
         <!-- ----------------------------------------------------------- -->
         <div class="row">
             <div class="col-4 pl-5" >
 
-                <div class="row pt-5">
+                <div class="row pt-1">
+
+                    <!-- CHAT -->
+
+                    <div class="chat-container clearfix d-flex py-3 bg-light">
+                        <div class="row d-flex justify-content-end">
+                            <div class="col d-flex">
+                                <div class="people-list" id="people-list">
+                                    <div class="search">
+                                        <input type="hidden" id="userName"/>
+
+                                    </div>
+                                    <input type="hidden" id="loggedInUser" value="${loggedInUser}" />
+                                    <span class="loggedInChat">Logged in as: <strong>${loggedInUser} </strong> </span>
+                                    <ul class="list" id="usersList">
+                                        <c:forEach items="${chatUserNames}" var="chatUser">
+                                            <li>${chatUser}</li>
+                                            </c:forEach>
+
+                                    </ul>
+                                </div>
+
+                                <div class="chat">
+                                    <div class="chat-header clearfix">
+
+
+                                        <div class="chat-about">
+                                            <div class="chat-with" id="selectedUserId"></div>
+                                            <div class="chat-num-messages"></div>
+                                        </div>
+
+                                    </div> <!-- end chat-header -->
+
+                                    <div class="chat-history">
+                                        <ul>
+
+                                        </ul>
+
+                                    </div> <!-- end chat-history -->
+
+                                    <div class="chat-message clearfix">
+                                        <textarea id="message-to-send" name="message-to-send" placeholder="Type your message"
+                                                  rows="3"></textarea>                                        
+                                        <button id="sendBtn" class="btn btn-light">Send</button>
+
+                                    </div> <!-- end chat-message -->
+
+                                </div> <!-- end chat -->
+                            </div>
+                        </div> <!-- end of chat row -->
+                    </div> <!-- end container -->
+
 
                     <table class="table bg-light">
 
@@ -129,37 +183,23 @@
                 </div>
 
 
-
                 <input type="hidden" id="projectId" name="projectId" value="${project.projectId}" />
-
-                <div class="row col-3 pt-5">
-                    <div class=" col-3 pb-2 ">
-                        <!--                    <div class="row pt-5">
-                                                <div class="pb-2">-->
-                        <div class="py-5">
-                            <div class="pb-2">
-                                <c:if test="${isProductOwner}">
-                                    <form:form method="POST" 
-                                               modelAttribute="project"
-                                               action="${pageContext.request.contextPath}/sprint/createSprint">
-                                        <input type="hidden" name="projectId" value="${project.projectId}" />
-                                        <input type="SUBMIT"  class="btn btn-success" value="create new sprint" />
-                                    </form:form>
-                                </c:if>
-
-                            </div>
-                        </div>
-                        <p id="inspectError" ></p>
-                    </div>       
-                </div>
 
 
                 <div class="container">
                     <div class="row pt-5">
                         <table class="table bg-light">
                             <thead class="col-3 text-center" >
-                                <tr >
-                                    <th scope="col" colspan="5" style="background-color:rgb(63, 70, 173); color:white">Sprints</th>
+                                <tr>
+                                    <th scope="col" colspan="3" style="background-color:rgb(63, 70, 173); color:white">Sprints</th>
+                                    <th colspan="2" class="createnewsprint">                                <c:if test="${isProductOwner}">
+                                            <form:form method="POST" 
+                                                       modelAttribute="project"
+                                                       action="${pageContext.request.contextPath}/sprint/createSprint">
+                                                <input type="hidden" name="projectId" value="${project.projectId}" />
+                                                <input type="SUBMIT"  class="btn btn-success" value="Create New Sprint" />
+                                            </form:form>
+                                        </c:if></th>
                                 </tr>
                                 <tr>
                                     <th scope="col"></th>
@@ -208,9 +248,9 @@
                                                 </div>
                                                 </div>
 
-                                                <div class="col-8 p-5">
+                                                <div class="col-8 px-5">
                                                     <h2>Sprint Backlog</h2>
-
+                                                    <p id="inspectError" class="problemInfo"></p>
                                                     <div id="sprintDatedFromTask">
                                                         <h4 class="font-italic">
 
@@ -299,111 +339,55 @@
                                                         </div>
                                                     </div>
 
-
-
-                                                    <div class="chat-container  py-3">
-                                                        <div class="row ">
-                                                            <div class="col">
-                                                                <div class="people-list" id="people-list">
-                                                                    <div class="search">
-                                                                        <input type="hidden" id="userName" placeholder="search" type="text" />
-                                                                    </div>
-                                                                    <input type="hidden" id="loggedInUser" value="${loggedInUser}" />
-                                                                    Logged in as:<u>${loggedInUser} </u>
-                                                                    <ul class="list" id="usersList">
-                                                                        <c:forEach items="${chatUserNames}" var="chatUser">
-                                                                            <li>${chatUser}</li>
-                                                                            </c:forEach>
-                                                                    </ul>
-                                                                </div>
-
-                                                                <div class="chat">
-                                                                    <div class="chat-header clearfix">
-
-
-                                                                        <div class="chat-about">
-                                                                            <div class="chat-with" id="selectedUserId"></div>
-                                                                            <div class="chat-num-messages"></div>
-                                                                        </div>
-
-                                                                    </div> <!-- end chat-header -->
-
-                                                                    <div class="chat-history">
-                                                                        <ul>
-
-                                                                        </ul>
-
-                                                                    </div> <!-- end chat-history -->
-
-                                                                    <div class="chat-message clearfix">
-                                                                        <textarea id="message-to-send" name="message-to-send" placeholder="Type your message"
-                                                                                  rows="3"></textarea>
-
-
-
-                                                                        <button id="sendBtn">Send</i></button>
-
-                                                                    </div> <!-- end chat-message -->
-
-                                                                </div> <!-- end chat -->
-                                                            </div>
-                                                        </div> <!-- end of chat row -->
-                                                    </div> <!-- end container -->
                                                 </div>
 
 
 
-
                                                 <script id="message-template" type="text/x-handlebars-template">
-                                                    <li class="clearfix">
+                                                    <li class="clearfix theUser">
                                                     <div class="message-data align-right">
                                                     <span class="message-data-time">{{time}}, Today</span> &nbsp; &nbsp;
-                                                    <span class="message-data-name">You</span> <i class="fa fa-circle me"></i>
+                                                    <span class="message-data-name strong">You</span> 
                                                     </div>
                                                     <div class="message other-message float-right">
-                                                        {{messageOutput}}
+                                                    {{messageOutput}}
                                                     </div>
                                                     </li>
                                                 </script>
 
                                                 <script id="message-response-template" type="text/x-handlebars-template">
-                                                    <                                                        li>
-                                                    <div class="message                                                            -data">
-                                                            <span class="message-data-name"><i class="fa fa-circle online"></i> {{us                                                            erName}}</span>
-                                                                <span class="message-data-time"                                                        >{{time}}, Today</span>
-                                                                </div>
-                                                                                                       <                                                            div class="message my-message">
-                                                    {{r                                                    esponse}}
+                                                    <li class="theOtherUser">
+                                                    <div class="message-data">
+                                                    <span class="message-data-time">{{time}}, Today</span>
+                                                    <span class="message-data-name strong"> {{userName}}</span>
                                                     </div>
-                                                                                     </li>
+                                                    <div class="message my-message">
+                                                    {{response}}
+                                                    </div>
+                                                    </li>
                                                 </script>                                        
 
-
-
-
-
-
                                                 <script src="${pageContext.request.contextPath}/js/custom.js"></script>
-                                                    <script src="${pageContext.request.contextPath}/js/chat.js"></script>
+                                                <script src="${pageContext.request.contextPath}/js/chat.js"></script>
 
 
 
 
 
 
-                                                    <script
-                                                        src="https://code.jquery.com/jquery-3.4.1.min.js"
-                                                        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-                                                    crossorigin="anonymous"></script>
-                                                    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-                                                            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-                                                    crossorigin="anonymous"></script>
-                                                    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-                                                            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-                                                    crossorigin="anonymous"></script>
-                                                    <script src="${pageContext.request.contextPath}/js/workspaceRest.js"></script>
+                                                <script
+                                                    src="https://code.jquery.com/jquery-3.4.1.min.js"
+                                                    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+                                                crossorigin="anonymous"></script>
+                                                <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+                                                        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+                                                crossorigin="anonymous"></script>
+                                                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+                                                        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+                                                crossorigin="anonymous"></script>
+                                                <script src="${pageContext.request.contextPath}/js/workspaceRest.js"></script>
 
 
-                                                    </body>
+                                                </body>
 
-                                                    </html>
+                                                </html>

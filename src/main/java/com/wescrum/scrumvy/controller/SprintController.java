@@ -160,9 +160,6 @@ public class SprintController {
             Date sprintEndDate = sprint.getSprintEndDate();
             Date projectStartDate = currentproject.getStartDate();
             Date projectEndDate = currentproject.getEndDate();
-            System.out.println(sprintStartDate.toString());
-
-            System.out.println(sprintEndDate.toString());
 
             if (projectStartDate != null || projectEndDate != null) {
                 if ((sprintStartDate.compareTo(projectStartDate) < 0) && (sprintEndDate.compareTo(projectEndDate) > 0)) {
@@ -186,8 +183,11 @@ public class SprintController {
                     return "updateSprintForm";
                 }
             }
-            updateTaskWithSprintDates(sprint);
 
+            if (sprint.getTaskCollection() != null) {
+                updateTaskWithSprintDates(sprint);
+            }
+            
             sprintService.createSprint(sprint);
 
             model.addAttribute("project", currentproject);
@@ -223,7 +223,8 @@ public class SprintController {
     public String updateSprint(@ModelAttribute("sprintId") Long sprintId,
             Model model,
             HttpServletRequest request,
-            final RedirectAttributes redirectAttributes) {
+            final RedirectAttributes redirectAttributes
+    ) {
 
         Sprint sprint = sprintService.getSprintbyid(sprintId);
 
@@ -261,7 +262,8 @@ public class SprintController {
     public String deleteSprint(@ModelAttribute("sprintId") Long sprintId,
             Model model,
             HttpServletRequest request,
-            final RedirectAttributes redirectAttributes) {
+            final RedirectAttributes redirectAttributes
+    ) {
 
         Sprint sprint = sprintService.getSprintbyid(sprintId);
         Long currentProjectId = (Long) request.getSession().getAttribute("activeProject");
@@ -290,7 +292,6 @@ public class SprintController {
     }
 
     private void updateTaskWithSprintDates(Sprint sprint) {
-
         Date sprintStartDate = sprint.getSprintStartDate();
         Date sprintEndDate = sprint.getSprintEndDate();
 

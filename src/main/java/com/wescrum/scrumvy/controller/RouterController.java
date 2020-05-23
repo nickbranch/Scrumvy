@@ -2,7 +2,6 @@ package com.wescrum.scrumvy.controller;
 
 import com.wescrum.scrumvy.entity.Project;
 import com.wescrum.scrumvy.entity.Task;
-import com.wescrum.scrumvy.entity.User;
 import com.wescrum.scrumvy.service.ProjectServiceInterface;
 import com.wescrum.scrumvy.service.UserService;
 import javax.servlet.http.HttpServletRequest;
