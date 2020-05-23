@@ -52,7 +52,7 @@ public class PaypalController {
 
     @GetMapping(value = CANCEL_URL)
     public String cancelPay() {
-        return "cancel";
+        return "redirect:/";
     }
 
     @GetMapping(value = SUCCESS_URL)

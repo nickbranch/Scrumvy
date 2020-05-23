@@ -31,15 +31,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
         <%--        <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">--%>
-<!--        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css">-->
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/chat.css">
-
-
-        <style>
-            body {
-                font-family: 'Lato', sans-serif;
-            }
-        </style>
     </head>
 
     <body>
@@ -53,34 +45,32 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#">Home </a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/">Home<span class="sr-only"></span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Reports</a>
+                        <a href="${pageContext.request.contextPath}/goPremium" class="nav-link">Pricing</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Manage
+                            Projects
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Manage Projects</a>
-                            <a class="dropdown-item" href="#">Manage Members</a>
+                            <a class="dropdown-item" href="#">Owner</a>
+                            <a class="dropdown-item" href="#">Developer</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Acounts</a>
+                            <a class="dropdown-item" href="#">Drafts</a>
                         </div>
                     </li>
-                    <li class="nav-item ">
-                        <a class="nav-link" href="#">Pricing</a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About Us</a>
                     </li>
                 </ul>
-                <form class="form-inline my-2 my-lg-0">
-                    <span class="fas fa-search m-1"> </span> <input class="form-control mr-md-4" type="search"
-                                                                    placeholder="Search..." aria-label="Search">
-                    <button class=" btn btn-outline-info my-2 my-sm-0" type="Logout"><i
-                            class="fas fa-sign-out-alt"></i>Logout</button>
-                </form>
+                <form:form action="${pageContext.request.contextPath}/logout" method="POST"
+                           class="form-inline my-2 my-lg-0">
+                    <input id="logout" type="submit" value="&#xf2f5Logout" class=" btn btn-outline-info my-2 my-sm-0">
+                </form:form>
             </div>
         </nav>
 
@@ -94,9 +84,12 @@
         </c:if>
 
         <div class="d-flex flex-row bd-highlight ">
-            <h1 class="p-3 bd-highlight" > Project "${project.projectName}"</h1>
-        </div>        
-        <h4 class="font-italic px-3">
+            <a class="backToHome" href="${pageContext.request.contextPath}/"><i class="fas fa-arrow-circle-left"></i></a>
+            <h1 class="pt-4 bd-highlight"> 
+                Project "${project.projectName}"
+            </h1>
+        </div>
+        <h4 class="ml-5 font-italic px-3">
             <fmt:formatDate type="date" value="${project.startDate}"/> /
             <fmt:formatDate  type="date" value="${project.endDate}" />
         </h4>
@@ -122,7 +115,6 @@
                                         <c:forEach items="${chatUserNames}" var="chatUser">
                                             <li>${chatUser}</li>
                                             </c:forEach>
-
                                     </ul>
                                 </div>
 
@@ -249,7 +241,8 @@
                                                 </div>
 
                                                 <div class="col-8 px-5">
-                                                    <h2>Sprint Backlog</h2>
+                                                    <a id="settingsProj" class="float-right" href="${pageContext.request.contextPath}/redirectToProject/${project.projectId}"><i class="fas fa-cogs p-1"></i>Project Settings</a>
+                                                    <h2>Sprint Backlog</h2>                     
                                                     <p id="inspectError" class="problemInfo"></p>
                                                     <div id="sprintDatedFromTask">
                                                         <h4 class="font-italic">
