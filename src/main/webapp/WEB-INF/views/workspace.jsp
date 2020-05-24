@@ -92,7 +92,9 @@
         <h4 class="ml-5 font-italic px-3">
             <fmt:formatDate type="date" value="${project.startDate}"/> /
             <fmt:formatDate  type="date" value="${project.endDate}" />
+            <a id="back" class="back" href="${pageContext.request.contextPath}/reports/reportCentral">Get Reports</a>
         </h4>
+
         <!-- ----------------------------------------------------------- -->
         <div class="row">
             <div class="col-4 pl-5" >

@@ -53,9 +53,7 @@ public class SprintController {
         if (project.getProjectId() == request.getSession().getAttribute("activeProject")) {
 
             model.addAttribute("activeTasks", getActiveTasks(project));
-
             model.addAttribute("sprint", new Sprint());
-
             model.addAttribute("project", project);
 
             return "createSprintForm";
@@ -80,7 +78,6 @@ public class SprintController {
 
         // check if sprint belongs to the active Project
         if (project.getProjectId() == request.getSession().getAttribute("activeProject")) {
-
             Date sprintStartDate = sprint.getSprintStartDate();
             Date sprintEndDate = sprint.getSprintEndDate();
             Date projectStartDate = currentproject.getStartDate();
@@ -111,11 +108,8 @@ public class SprintController {
                 if ((sprintStartDate.compareTo(projectStartDate) < 0) && (sprintEndDate.compareTo(projectEndDate) > 0)) {
 
                     model.addAttribute("activeTasks", getActiveTasks(currentproject));
-
                     model.addAttribute("createSprintError", "Make sure the dates are consistent with the current project schedule");
-
                     model.addAttribute("sprint", new Sprint());
-
                     model.addAttribute("project", currentproject);
 
                     return "createSprintForm";
@@ -123,18 +117,15 @@ public class SprintController {
             }
 
             updateTaskWithSprintDates(sprint);
-
             sprintService.createSprint(sprint);
 
             model.addAttribute("project", currentproject);
 
             List<Task> projectTasks = taskRepo.findByProjectId(currentproject);
             model.addAttribute("projectTasks", projectTasks);
-
             List<Sprint> projectSprints = sprintRepo.findByProjectId(currentproject);
             model.addAttribute("projectSprints", projectSprints);
-
-//        redirectAttributes.addFlashAttribute("projectId", project.getProjectId());
+            
             return "redirect:/project/projectDetails/" + currentProjectId;
         }
 
@@ -171,13 +162,9 @@ public class SprintController {
                     }
 
                     model.addAttribute("currentTasks", currentTasks);
-
                     model.addAttribute("activeTasks", getActiveTasks(currentproject));
-
                     model.addAttribute("createSprintError", "Make sure the dates are consistent with the current project schedule");
-
                     model.addAttribute("sprint", sprint);
-
                     model.addAttribute("project", currentproject);
 
                     return "updateSprintForm";
@@ -189,7 +176,6 @@ public class SprintController {
             }
             
             sprintService.createSprint(sprint);
-
             model.addAttribute("project", currentproject);
 
             List<Task> projectTasks = taskRepo.findByProjectId(currentproject);
@@ -207,13 +193,9 @@ public class SprintController {
         }
 
         model.addAttribute("currentTasks", currentTasks);
-
         model.addAttribute("activeTasks", getActiveTasks(currentproject));
-
         model.addAttribute("createSprintError", "Please do not tamper with hidden form fields.");
-
         model.addAttribute("sprint", sprint);
-
         model.addAttribute("project", currentproject);
 
         return "updateSprintForm";
@@ -241,19 +223,14 @@ public class SprintController {
             Project project = sprint.getProjectId();
 
             model.addAttribute("activeTasks", getActiveTasks(project));
-
             model.addAttribute("currentTasks", currentTasks);
-
             model.addAttribute("project", project);
-
             model.addAttribute("sprint", sprint);
 
             return "updateSprintForm";
 
         } else {
-
             redirectAttributes.addFlashAttribute("editTaskError", "Please do not tamper with hidden form fields.");
-
             return "redirect:/project/projectDetails/" + request.getSession().getAttribute("activeProject");
         }
     }
@@ -296,13 +273,9 @@ public class SprintController {
         Date sprintEndDate = sprint.getSprintEndDate();
 
         for (Task task : sprint.getTaskCollection()) {
-
             Task updateTask = taskService.getTaskbyid(task.getTaskId());
-
             updateTask.setTaskStartDate(sprintStartDate);
-
             updateTask.setTaskEndDate(sprintEndDate);
-
             taskService.createTask(updateTask);
         }
     }
@@ -310,7 +283,6 @@ public class SprintController {
     private List<Task> getActiveTasks(Project project) {
 
         List<Task> projectTasks = taskRepo.findByProjectId(project);
-
         List<Task> activeTasks = new ArrayList();
 
         for (Task task : projectTasks) {
@@ -320,5 +292,4 @@ public class SprintController {
         }
         return activeTasks;
     }
-
 }

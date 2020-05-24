@@ -46,15 +46,15 @@ public class Sprint implements Serializable {
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date sprintEndDate;
-    
+
 //    @ManyToMany(mappedBy = "sprintCollection")
     @ManyToMany
-    @JoinTable(name = "sprint_tasks", 
+    @JoinTable(name = "sprint_tasks",
             joinColumns = @JoinColumn(name = "sprint_id"),
             inverseJoinColumns = @JoinColumn(name = "task_id"))
 //    @ManyToMany(fetch = FetchType.LAZY,mappedBy = "sprintCollection")
-    private Collection<Task> taskCollection ;
-    
+    private Collection<Task> taskCollection;
+
     @JoinColumn(name = "project_id", referencedColumnName = "project_id")
     @ManyToOne(optional = false)
     private Project projectId;
@@ -131,5 +131,5 @@ public class Sprint implements Serializable {
     public String toString() {
         return "com.wescrum.scrumvy.entity.Sprint[ sprintId=" + sprintId + " ]";
     }
-    
+
 }

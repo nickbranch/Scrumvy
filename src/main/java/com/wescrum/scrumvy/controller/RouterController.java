@@ -45,4 +45,16 @@ public class RouterController {
         }
     }
 
+    @GetMapping("/redirectToWorkspace")
+    public String redirectToWorkspace(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        Long currentProjectId = (Long) request.getSession().getAttribute("activeProject");
+        Project currentproject = projectService.getProjectbyid(currentProjectId);
+        if (projectService.checkIdOfOwnedProjectsFix(currentproject)) {
+            return "redirect:/project/projectDetails/" + currentProjectId;
+        } else {
+            redirectAttributes.addFlashAttribute("createProjectError", "The project you are trying to join is not yours.");
+            return "redirect:/";
+        }
+    }
+
 }
