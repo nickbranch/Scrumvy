@@ -31,12 +31,9 @@ public class InviteController {
     ProjectTeamServiceInterface projectTeamService;
 
     @PostMapping("/sendInvite")
-    public String sendInvite(@ModelAttribute("invite") Invite invite,
-            @ModelAttribute("userName") String userName,
-            @ModelAttribute("project") Long projectId,
-            final RedirectAttributes redirectAttributes,
-            HttpServletRequest request,
-            Model model) {
+    public String sendInvite(@ModelAttribute("invite") Invite invite, @ModelAttribute("userName") String userName,
+            @ModelAttribute("project") Long projectId, final RedirectAttributes redirectAttributes,
+            HttpServletRequest request, Model model) {
 
         if (projectId != request.getSession().getAttribute("activeProject")) {
             redirectAttributes.addFlashAttribute("createProjectError", "Please do not tamper with hidden form fields.");
@@ -49,7 +46,7 @@ public class InviteController {
 
         if (userService.checkIfUserIsPartOfAProject(invite)) {
             model.addAttribute("project", projectService.getProjectbyid(projectId));
-            model.addAttribute("couldNotFind", "This person is already part of this project");
+            model.addAttribute("couldNotFind", "This person is already part of this project.");
             return "manageTeam";
         } else if (inviteService.checkForDuplicate(invite)) {
             model.addAttribute("project", projectService.getProjectbyid(projectId));

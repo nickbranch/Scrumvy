@@ -9,96 +9,187 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" 
               integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
         <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/homepage.css">
+        <title>Project Report</title>
+        <style>
 
-        <title>All Sprints Report</title>
+            .header1 {
+                font-weight: bold;
+                text-align: right;
+            }
+            .title1{
+                color:#9f9db6;
+            }    
+            .title{
+                color:#9f9db6;
+                background-color: #e3d8c7
+
+            }   
+            .table {
+                background-color:#f5f5f5;
+                border-radius: 15px; 
+                color:#5b536e;
+            }
+            .container {
+                font-family:sans-serif;
+                letter-spacing: 1px;
+            }   
+            .des {
+                text-align: left;
+            }
+
+        </style>
     </head>
 
     <body>
-        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:rgb(63, 70, 173);">
-            <a class="navbar-brand" href="#"><i class="fab fa-stripe-s"></i>crumvy</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        <jsp:include page="/WEB-INF/views/generalNavigation.jsp"></jsp:include>
+        <!-- end of left side -->
+        <div class="container col-lg-4 text-center py-5">
+            <h3 class="title1"> - PROJECT REPORT - </h3>
+            <br/>
+            <div class="col-lg md-8 align-items-center">
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/">Home<span class="sr-only"></span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="${pageContext.request.contextPath}/goPremium" class="nav-link">Pricing</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Projects
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Owner</a>
-                            <a class="dropdown-item" href="#">Developer</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Drafts</a>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">About Us</a>
-                    </li>
-                </ul>
-                <form:form action="${pageContext.request.contextPath}/logout" method="POST"
-                           class="form-inline my-2 my-lg-0">
-                    <input type="submit" value="&#xf2f5Logout" class=" btn btn-outline-info my-2 my-sm-0">
-                </form:form>
-            </div>
-        </nav>
-        <!-- end of navbar -->
-        <div class="container-fluid text-center py-4">
-            <div class="row content">
-                <div class="col-lg-2 md-2 sidenav">
-                    <div>
+                <table class="table py-5 ">
 
-                    </div>
-                </div>
+                    <tbody>
+                        <tr>
+                            <td class="header1">NAME : </td>
+                            <td class="des">${activeProject.projectName}</td>
+                        </tr>
+                        <tr>
+                            <td class="header1">DESCRIPTION : </td>
+                            <td class="des">${activeProject.projectDescription}</td>
+                        </tr>
+                        <tr>
+                            <td class="header1">START DATE : </td>
+                            <td class="des">${activeProject.startDate}</td>
+                        </tr>
+                        <tr>
+                            <td class="header1">END DATE : </td>
+                            <td class="des">${activeProject.endDate}</td>
+                        </tr>
+                    </tbody>
+                </table>
 
-                <!-- end of left side -->
-                <h1>RetroSpective Report</h1>
-                <div class="col-lg-8 md-8 text-center">
-                    <h2>Retrospective Notes</h2>
-                    <table class="table table-dark">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Message</th>
-                                <th scope="col">Posted</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <c:forEach items="${showMeAllTheRetrospective}" var="message">
-                                <tr>
-                                    <th scope="row">Message</th>
-                                    <td>${message.description}</td>
-                                    <td>${message.timestamp}</td>
-                                </tr>
-                            </c:forEach>
-                        </tbody>
-                    </table>
-                    <a id="back" class="back" href="${pageContext.request.contextPath}/redirectToWorkspace"><i class="fas fa-arrow-circle-left"></i></a>
-                </div>
-
-                <!-- end of center side -->
-
-                <div class="col-lg-2 md-2 sidenav py-3">
-                </div>
             </div>
         </div>
 
+        <!-- end of center side -->
+
+        <!--                <div class="col-lg-2 md-2 sidenav py-3">
+                        </div>
+                    </div>
+                </div>
+        </div>-->
+
+        <div class="row p-2">
+
+            <div class="col-lg-4 md-8 align-items-center">
+                <table class="table py-5 ">
+                    <h3 class="title" > PRODUCT BACKLOG </h3>
+                    <thead>
+                        <tr class="header">
+                            <th scope="col">#</th>
+                            <th scope="col">TASK</th>
+                            <th scope="col">TASK START DATE</th>
+                            <th scope="col">TASK END DATE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach items="${activeProject.taskCollection}" var="task" varStatus="status" begin="0"
+                                   end="${fn:length(activeProject.taskCollection)}" step="1">
+                            <tr >
+                                <th scope="row">${status.count}.</th>
+                                <td>${task.description}</td>
+                                <td>${task.taskStartDate}</td>
+                                <td>${task.taskEndDate}</td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+
+                <!--                <div class="col-lg-3 md-8 align-items-center">-->
+                <table class="table py-5 ">
+                    <h3 class="title"> SPRINTS </h3>
+                    <thead>
+                        <tr class="header">
+                            <th scope="col"></th>
+                            <th scope="col">START DATE</th>
+                            <th scope="col">END DATE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach items="${activeProject.sprintCollection}" var="sprint" varStatus="status" begin="0"
+                                   end="${fn:length(activeProject.sprintCollection)}" step="1">
+                            <tr>
+                                <th scope="row">${status.count}.</th>
+                                <td><fmt:formatDate type="date" value="${sprint.sprintStartDate}" /></td>
+                                <td><fmt:formatDate type="date" value="${sprint.sprintEndDate}" /></td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+
+                <!--                </div>-->
+            </div>
+            <div class="col-lg-4 md-8 align-items-center">
+                <h3 class="title"> DAILY SCRUM NOTES</h3>
+
+                <table class="table py-5 ">
+                    <thead>
+                        <tr class="header">
+                            <th scope="col">#</th>
+                            <th scope="col">MESSAGE</th>
+                            <th scope="col">POSTED</th>
+                        </tr>
+                    </thead>
+                    <tbody >
+                        <c:forEach items="${activeProject.dailyScrumRecordCollection}" var="message" varStatus="status" begin="0"
+                                   end="${fn:length(activeProject.dailyScrumRecordCollection)}" step="1">
+                            <tr>
+                                <th scope="row">${status.count}.</th>
+                                <td>${message.description}</td>
+                                <td>${message.timestamp}</td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="col-lg-4 md-8 align-items-center">
+                <h3 class="title">RETROSPECTIVE NOTES</h3>
+
+                <table class="table py-5 ">
+                    <thead>
+                        <tr class="header">
+                            <th scope="col">#</th>
+                            <th scope="col">MESSAGE</th>
+                            <th scope="col">POSTED</th>
+                        </tr>
+                    </thead>
+                    <tbody >
+                        <c:forEach items="${activeProject.retrospectiveCollection}" var="message" varStatus="status" begin="0"
+                                   end="${fn:length(activeProject.retrospectiveCollection)}" step="1">
+                            <tr>
+                                <th scope="row">${status.count}.</th>
+                                <td>${message.description}</td>
+                                <td>${message.timestamp}</td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+
+            </div> 
+    
+        </div>
+   
+            <a id="back" class="back" href="${pageContext.request.contextPath}/reports/reportCentral" style="float:right"><i class="fas fa-arrow-circle-left"></i></a>  
+        
 
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
         <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"

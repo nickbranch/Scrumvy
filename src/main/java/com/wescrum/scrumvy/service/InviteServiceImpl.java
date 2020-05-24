@@ -1,6 +1,5 @@
 package com.wescrum.scrumvy.service;
 
-import com.wescrum.scrumvy.controller.ProjectController;
 import com.wescrum.scrumvy.entity.Invite;
 import com.wescrum.scrumvy.entity.Project;
 import com.wescrum.scrumvy.entity.User;
@@ -15,13 +14,11 @@ public class InviteServiceImpl implements InviteServiceInterface {
 
     @Autowired
     private InviteRepository inviteRepo;
-
     @Autowired
     private ProjectServiceInterface projectService;
-    
     @Autowired
     private UserService userService;
-
+    
     @Override
     public List<Invite> getAllInvites() {
         return inviteRepo.findAll();
@@ -58,7 +55,7 @@ public class InviteServiceImpl implements InviteServiceInterface {
         boolean toggle = false;
         for (Invite inv : checkReceivingUserInvites) {
             if ((inv.getReceivingUserId() == invite.getReceivingUserId())
-                    && (inv.getProjectRoleId() == invite.getProjectRoleId())) {
+                    && (inv.getProjectRoleId() == invite.getProjectRoleId()) && (inv.getProjectId() == invite.getProjectId())) {
                 toggle = true;
             }
         }

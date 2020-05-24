@@ -17,7 +17,6 @@ public class RouterController {
 
     @Autowired
     private ProjectServiceInterface projectService;
-
     @Autowired
     private UserService userService;
 
@@ -56,5 +55,9 @@ public class RouterController {
             return "redirect:/";
         }
     }
-
+    
+    @GetMapping("/aboutUs")
+    public String aboutUs(){
+        return "aboutUs";
+    }
 }

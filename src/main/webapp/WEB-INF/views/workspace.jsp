@@ -9,7 +9,6 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
         <meta name="_csrf" content="${_csrf.token}"/>
         <!-- default header name is X-CSRF-TOKEN -->
@@ -18,7 +17,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Workspace</title>
-
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
               integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -32,49 +30,11 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
         <%--        <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">--%>
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/chat.css">
+        
     </head>
 
     <body>
-        <!--navbar-->
-        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:rgb(63, 70, 173);">
-            <a class="navbar-brand" href="#"><i class="fab fa-stripe-s"></i>crumvy</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/">Home<span class="sr-only"></span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="${pageContext.request.contextPath}/goPremium" class="nav-link">Pricing</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Projects
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Owner</a>
-                            <a class="dropdown-item" href="#">Developer</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Drafts</a>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">About Us</a>
-                    </li>
-                </ul>
-                <form:form action="${pageContext.request.contextPath}/logout" method="POST"
-                           class="form-inline my-2 my-lg-0">
-                    <input id="logout" type="submit" value="&#xf2f5Logout" class=" btn btn-outline-info my-2 my-sm-0">
-                </form:form>
-            </div>
-        </nav>
-
-
+        <jsp:include page="/WEB-INF/views/generalNavigation.jsp"></jsp:include>
         <!-- end of navbar  -->
         <!-- Check for errors --> 
         <c:if test="${editTaskError != null}">
@@ -92,13 +52,11 @@
         <h4 class="ml-5 font-italic px-3">
             <fmt:formatDate type="date" value="${project.startDate}"/> /
             <fmt:formatDate  type="date" value="${project.endDate}" />
-            <a id="back" class="back" href="${pageContext.request.contextPath}/reports/reportCentral">Get Reports</a>
+            <a id="back" class="back" href="${pageContext.request.contextPath}/reports/reportCentral" style="font-size:smaller"> &nbsp; Get Reports</a>
         </h4>
-
         <!-- ----------------------------------------------------------- -->
         <div class="row">
             <div class="col-4 pl-5" >
-
                 <div class="row pt-1">
 
                     <!-- CHAT -->
@@ -112,10 +70,10 @@
 
                                     </div>
                                     <input type="hidden" id="loggedInUser" value="${loggedInUser}" />
-                                    <span class="loggedInChat">Logged in as: <strong>${loggedInUser} </strong> </span>
+                                    Logged in as:<span class="loggedInChat"> <strong>${loggedInUser} </strong> </span>
                                     <ul class="list" id="usersList">
                                         <c:forEach items="${chatUserNames}" var="chatUser">
-                                            <li>${chatUser}</li>
+                                            <li style="color:darkslategray"><em>${chatUser}</em></li>
                                             </c:forEach>
                                     </ul>
                                 </div>
@@ -166,7 +124,7 @@
                                     <td id="taskDescription_${task.taskId}" class="editable">${task.description}</td>                             
                                     <td >
                                         <c:if test="${isProductOwner}">
-                                            <button type="button" class="btn btn-light" style="background-color:rgb(177,239,224) ;" onclick="makeTaskEditable(${task.taskId})">Edit</button>
+                                            <button type="button" class="btn btn-light" style="background-color:rgb(235, 236, 255) ;" onclick="makeTaskEditable(${task.taskId})">Edit</button>
                                         </c:if>
                                     </td>
                                 </tr>
@@ -219,7 +177,7 @@
                                                                        modelAttribute="sprint"
                                                                        action="${pageContext.request.contextPath}/sprint/updateSprint">                                                          
                                                                 <input type="hidden" name="sprintId" value="${sprint.sprintId}" />
-                                                                <input type="SUBMIT" class="btn btn-light" style="background-color:rgb(177,239,224);" value="Edit"/>
+                                                                <input type="SUBMIT" class="btn btn-light" style="background-color:rgb(235, 236, 255);" value="Edit"/>
                                                             </form:form>
                                                         </c:if>
                                                     </td>
@@ -244,7 +202,7 @@
 
                                                 <div class="col-8 px-5">
                                                     <a id="settingsProj" class="float-right" href="${pageContext.request.contextPath}/redirectToProject/${project.projectId}"><i class="fas fa-cogs p-1"></i>Project Settings</a>
-                                                    <h2>Sprint Backlog</h2>                     
+                                                    <h2 style="color: rgb(126, 166, 172);"><strong>Sprint Backlog</strong></h2>                     
                                                     <p id="inspectError" class="problemInfo"></p>
                                                     <div id="sprintDatedFromTask">
                                                         <h4 class="font-italic">
@@ -258,13 +216,15 @@
                                                     <div class="row">
                                                         <table id="tasksTable" class="table  text-center" data-sprintId="${currentSprint.sprintId}">
                                                             <thead class=" text-center">
+                                                                
                                                                 <tr>
-                                                                    <th scope="col" colspan="4">Sprint Management</th>
+                                                                   <th scope="col" colspan="4" style="letter-spacing: 1px;">  SPRINT MANAGEMENT </th>
                                                                 </tr>
                                                                 <tr>
-                                                                    <th scope="col" style="background-color:rgb(177,239,224); width: 33.33%"> TO DO </th>
-                                                                    <th scope="col" style="background-color:rgb(255,190,97); width: 33.33%"> IN PROGRESS </th>
-                                                                    <th scope="col" style="background-color: rgb(119,221,119); width: 33.33%"> COMPLETE </th>
+                                                                    
+                                                                    <th scope="col" style="background-color:rgb(235, 236, 255); width: 33.33%"> TO DO  </th>
+                                                                    <th scope="col" style="background-color:rgb(252, 224, 184); width: 33.33%"> IN PROGRESS </th>
+                                                                    <th scope="col" style="background-color: rgb(143, 202, 180); width: 33.33%"> COMPLETE  </th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody id="bodyOfTaskTable">
@@ -277,7 +237,7 @@
                                                     <div class="container py-5">
                                                         <div class="row">
                                                             <div class="col">
-                                                                <div class=" m-1">
+                                                                <div class="m-1">
                                                                     <div class="row col-3">
                                                                         <label for="retrospective"> <strong>Retrospective:</strong></label>
                                                                     </div>

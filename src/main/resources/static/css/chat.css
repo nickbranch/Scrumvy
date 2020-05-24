@@ -1,9 +1,10 @@
 body{
     font-family: 'Lato', sans-serif;
 }
-#logout {
+
+input[type="submit"] {
     font-family: "Font Awesome 5 Free";
-    font-size: 1.3333333333333333em;
+    font-size: 1.0em;
     font-weight: 900;
 }
 
@@ -24,7 +25,7 @@ body{
 .chat-history ul {
     list-style: none;
     padding:1px;
-    width:400px;
+    width:100%;
 }
 
 .theUser {
@@ -66,8 +67,8 @@ body{
 
 .loggedInChat {
     padding:5px;
-    background: #3f46ad;
-    color:white;
+    /*    background: #3f46ad;*/
+    color:#3f46ad;
     border-radius: 5px;
 }
 
@@ -78,16 +79,16 @@ body{
 
 .chat-container {
     border-radius: 5px;
-    width:600px;
+    width:100%;
     padding:5px;
     margin:3px;
 }
 
 .backToHome {
-    font-size: 50px;
+    font-size: 40px;
     margin: 20px;
 }
 
 #settingsProj {
-    font-size: 30px;
+    font-size: 15px;
 }

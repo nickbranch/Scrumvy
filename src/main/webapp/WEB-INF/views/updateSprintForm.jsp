@@ -15,60 +15,20 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
         <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/homepage.css">
-
         <title>Update Sprint</title>
     </head>
 
     <body>
-        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:rgb(63, 70, 173);">
-            <a class="navbar-brand" href="#"><i class="fab fa-stripe-s"></i>crumvy</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/">Home<span class="sr-only"></span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="${pageContext.request.contextPath}/goPremium" class="nav-link">Pricing</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Projects
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Owner</a>
-                            <a class="dropdown-item" href="#">Developer</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Drafts</a>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">About Us</a>
-                    </li>
-                </ul>
-                <form:form action="${pageContext.request.contextPath}/logout" method="POST"
-                           class="form-inline my-2 my-lg-0">
-                    <input type="submit" value="&#xf2f5Logout" class=" btn btn-outline-info my-2 my-sm-0">
-                </form:form>
-            </div>
-        </nav>
-        <!-- end of navbar -->
-        <div class="container">
-            <div class="row ">
-
-                <div class="col-md-2 py-5">
-
-                    <a id="back" class="back " href="${pageContext.request.contextPath}/project/projectDetails/${project.projectId}"><i class="fas fa-arrow-circle-left"></i></a>
+        <jsp:include page="/WEB-INF/views/generalNavigation.jsp"></jsp:include>
+            <!-- end of navbar -->
+            <div class="container">
+                <div class="row ">
+                    <div class="col-md-2 py-5">
+                        <a id="back" class="back " href="${pageContext.request.contextPath}/project/projectDetails/${project.projectId}"><i class="fas fa-arrow-circle-left"></i></a>
                 </div>
 
                 <div class="col-md-8 bg-light">
                     <div class="login d-flex align-items-start py-5">
-
 
                         <div class="container">
                             <div class="row">

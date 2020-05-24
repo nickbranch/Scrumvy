@@ -2,19 +2,17 @@
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
         <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/homepage.css">
-
         <title>Scrumvy - Home</title>
     </head>
 
@@ -24,28 +22,16 @@
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-link">Home<span class="sr-only"></span></a>
                     </li>
                     <li class="nav-item">
                         <a href="${pageContext.request.contextPath}/goPremium" class="nav-link">Pricing</a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Projects
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Owner</a>
-                            <a class="dropdown-item" href="#">Developer</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Drafts</a>
-                        </div>
-                    </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">About Us</a>
+                        <a href="${pageContext.request.contextPath}/aboutUs" class="nav-link">About Us</a>
                     </li>
                 </ul>
                 <form:form action="${pageContext.request.contextPath}/logout"
@@ -62,7 +48,7 @@
                     <br>
                     <a href="${pageContext.request.contextPath}/project/createProject" class="btn btn-success btn-lg" ;><i class="fas fa-plus"> </i> Create New Project</a>
                     <br>
-                    <div>
+                    <div class="m-2">
                         <!-- Check for errors --> 
                         <c:if test="${createProjectError != null}">
                             <div class="alert alert-danger col-xs-offset-1 col-xs-10">
@@ -202,7 +188,7 @@
                                 <div class="modal-body">
                                     <p>
                                         <c:forEach items="${receivedInvites}" var="receivedInvite">
-
+                                        <div>
                                             You have been invited to project ${receivedInvite.projectId.projectName}
                                             in the position of ${receivedInvite.projectRoleId.roleDescription}
                                             <form:form cssClass="form1" method="POST" modelAttribute="invite"
@@ -217,7 +203,9 @@
                                                 <input type="hidden" name="theRecInvite" value="${receivedInvite.inviteId}" />
                                                 <input type="submit" class="btn btn-danger" name="Reject"  value="&#xf00d" />
                                             </form:form>
-                                        </c:forEach>
+                                        </div>
+                                        <hr>
+                                    </c:forEach>
                                 </div>
 
                             </div>
@@ -236,15 +224,18 @@
                                 </div>
                                 <div class="modal-body">
                                     <c:forEach items="${sentInvites}" var="sentInvite">
-                                        You have invited ${sentInvite.receivingUserId.username} 
-                                        to project ${sentInvite.projectId.projectName}
-                                        in the position of ${sentInvite.projectRoleId.roleDescription}
-                                        <form:form method="POST"
-                                                   modelAttribute="invite"
-                                                   action="${pageContext.request.contextPath}/invites/cancelInvite">
-                                            <input type="hidden" name="theRecInvite" value="${sentInvite.inviteId}"/>
-                                            <input type="submit" class="btn btn-danger" name="Cancel"  value="&#xf00d" />
-                                        </form:form>
+                                        <div>
+                                            You have invited ${sentInvite.receivingUserId.username} 
+                                            to project ${sentInvite.projectId.projectName}
+                                            in the position of ${sentInvite.projectRoleId.roleDescription}
+                                            <form:form method="POST"
+                                                       modelAttribute="invite"
+                                                       action="${pageContext.request.contextPath}/invites/cancelInvite">
+                                                <input type="hidden" name="theRecInvite" value="${sentInvite.inviteId}"/>
+                                                <input type="submit" class="btn btn-danger" name="Cancel"  value="&#xf00d" />
+                                            </form:form>
+                                        </div>
+                                        <hr>
                                     </c:forEach>
                                 </div>
                             </div>
@@ -253,9 +244,6 @@
                 </div>
             </div>
         </div>
-
-
-
 
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
         <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
