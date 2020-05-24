@@ -5,8 +5,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%> 
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
 
-
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
