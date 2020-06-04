@@ -134,15 +134,15 @@ public class ProjectController {
             Model model) {
         // form validation
         if (theBindingResult.hasErrors()) {
-            model.addAttribute("emptyTask", new Task());
+            prepareProjectSetupPage(model, project);
             return "projectSetup";
         }
-
         project = trimTheProject(project);
 
         //we can apply some ban here
+        Long currentUserId = Long.valueOf(userService.getLoggedinUser().getId());
         if ((formProject != request.getSession().getAttribute("activeProject"))
-                && (formUser != Long.valueOf(userService.getLoggedinUser().getId()))) {
+                || (formUser != currentUserId)) {
             redirectAttributes.addFlashAttribute("createProjectError", "Please do not tamper with hidden form fields.");
             return "redirect:/";
         }
@@ -156,7 +156,7 @@ public class ProjectController {
         // unique name per project validation
         if (checkForSameName(project)) {
             model.addAttribute("createProjectError", "Sorry. It seems you already have a project named that way");
-            model.addAttribute("emptyTask", new Task());
+            prepareProjectSetupPage(model, project);
             return "projectSetup";
         }
 
@@ -167,22 +167,18 @@ public class ProjectController {
     }
 
     @RequestMapping(value = "/projectSettings", method = RequestMethod.GET)
-    public String projectSettings(@ModelAttribute("projectId") Long projectid,
-            Model model,
-            HttpServletRequest request,
+    public String projectSettings(@ModelAttribute("projectId") Long projectId,
+            Model model, HttpServletRequest request,
             final RedirectAttributes redirectAttributes
     ) {
-        Project project = projectService.getProjectbyid(projectid);
-        request.getSession().setAttribute("activeProject", project.getProjectId());
-        if (projectService.checkIdOfOwnedProjectsFix(project)) {
-            model.addAttribute("user", userService.getLoggedinUser());
-            model.addAttribute("project", project);
-            Task task = new Task();
-            task.setProjectId(project);
-            model.addAttribute("emptyTask", task);
+        Project project = projectService.getProjectbyid(projectId);
+        if (projectService.checkIdOfOwnedProjectsFix(project) && (request.getSession().getAttribute("activeProject") == null) || 
+                (projectId == request.getSession().getAttribute("activeProject"))) {
+            request.getSession().setAttribute("activeProject", project.getProjectId());
+            prepareProjectSetupPage(model, project);
             return "projectSetup";
         } else {
-            redirectAttributes.addFlashAttribute("createProjectError", "The project you are trying to join is not yours.");
+            redirectAttributes.addFlashAttribute("createProjectError", "Try to join your project by clicking on edit project.");
             return "redirect:/";
         }
     }
@@ -258,16 +254,12 @@ public class ProjectController {
             }
             //all project tasks
             model.addAttribute("projectTasks", projectTasks);
-
             //all project sprints
             model.addAttribute("projectSprints", projectSprints);
-
             // project team
             model.addAttribute("projectTeam", projectTeam);
-
             // retro list
             model.addAttribute("retroList", retroList);
-
             // daily scrum list
             model.addAttribute("dailyScrumList", dailyScrumList);
 
@@ -291,7 +283,7 @@ public class ProjectController {
 
             return "workspace";
         } else {
-            redirectAttributes.addFlashAttribute("viewWorkspaceError", "The project you are trying to join is not yours.");
+            redirectAttributes.addFlashAttribute("createProjectError", "The project you are trying to join is not yours.");
             return "redirect:/";
         }
     }
@@ -319,6 +311,14 @@ public class ProjectController {
                 break;
         }
         return false;
+    }
+
+    private void prepareProjectSetupPage(Model model, Project project) {
+        model.addAttribute("user", userService.getLoggedinUser());
+        model.addAttribute("project", project);
+        Task task = new Task();
+        task.setProjectId(project);
+        model.addAttribute("emptyTask", task);
     }
 
 }

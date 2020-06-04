@@ -33,7 +33,7 @@
 
                     <div class="form-group py-3 ml-2">
                         <label for="projectName">Project Name</label>
-                        <form:input path="projectName" placeholder="${project.startDate}" class="form-control" /><br>
+                        <form:input path="projectName" placeholder="${project.projectName}" class="form-control" /><br>
                         <form:errors path="projectName" cssClass="error" />
                     </div>
                     <div class="form-group py-1 ml-2">

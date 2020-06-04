@@ -63,7 +63,6 @@ public class TaskController {
     @PostMapping("/deleteTask")
     public String deleteTask(@Valid @ModelAttribute("taskId") Long taskId,
             BindingResult theBindingResult,
-            @ModelAttribute("taskId") Long formTask,
             final RedirectAttributes redirectAttributes,
             HttpServletRequest request,
             Model model) {

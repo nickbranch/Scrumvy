@@ -28,13 +28,13 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
         <%--        <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">--%>
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/chat.css">
-        
+
     </head>
 
     <body>
         <jsp:include page="/WEB-INF/views/generalNavigation.jsp"></jsp:include>
-        <!-- end of navbar  -->
-        <!-- Check for errors --> 
+            <!-- end of navbar  -->
+            <!-- Check for errors --> 
         <c:if test="${editTaskError != null}">
             <div class="alert alert-danger col-xs-offset-1 col-xs-10">
                 ${editTaskError}
@@ -72,7 +72,7 @@
                                     <ul class="list" id="usersList">
                                         <c:forEach items="${chatUserNames}" var="chatUser">
                                             <li style="color:darkslategray"><em>${chatUser}</em></li>
-                                            </c:forEach>
+                                                </c:forEach>
                                     </ul>
                                 </div>
 
@@ -142,7 +142,8 @@
                             <thead class="col-3 text-center" >
                                 <tr>
                                     <th scope="col" colspan="3" style="background-color:rgb(63, 70, 173); color:white">Sprints</th>
-                                    <th colspan="2" class="createnewsprint">                                <c:if test="${isProductOwner}">
+                                    <th colspan="2" class="createnewsprint">                                
+                                        <c:if test="${isProductOwner}">
                                             <form:form method="POST" 
                                                        modelAttribute="project"
                                                        action="${pageContext.request.contextPath}/sprint/createSprint">
@@ -199,27 +200,26 @@
                                                 </div>
 
                                                 <div class="col-8 px-5">
-                                                    <a id="settingsProj" class="float-right" href="${pageContext.request.contextPath}/redirectToProject/${project.projectId}"><i class="fas fa-cogs p-1"></i>Project Settings</a>
+                                                    <c:if test="${isProductOwner}">
+                                                        <a id="settingsProj" class="float-right" href="${pageContext.request.contextPath}/redirectToProject/${project.projectId}"><i class="fas fa-cogs p-1"></i>Project Settings</a>
+                                                    </c:if>
                                                     <h2 style="color: rgb(126, 166, 172);"><strong>Sprint Backlog</strong></h2>                     
                                                     <p id="inspectError" class="problemInfo"></p>
                                                     <div id="sprintDatedFromTask">
                                                         <h4 class="font-italic">
-
                                                             <fmt:formatDate type="date" value="${currentSprint.sprintStartDate}"/> - 
                                                             <fmt:formatDate  type="date" value="${currentSprint.sprintEndDate}" />
-
                                                         </h4>
                                                     </div>
 
                                                     <div class="row">
                                                         <table id="tasksTable" class="table  text-center" data-sprintId="${currentSprint.sprintId}">
                                                             <thead class=" text-center">
-                                                                
+
                                                                 <tr>
-                                                                   <th scope="col" colspan="4" style="letter-spacing: 1px;">  SPRINT MANAGEMENT </th>
+                                                                    <th scope="col" colspan="4" style="letter-spacing: 1px;">  SPRINT MANAGEMENT </th>
                                                                 </tr>
                                                                 <tr>
-                                                                    
                                                                     <th scope="col" style="background-color:rgb(235, 236, 255); width: 33.33%"> TO DO  </th>
                                                                     <th scope="col" style="background-color:rgb(252, 224, 184); width: 33.33%"> IN PROGRESS </th>
                                                                     <th scope="col" style="background-color: rgb(143, 202, 180); width: 33.33%"> COMPLETE  </th>

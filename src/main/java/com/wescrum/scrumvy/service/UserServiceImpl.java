@@ -32,19 +32,14 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDao userDao;
-
     @Autowired
     private RoleDao roleDao;
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
-
     @Autowired
     private ProjectTeamRepository projectTeamRepo;
-
     @Autowired
     private SessionRegistry sessionRegistry;
 
@@ -119,8 +114,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean checkIfUserIsPartOfProject(User user, Project project) {
-        if (project.getUserCollection().contains(user)) {
-            return true;
+        List<ProjectTeam> projectTeams = projectTeamRepo.findByProjectId(project);
+        for (int i = 0; i < projectTeams.size(); i++) {
+            if (projectTeams.get(i).getUserId().getId() == user.getId()) {
+                return true;
+            }
         }
         return false;
     }

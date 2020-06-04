@@ -12,6 +12,7 @@ import com.wescrum.scrumvy.service.InviteServiceInterface;
 import com.wescrum.scrumvy.service.UserService;
 import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,14 +34,14 @@ public class AfterLoginController {
     private InviteRepository inviteRepo;
 
     @GetMapping("/")
-    public String showHome(@ModelAttribute("createProjectError") String error, Model model) {
+    public String showHome(@ModelAttribute("createProjectError") String error, Model model, HttpServletRequest request) {
         User user = userService.getLoggedinUser();
         String[] roles = {"ownedProjects", "joinedAsScrumMaster", "joinedAsDevTeam"};
         List<Invite> sentInvites = inviteService.getSentInvites(user);
         List<Invite> receivedInvites = inviteRepo.findByReceivingUserId(user);
+        request.getSession().removeAttribute("activeProject");
 
         //System.out.println(userService.listLoggedInUsers());
-
         for (int i = 1; i <= 3; i++) {
             List<Project> listTobeAdded = userProjectListGenerator(i, user);
             model.addAttribute(roles[i - 1], listTobeAdded);

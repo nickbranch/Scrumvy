@@ -2,6 +2,7 @@ package com.wescrum.scrumvy.controller;
 
 import com.wescrum.scrumvy.entity.Project;
 import com.wescrum.scrumvy.entity.Task;
+import com.wescrum.scrumvy.entity.User;
 import com.wescrum.scrumvy.service.ProjectServiceInterface;
 import com.wescrum.scrumvy.service.UserService;
 import javax.servlet.http.HttpServletRequest;
@@ -48,16 +49,17 @@ public class RouterController {
     public String redirectToWorkspace(HttpServletRequest request, RedirectAttributes redirectAttributes) {
         Long currentProjectId = (Long) request.getSession().getAttribute("activeProject");
         Project currentproject = projectService.getProjectbyid(currentProjectId);
-        if (projectService.checkIdOfOwnedProjectsFix(currentproject)) {
+        User user = userService.getLoggedinUser();
+        if (userService.checkIfUserIsPartOfProject(user, currentproject)) {
             return "redirect:/project/projectDetails/" + currentProjectId;
         } else {
             redirectAttributes.addFlashAttribute("createProjectError", "The project you are trying to join is not yours.");
             return "redirect:/";
         }
     }
-    
+
     @GetMapping("/aboutUs")
-    public String aboutUs(){
+    public String aboutUs() {
         return "aboutUs";
     }
 }
