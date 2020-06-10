@@ -31,7 +31,7 @@ The following steps are needed to run this project on your machine.
 4) Modify applicaton.properties give your paypal credentials (client.id and secret key) which you can get from https://developer.paypal.com/home/
 5) Modify the chat.js with your localhost
 6) Modify the paypalcontroller java file with your localhost
-Now you are good to go
+* Now you are good to go
 
 ### Prerequisites
 
