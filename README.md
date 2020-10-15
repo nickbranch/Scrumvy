@@ -2,6 +2,9 @@
 
 Scrumvy has been created as a group project assignment. It simulates SCRUM activities. Includes project management, sprint and task management, Project reports, team management , drag and drop functionality.
 
+# Presentation video
+https://youtu.be/sqFRvU7czfk
+
 # Features
 * User registration (Spring boot security)
 * CRUD functionalities
