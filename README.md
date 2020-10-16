@@ -30,8 +30,8 @@ https://youtu.be/sqFRvU7czfk
 The following steps are needed to run this project on your machine.
 1) Download all files.
 2) Run the db.sql on your mysql workbench
-3) Modify applicaton.properties with the db connection string and give your credentials.
-4) Modify applicaton.properties give your paypal credentials (client.id and secret key) which you can get from https://developer.paypal.com/home/
+3) Modify application.properties with the db connection string and give your credentials.
+4) Modify application.properties give your paypal credentials (client.id and secret key) which you can get from https://developer.paypal.com/home/
 5) Modify the chat.js with your localhost
 6) Modify the paypalcontroller java file with your localhost
 * Now you are good to go
